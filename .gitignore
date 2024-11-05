@@ -1,0 +1,65 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Build folders
+bin/
+obj/
+
+# User-specific files
+.vs/
+*.user
+*.suo
+.vscode/
+
+# Environment-specific app settings
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+secrets.json
+
+# Logs
+*.log
+
+# Generated files
+/packages/
+*.nupkg
+project.lock.json
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+.directory
+
+# Compiled files
+*.dll
+*.exe
+*.pdb
+*.cache
+*.ilk
+*.lib
+*.exp
+
+# Sensitive data
+**/secrets.json
