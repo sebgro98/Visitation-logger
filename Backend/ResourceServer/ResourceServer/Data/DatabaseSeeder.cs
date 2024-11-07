@@ -142,7 +142,7 @@ namespace AuthenticationServer.Data
                 {
                     Id = Guid.NewGuid(),
                     UserName = "john.doe",
-                    Password = "securePass1",
+                    Password = "securePass1!",
                     StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
                     EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
                     PurposeTypeId = service.Id,
@@ -152,7 +152,7 @@ namespace AuthenticationServer.Data
                 {
                     Id = Guid.NewGuid(),
                     UserName = "jane.smith",
-                    Password = "securePass2",
+                    Password = "securePass2!",
                     StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
                     EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
                     PurposeTypeId = eventType.Id,
