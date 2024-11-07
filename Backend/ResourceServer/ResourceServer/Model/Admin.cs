@@ -14,7 +14,7 @@ namespace AuthenticationServer.Model
         [Required]
         public string FullName { get; set; }
 
-        [StringLength(100, MinimumLength = 10)]
+        [StringLength(100, MinimumLength = 8)]
         [Required]
         [Column("password")]
         public string Password { get; set; }

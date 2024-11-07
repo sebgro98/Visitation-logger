@@ -18,12 +18,12 @@ namespace AuthenticationServer.Model
         [Column("id")]
         public Guid Id { get; set; }
 
-        [StringLength(100, MinimumLength = 10)]
+        [StringLength(100, MinimumLength = 4)]
         [Required]
         [Column("username")]
         public string UserName { get; set; }
 
-        [StringLength(100, MinimumLength = 10)]
+        [StringLength(100, MinimumLength = 8)]
         [Required]
         [Column("password")]
         public string Password { get; set; }
