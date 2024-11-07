@@ -19,7 +19,7 @@ namespace AuthenticationServer.Model
         public DateTime CheckInTime { get; set; }
 
         [Column("check_in_sign")]
-        public string CheckInSign { get; set; }
+        public string CheckInSign { get; set; } 
 
         [Column("check_out_time")]
         public DateTime CheckOutTime { get; set; }

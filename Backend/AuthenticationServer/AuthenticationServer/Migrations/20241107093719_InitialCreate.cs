@@ -3,26 +3,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace AuthenticationServer.Migrations
 {
     /// <inheritdoc />
-    public partial class first_migration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "admins",
+                name: "admin_types",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    fullname = table.Column<string>(type: "text", nullable: false),
-                    password = table.Column<string>(type: "text", nullable: false),
-                    admin_type = table.Column<int>(type: "integer", nullable: false)
+                    name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_admins", x => x.id);
+                    table.PrimaryKey("PK_admin_types", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,6 +47,38 @@ namespace AuthenticationServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_nodes", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "purpose_types",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_purpose_types", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "admins",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    fullname = table.Column<string>(type: "text", nullable: false),
+                    password = table.Column<string>(type: "text", nullable: false),
+                    admin_type_id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_admins", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_admins_admin_types_admin_type_id",
+                        column: x => x.admin_type_id,
+                        principalTable: "admin_types",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -107,16 +139,22 @@ namespace AuthenticationServer.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    purpose_type_id = table.Column<Guid>(type: "uuid", nullable: false),
                     username = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
                     start_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     end_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    purpose_type = table.Column<int>(type: "integer", nullable: false),
                     VisitorId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_visitorAccounts", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_visitorAccounts_purpose_types_purpose_type_id",
+                        column: x => x.purpose_type_id,
+                        principalTable: "purpose_types",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_visitorAccounts_visitors_VisitorId",
                         column: x => x.VisitorId,
@@ -124,6 +162,30 @@ namespace AuthenticationServer.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "admin_types",
+                columns: new[] { "id", "name" },
+                values: new object[,]
+                {
+                    { new Guid("5522bc1c-43a3-4850-9a04-385dc2aa29cc"), "LoggAdmin" },
+                    { new Guid("80565433-d4ee-4773-ac23-b484b4b7f36f"), "MasterAdmin" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "purpose_types",
+                columns: new[] { "id", "name" },
+                values: new object[,]
+                {
+                    { new Guid("0d5abe13-4b5f-4fd6-ad74-a2cf129a94cf"), "Service" },
+                    { new Guid("59d1bf88-b964-4076-8818-5b7d52a0440a"), "Meeting" },
+                    { new Guid("d24e2c90-7132-465c-83c0-f1eea38fc0fa"), "Event" }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_admins_admin_type_id",
+                table: "admins",
+                column: "admin_type_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_status_NodeId",
@@ -134,6 +196,11 @@ namespace AuthenticationServer.Migrations
                 name: "IX_status_VisitorId",
                 table: "status",
                 column: "VisitorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_visitorAccounts_purpose_type_id",
+                table: "visitorAccounts",
+                column: "purpose_type_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_visitorAccounts_VisitorId",
@@ -159,7 +226,13 @@ namespace AuthenticationServer.Migrations
                 name: "visitorAccounts");
 
             migrationBuilder.DropTable(
+                name: "admin_types");
+
+            migrationBuilder.DropTable(
                 name: "nodes");
+
+            migrationBuilder.DropTable(
+                name: "purpose_types");
 
             migrationBuilder.DropTable(
                 name: "visitors");

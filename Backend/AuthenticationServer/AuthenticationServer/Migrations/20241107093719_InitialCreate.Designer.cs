@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthenticationServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241106151129_first_migration")]
-    partial class first_migration
+    [Migration("20241107093719_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,9 +32,9 @@ namespace AuthenticationServer.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<int>("AdminType")
-                        .HasColumnType("integer")
-                        .HasColumnName("admin_type");
+                    b.Property<Guid>("AdminTypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("admin_type_id");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -48,7 +48,38 @@ namespace AuthenticationServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdminTypeId");
+
                     b.ToTable("admins");
+                });
+
+            modelBuilder.Entity("AuthenticationServer.Model.AdminType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("admin_types");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("80565433-d4ee-4773-ac23-b484b4b7f36f"),
+                            Name = "MasterAdmin"
+                        },
+                        new
+                        {
+                            Id = new Guid("5522bc1c-43a3-4850-9a04-385dc2aa29cc"),
+                            Name = "LoggAdmin"
+                        });
                 });
 
             modelBuilder.Entity("AuthenticationServer.Model.Country", b =>
@@ -83,6 +114,40 @@ namespace AuthenticationServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("nodes");
+                });
+
+            modelBuilder.Entity("AuthenticationServer.Model.PurposeType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("purpose_types");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("0d5abe13-4b5f-4fd6-ad74-a2cf129a94cf"),
+                            Name = "Service"
+                        },
+                        new
+                        {
+                            Id = new Guid("d24e2c90-7132-465c-83c0-f1eea38fc0fa"),
+                            Name = "Event"
+                        },
+                        new
+                        {
+                            Id = new Guid("59d1bf88-b964-4076-8818-5b7d52a0440a"),
+                            Name = "Meeting"
+                        });
                 });
 
             modelBuilder.Entity("AuthenticationServer.Model.Status", b =>
@@ -188,9 +253,9 @@ namespace AuthenticationServer.Migrations
                         .HasColumnType("text")
                         .HasColumnName("password");
 
-                    b.Property<int>("PurposeType")
-                        .HasColumnType("integer")
-                        .HasColumnName("purpose_type");
+                    b.Property<Guid>("PurposeTypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("purpose_type_id");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone")
@@ -206,9 +271,22 @@ namespace AuthenticationServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PurposeTypeId");
+
                     b.HasIndex("VisitorId");
 
                     b.ToTable("visitorAccounts");
+                });
+
+            modelBuilder.Entity("AuthenticationServer.Model.Admin", b =>
+                {
+                    b.HasOne("AuthenticationServer.Model.AdminType", "AdminType")
+                        .WithMany()
+                        .HasForeignKey("AdminTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AdminType");
                 });
 
             modelBuilder.Entity("AuthenticationServer.Model.Status", b =>
@@ -243,11 +321,19 @@ namespace AuthenticationServer.Migrations
 
             modelBuilder.Entity("AuthenticationServer.Model.VisitorAccount", b =>
                 {
+                    b.HasOne("AuthenticationServer.Model.PurposeType", "PurposeType")
+                        .WithMany()
+                        .HasForeignKey("PurposeTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AuthenticationServer.Model.Visitor", "Visitor")
                         .WithMany("VisitorAccounts")
                         .HasForeignKey("VisitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PurposeType");
 
                     b.Navigation("Visitor");
                 });

@@ -18,5 +18,12 @@ namespace AuthenticationServer.Data
         public DbSet<Visitor> Visitors { get; set; }
         public DbSet<VisitorAccount> VisitorAccounts { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            DatabaseSeeder.Seed(modelBuilder);
+        }
+
+
     }
 }
