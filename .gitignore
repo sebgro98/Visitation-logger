@@ -38,7 +38,8 @@ appsettings.Development.json
 appsettings.Local.json
 appsettings.*.json
 secrets.json
-
+Backend/AuthenticationServer/AuthenticationServer/appsettings.json
+Backend/ResourceServer/ResourceServer/appsettings.json
 # Logs
 *.log
 
