@@ -7,7 +7,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<RoleSelection />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/login/admin" element={<Login isAdminMode={true} />} />
+      <Route path="/login/visitor" element={<Login isAdminMode={false} />} />
     </Routes>
   );
 }
