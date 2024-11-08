@@ -14,7 +14,7 @@ const RoleSelection = () => {
           style={{
             textDecoration: "none",
           }}
-          to="/login"
+          {...(isAdminMode ? { to: "/login/admin" } : { to: "/login/visitor" })}
         >
           {isAdminMode ? (
             <FontAwesomeIcon
