@@ -1,4 +1,4 @@
-using AuthenticationServer.Data;
+using ResourceData.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

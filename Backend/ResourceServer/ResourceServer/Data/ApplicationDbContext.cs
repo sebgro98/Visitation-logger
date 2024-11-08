@@ -1,8 +1,8 @@
-﻿using AuthenticationServer.Model;
+﻿using ResourceData.Model;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthenticationServer.Data
+namespace ResourceData.Data
 {
     public class ApplicationDbContext : DbContext
     {
