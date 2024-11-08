@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using ResourceData.Model;
+using ResourceServer.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace ResourceData.Data
+namespace ResourceServer.Data
 {
     public static class DatabaseSeeder
     {

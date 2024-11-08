@@ -1,4 +1,4 @@
-namespace ResourceData.Model
+namespace ResourceServer.Model
 {
     public enum PurposeTypeEnum
     {

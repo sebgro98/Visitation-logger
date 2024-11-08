@@ -1,8 +1,8 @@
-﻿using ResourceData.Model;
+﻿using ResourceServer.Model;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
-namespace ResourceData.Data
+namespace ResourceServer.Data
 {
     public class ApplicationDbContext : DbContext
     {

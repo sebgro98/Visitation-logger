@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ResourceData.Model
+namespace ResourceServer.Model
 {
     [Table("admin_types")]
     public class AdminType
