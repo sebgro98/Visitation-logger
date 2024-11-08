@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace AuthenticationServer.Migrations
+namespace ResourceServer.Migrations
 {
     /// <inheritdoc />
     public partial class rest_of_the_seed_data : Migration

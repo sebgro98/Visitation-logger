@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace AuthenticationServer.Model
+namespace ResourceServer.Model
 {
     [Table("visitorAccounts")]
     public class VisitorAccount
@@ -34,8 +34,7 @@ namespace AuthenticationServer.Model
         [Column("end_date")]
         public DateTime EndDate { get; set; }
 
-        [ForeignKey("visitor")]
-        public Guid VisitorId { get; set; }
+        public Guid? VisitorId { get; set; }
 
         public Visitor Visitor { get; set; }
 
