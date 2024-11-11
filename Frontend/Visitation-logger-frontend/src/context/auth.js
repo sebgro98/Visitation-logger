@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
     if (storedToken && storedUser) {
       setToken(storedToken);
       setUser(storedUser);
-      navigate(location.pathname || "/");
+      navigate(location.pathname || "/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
     } else {
       navigate("/login");
     }
@@ -45,7 +45,7 @@ const AuthProvider = ({ children }) => {
 
     setToken(res.data.token);
     setUser(res.data.user);
-    navigate("/");
+    navigate("/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
   };
 
   const handleLogout = () => {
