@@ -19,11 +19,11 @@ const AuthProvider = ({ children }) => {
       setUser(storedUser);
       navigate(location.pathname || "/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
     } else {
-      navigate("/login");
+      navigate("/");
     }
   }, []);
 
-  const handleLogin = async (/*username, password*/) => {
+  const handleLogin = async (/*username, password,*/ isAdminMode) => {
     const res = {
       data: {
         token: "fake",
@@ -45,6 +45,9 @@ const AuthProvider = ({ children }) => {
 
     setToken(res.data.token);
     setUser(res.data.user);
+    if (isAdminMode) {
+      navigate("/admin"); // This is a placeholder for the actual admin dashboard path "/admin" that will be implemented later
+    }
     navigate("/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
   };
 
