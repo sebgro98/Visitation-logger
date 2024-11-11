@@ -13,7 +13,7 @@ namespace ResourceServer.Model
         public Guid VisitorId { get; set; }
 
         // Navigation property for Visitor
-        public Visitor Visitor { get; set; }
+        public virtual Visitor Visitor { get; set; }
 
         [Column("check_in_time")]
         public DateTime CheckInTime { get; set; }
@@ -34,6 +34,6 @@ namespace ResourceServer.Model
         public Guid NodeId { get; set; }
 
         // Navigation property for Node
-        public Node Node { get; set; }
+        public virtual Node Node { get; set; }
     }
 }

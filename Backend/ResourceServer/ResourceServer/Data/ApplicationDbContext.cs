@@ -1,5 +1,6 @@
 ﻿using ResourceServer.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace ResourceServer.Data
 {
@@ -19,6 +20,13 @@ namespace ResourceServer.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<VisitorAccount>()
+                .HasIndex(v => v.UserName)
+                .IsUnique();
+
+            modelBuilder.Entity<Admin>()
+                .HasIndex(a => a.FullName)
+                .IsUnique();
             base.OnModelCreating(modelBuilder);
             DatabaseSeeder.Seed(modelBuilder);
         }
