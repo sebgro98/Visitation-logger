@@ -23,7 +23,7 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const handleLogin = async (/*username, password,*/ isAdminMode) => {
+  const handleLogin = async (/*username, password, isAdminMode*/) => {
     const res = {
       data: {
         token: "fake",
@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
       },
     };
 
-    // await login(username, password);  This is a placeholder for the actual login function that will be implemented later
+    // await login(username, password, isAdminMode);  This is a placeholder for the actual login function that will be implemented later
 
     if (!res.data.token || !res.data.user) {
       return navigate("/login");
@@ -45,9 +45,12 @@ const AuthProvider = ({ children }) => {
 
     setToken(res.data.token);
     setUser(res.data.user);
-    if (isAdminMode) {
-      navigate("/admin"); // This is a placeholder for the actual admin dashboard path "/admin" that will be implemented later
-    }
+
+    // This is a placeholder for the actual admin dashboard that will be implemented later
+    /*   if (isAdminMode) {
+      navigate("/admin");
+    } */
+
     navigate("/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
   };
 
