@@ -1,5 +1,4 @@
 ﻿using ResourceServer.Model;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Data
