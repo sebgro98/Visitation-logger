@@ -40,7 +40,7 @@ namespace AuthenticationServer.Model
         public Visitor Visitor { get; set; }
 
 
-        [NotMapped]
+        /*[NotMapped]
         public PurposeTypeEnum PurposeTypeEnum
         {
             get
@@ -57,6 +57,6 @@ namespace AuthenticationServer.Model
             {
                 PurposeType.Name = value.ToString();
             }
-        }
+        }*/
     }
 }

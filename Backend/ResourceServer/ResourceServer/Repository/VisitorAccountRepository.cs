@@ -13,6 +13,14 @@ namespace ResourceServer.Repository
             _context = context;
         }
 
+        public async Task<VisitorAccount> GetVisitorAccountWithVisitor(Guid id)
+        {
+            return await _context.VisitorAccounts
+                .Include(va => va.Visitor)
+                .FirstOrDefaultAsync(va => va.Id == id);
+        }
+
+
         public async Task<IEnumerable<VisitorAccount>> GetAllVisitorAccounts()
         {
             return await _context.VisitorAccounts.ToListAsync();
