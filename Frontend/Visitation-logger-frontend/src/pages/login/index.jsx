@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import './login.css'
-
-const Login = () => {
-    return (
-    <>
-        <p>Hi this is login page. Please enter bank details.</p>
-    </>
-    )
-}
-
-export default Login;
-=======
 import PropTypes from "prop-types";
 
 const Login = ({ isAdminMode }) => {
@@ -29,4 +16,3 @@ Login.propTypes = {
 };
 
 export default Login;
->>>>>>> main

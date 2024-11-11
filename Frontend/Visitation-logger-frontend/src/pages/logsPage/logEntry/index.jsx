@@ -5,22 +5,21 @@ const LogEntry = ({ log }) => {
     console.log(log);
     
     return (
-        <>
+        <tr>
+
             <td>{log.visitor}</td>
             <td>{log.description}</td>
             <td>{log.node}</td>
             <td>{log.date}</td>
-        </>
+        </tr>
     );
 };
-
-// PropTypes validation for ESLint
 LogEntry.propTypes = {
     log: PropTypes.shape({
         visitor: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         node: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired
+        date: PropTypes.string.isRequired,
     }).isRequired,
 };
 
