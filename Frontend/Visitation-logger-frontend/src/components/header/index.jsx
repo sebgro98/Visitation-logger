@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import "./header.css";
 
-const Header = ({ isLoggedIn, onLogout }) => {
+const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
   return (
     <div className="header">
       <h1 className="header-title">Combitech</h1>

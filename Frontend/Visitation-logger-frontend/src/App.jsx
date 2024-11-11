@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <header>
-        <Header isLoggedIn={false} onLogout={() => {}} />
+        <Header />
       </header>
 
       <Routes>
