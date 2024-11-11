@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using AuthenticationServer.Model;
+using ResourceServer.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthenticationServer.Data
+namespace ResourceServer.Data
 {
     public static class DatabaseSeeder
     {

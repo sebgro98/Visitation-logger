@@ -1,5 +1,5 @@
-using AuthenticationServer.Data;
-using AuthenticationServer.Model;
+using ResourceServer.Data;
+using ResourceServer.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Repository

@@ -1,4 +1,4 @@
-using AuthenticationServer.Model;
+using ResourceServer.Model;
 
 namespace ResourceServer.Repository
 {

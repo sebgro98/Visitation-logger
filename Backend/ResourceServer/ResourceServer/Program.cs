@@ -1,4 +1,4 @@
-using AuthenticationServer.Data;
+using ResourceServer.Data;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repository;
 
@@ -12,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
+builder.Services.AddScoped<IVisitorRepository, VisitorRepository>();
 builder.Services.AddScoped<IVisitorAccountRepository, VisitorAccountRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,5 +1,5 @@
-using AuthenticationServer.DTO;
-using AuthenticationServer.Model;
+using ResourceServer.DTO;
+using ResourceServer.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repository;
@@ -26,7 +26,7 @@ namespace ResourceServer.Controller
                 return BadRequest("Invalid data.");
             }
 
-            // Map the DTO to the entity
+            
             var visitorAccount = new VisitorAccount
             {
                 Id = Guid.NewGuid(), // Assign a new unique ID if it's generated server-side
