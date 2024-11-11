@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #006eaf;
+  padding: 10px 20px;
+  color: white;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.logout-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.logout-button:hover {
+  background-color: lightgray;
+}
