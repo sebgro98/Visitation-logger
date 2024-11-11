@@ -2,7 +2,7 @@ using ResourceServer.DTO;
 using ResourceServer.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ResourceServer.Repository;
+using ResourceServer.Repositories;
 
 namespace ResourceServer.Controller
 {

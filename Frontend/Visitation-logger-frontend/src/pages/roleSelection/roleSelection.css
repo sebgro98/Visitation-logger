@@ -1,5 +1,5 @@
 .main-login-card {
-  height: 80vh;
+  height: 40vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -17,11 +17,12 @@
 
 .adress-card-icon {
   color: #006eaf;
+  margin-top: 50px;
 }
 
 .user-cog-icon {
   color: #006eaf;
-  margin: 8px 0;
+  margin: 58px 0;
 }
 
 .admin-toggle-button {

@@ -2,7 +2,7 @@ using ResourceServer.Data;
 using ResourceServer.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace ResourceServer.Repository
+namespace ResourceServer.Repositories
 {
     public class VisitorAccountRepository : IVisitorAccountRepository
     {
