@@ -33,5 +33,13 @@ namespace ResourceServer.Controllers
 
             return Ok(admin);
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Admin>>> GetAllAdmins()
+        {
+            var admins = await _adminRepository.GetAll();
+
+            return Ok(admins);
+        }
     }
 }
