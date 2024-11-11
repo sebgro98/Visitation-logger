@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import LogEntry from "./logEntry"
+import LogEntry from "./logEntry";
 
 const Logs = () => {
   const [logs, setLogs] = useState([]);
@@ -39,14 +39,33 @@ const Logs = () => {
       }
     ];
 
-    // Simulate fetching logs or just set them as dummy data
-    console.log("Fetching logs");
-
     // Set the logs in state
     setLogs(dummyLogs); // Initialize logs with dummy data on first render
   }, []); // Empty dependency array ensures this runs only once when the component mounts
 
-  console.log(logs);
+  // Function to convert logs to CSV format
+  const exportToCSV = () => {
+    const header = ["Besökare", "Besöksbeskrivning", "Nod", "Datum"];
+    const rows = logs.map(log => [
+      log.visitor,
+      log.description,
+      log.node,
+      log.date
+    ]);
+
+    // Combine header and rows into a single CSV string
+    const csvContent = [
+      header.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
+
+    // Create a Blob from the CSV string and create a downloadable URL
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "logs.csv"; // Set the file name for the download
+    link.click(); // Trigger the download
+  };
 
   return (
     <>
@@ -54,7 +73,9 @@ const Logs = () => {
         <button className="logsPage-filter" type="button">
           Filtrera
         </button>
-        <button className="logsPage-export">Exportera</button>
+        <button className="logsPage-export" onClick={exportToCSV}>
+          Exportera
+        </button>
       </div>
       <div className="logsPage-results">
         <table>
@@ -67,10 +88,10 @@ const Logs = () => {
             </tr>
           </thead>
           <tbody>
-          {logs.map((log, index) => (
-            <LogEntry log={log} key={index}/>
-          ))}
-        </tbody>
+            {logs.map((log, index) => (
+              <LogEntry log={log} key={index} />
+            ))}
+          </tbody>
         </table>
       </div>
     </>
