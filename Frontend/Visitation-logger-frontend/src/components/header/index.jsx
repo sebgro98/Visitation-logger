@@ -15,8 +15,8 @@ const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
 };
 
 Header.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  onLogout: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool,
+  onLogout: PropTypes.func,
 };
 
 export default Header;
