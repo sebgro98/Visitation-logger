@@ -1,4 +1,4 @@
-namespace AuthenticationServer.Model
+namespace ResourceServer.Model
 {
     public enum AdminTypeEnum
     {
