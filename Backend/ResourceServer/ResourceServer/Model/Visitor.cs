@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ResourceServer.Model
 {
@@ -20,15 +21,15 @@ namespace ResourceServer.Model
         public string SSN { get; set; }
 
         // One-to-Many relationship with Status (adjust based on actual relationship)
-
-        public ICollection<Status> Status { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Status> Status { get; set; }
 
         // Foreign Key for Country
         [Column("country_id")]
         public Guid CountryId { get; set; }
 
         // Navigation property for Country
-        public Country Country { get; set; }
+        public virtual Country Country { get; set; }
 
         [Required]
         [Column("passport_no")]
@@ -41,7 +42,7 @@ namespace ResourceServer.Model
         [Required]
         [Column("city")]
         public string City { get; set; }
-
-        public ICollection<VisitorAccount> VisitorAccounts { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<VisitorAccount> VisitorAccounts { get; set; }
     }
 }

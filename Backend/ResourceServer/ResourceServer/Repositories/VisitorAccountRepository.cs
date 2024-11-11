@@ -23,7 +23,9 @@ namespace ResourceServer.Repositories
 
         public async Task<IEnumerable<VisitorAccount>> GetAllVisitorAccounts()
         {
-            return await _context.VisitorAccounts.ToListAsync();
+            return await _context.VisitorAccounts
+                .Include(v => v.Visitor) // Eagerly load the Visitor related entity
+                .ToListAsync();
         }
 
         public async Task<VisitorAccount> GetVisitorAccountById(int id)
