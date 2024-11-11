@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
+        .UseLazyLoadingProxies());
 
 
 builder.Services.AddScoped<IVisitorRepository, VisitorRepository>();

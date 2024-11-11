@@ -43,6 +43,13 @@ namespace ResourceServer.Controller
             return Ok(visitorAccount);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetVisitorAccounts()
+        {
+            var visitorAccounts = await _visitorAccountRepository.GetAllVisitorAccounts();
+
+            return Ok(visitorAccounts);
+        }
 
     }
 }

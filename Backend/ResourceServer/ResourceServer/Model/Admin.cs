@@ -24,6 +24,6 @@ namespace ResourceServer.Model
 
         // Navigation property
         [ForeignKey("AdminTypeId")]
-        public AdminType AdminType { get; set; }
+        public virtual AdminType AdminType { get; set; }
     }
 }
