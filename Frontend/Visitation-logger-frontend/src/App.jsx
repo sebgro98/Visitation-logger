@@ -1,17 +1,23 @@
-import { Routes, Route } from 'react-router-dom';
-import Login from './pages/login';
-import Logs from './pages/logsPage';
-import './App.css'
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import RoleSelection from "./pages/roleSelection";
+import Login from "./pages/login";
+import Header from "./components/header";
 
-const App = () => {
+function App() {
   return (
     <>
+      <header>
+        <Header />
+      </header>
+
       <Routes>
-        <Route path='logs' element={<Logs />}/>
-        <Route path='/' element={<Login />}/>
+        <Route path="/" element={<RoleSelection />} />
+        <Route path="/login/admin" element={<Login isAdminMode={true} />} />
+        <Route path="/login/visitor" element={<Login isAdminMode={false} />} />
       </Routes>
     </>
-  )
+  );
 }
 
 export default App;
