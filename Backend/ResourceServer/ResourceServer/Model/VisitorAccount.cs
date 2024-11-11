@@ -37,25 +37,5 @@ namespace ResourceServer.Model
         public Guid? VisitorId { get; set; }
 
         public Visitor Visitor { get; set; }
-
-
-        /*[NotMapped]
-        public PurposeTypeEnum PurposeTypeEnum
-        {
-            get
-            {
-                return PurposeType.Name switch
-                {
-                    "Service" => PurposeTypeEnum.Service,
-                    "Event" => PurposeTypeEnum.Event,
-                    "Meeting" => PurposeTypeEnum.Meeting,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
-            set
-            {
-                PurposeType.Name = value.ToString();
-            }
-        }*/
     }
 }

@@ -13,9 +13,9 @@ namespace ResourceServer.Controller
         private readonly IVisitorAccountRepository _visitorAccountRepository;
 
 
-        public VisitorAccountController(IVisitorAccountRepository visitorAccountuserRepository)
+        public VisitorAccountController(IVisitorAccountRepository visitorAccountRepository)
         {
-            _visitorAccountRepository = visitorAccountuserRepository;
+            _visitorAccountRepository = visitorAccountRepository;
         }
 
         [HttpPost]
@@ -29,7 +29,7 @@ namespace ResourceServer.Controller
             
             var visitorAccount = new VisitorAccount
             {
-                Id = Guid.NewGuid(), // Assign a new unique ID if it's generated server-side
+                Id = Guid.NewGuid(),
                 UserName = visitorAccountDto.UserName,
                 Password = visitorAccountDto.Password,
                 StartDate = visitorAccountDto.StartDate,
@@ -41,13 +41,6 @@ namespace ResourceServer.Controller
             // Save the new visitor account
             await _visitorAccountRepository.CreateVisitorAccount(visitorAccount);
             return Ok(visitorAccount);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetUsers()
-        {
-            var visitorAccounts = await _visitorAccountRepository.GetAllVisitorAccounts();
-            return Ok(visitorAccounts);
         }
 
 

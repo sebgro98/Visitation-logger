@@ -7,7 +7,6 @@ namespace ResourceServer.DTO
 {
     public class VisitorAccountDto
     {
-        public Guid Id { get; set; }
 
         [Required]
         [StringLength(100, MinimumLength = 4)]
