@@ -1,7 +1,4 @@
-﻿using AuthenticationServer.Model;
-using System.ComponentModel.DataAnnotations;
-
-namespace ResourceServer.DTO
+﻿namespace ResourceServer.DTO
 {
     public class AdminPostDTO
     {

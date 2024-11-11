@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using AuthenticationServer.Model;
+using ResourceServer.Model;
 
 namespace ResourceServer.Repositories{
 	public interface IAdminRepository{

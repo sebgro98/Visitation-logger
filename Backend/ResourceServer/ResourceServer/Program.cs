@@ -1,4 +1,4 @@
-using AuthenticationServer.Data;
+using ResourceServer.Data;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repositories;
 
