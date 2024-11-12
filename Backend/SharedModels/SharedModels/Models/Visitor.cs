@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+
 using System.Text.Json.Serialization;
 
-namespace ResourceServer.Model
+
+namespace SharedModels.Models
 {
     [Table("visitors")]
     public class Visitor
@@ -26,6 +26,8 @@ namespace ResourceServer.Model
 
         // Foreign Key for Country
         [Column("country_id")]
+        [Required]
+        [JsonIgnore]
         public Guid CountryId { get; set; }
 
         // Navigation property for Country

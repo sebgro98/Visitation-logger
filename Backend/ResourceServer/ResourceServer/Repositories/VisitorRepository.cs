@@ -1,6 +1,6 @@
 using ResourceServer.Data;
-using ResourceServer.Model;
 using ResourceServer.DTO;
+using SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Repositories
@@ -13,7 +13,7 @@ namespace ResourceServer.Repositories
         {
             _context = context;
         }
-
+        
         public async Task<IEnumerable<Visitor>> GetAllVisitors()
         {
             return await _context.Visitors.ToListAsync();

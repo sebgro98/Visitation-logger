@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-namespace ResourceServer.Model
+
+namespace SharedModels.Models
 {
-    [Table("Country")]
+    [Table("Countries")]
     public class Country
     {
         [Column("id")]

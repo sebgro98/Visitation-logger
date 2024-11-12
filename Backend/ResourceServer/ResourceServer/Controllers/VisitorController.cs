@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
-using ResourceServer.Model;
+using SharedModels.Models;
 using ResourceServer.DTO;
 
 namespace ResourceServer.Controllers

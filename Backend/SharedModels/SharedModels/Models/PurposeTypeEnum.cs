@@ -1,4 +1,4 @@
-namespace ResourceServer.Model
+﻿namespace SharedModels.Models
 {
     public enum PurposeTypeEnum
     {

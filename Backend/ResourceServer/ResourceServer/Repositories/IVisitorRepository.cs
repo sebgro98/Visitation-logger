@@ -1,4 +1,4 @@
-using ResourceServer.Model;
+using SharedModels.Models;
 using ResourceServer.DTO;
 
 namespace ResourceServer.Repositories
