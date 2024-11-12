@@ -1,24 +1,40 @@
-.logsPage-results {
-    display: flex;
-    justify-content: center; /* Centers the table horizontally */
-  }
-  
-  .logsPage-results table {
-    width: auto; /* Adjusts to the content width */
-    margin: 0 auto; /* Ensures proper centering if width is specified */
-    border-collapse: collapse; /* Optional: Makes the table look cleaner */
-  }
-  
-  .logsPage-results th,
-  .logsPage-results td {
-    padding: 15px 60px; /* Adds padding for a cleaner look */
-    text-align: left; /* Adjust as needed */
-  }
+.logsPage{
+}
 
-  .logsPage-header{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+.logsPage-results table {
+  width: auto; /* Adjusts to the content width */
+  margin: 0 auto; /* Ensures proper centering if width is specified */
+  border-collapse: collapse; /* Optional: Makes the table look cleaner */
+}
 
-  }
-  
+.logsPage-results th,
+.logsPage-results td {
+  padding: 15px 60px; /* Adds padding for a cleaner look */
+  text-align: left; /* Adjust as needed */
+}
+
+.logsPage-header{
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+/* For the filter button */
+.logsPage-filter,
+.logsPage-export {
+  background-color: #006eaf; /* Blue background */
+  color: #ffffff;            /* White text */
+  border: none;              /* Remove default border */
+  padding: 10px 20px;        /* Add padding for size */
+  border-radius: 4px;        /* Rounded corners */
+  cursor: pointer;           /* Pointer cursor on hover */
+}
+
+/* Optional: Add hover effects for both buttons */
+.logsPage-filter:hover,
+.logsPage-export:hover {
+  background-color: #0056b3; /* Darker blue on hover for filter */
+  color: #ffffff;            /* Keep text white on hover */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
