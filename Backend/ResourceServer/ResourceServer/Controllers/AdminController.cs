@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
-using ResourceServer.Model;
+using SharedModels.Models;
 using ResourceServer.DTO;
 
 namespace ResourceServer.Controllers
@@ -23,9 +23,9 @@ namespace ResourceServer.Controllers
             var admin = new Admin
             {
                 Id = Guid.NewGuid(),
-                FullName = dto.FullName,
+                Username = dto.Username,
                 Password = dto.Password,
-                AdminTypeId = dto.AdminTypeId
+                AccountTypeId = dto.AccountTypeId
             };
 
             await _adminRepository.Insert(admin);

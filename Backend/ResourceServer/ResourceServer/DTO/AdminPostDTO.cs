@@ -2,8 +2,8 @@
 {
     public class AdminPostDTO
     {
-        public string FullName { get; set; }
+        public string Username { get; set; }
         public string Password { get; set; }
-        public Guid AdminTypeId { get; set; }
+        public Guid AccountTypeId { get; set; }
     }
 }

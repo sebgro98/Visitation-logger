@@ -1,5 +1,5 @@
-using ResourceServer.Model;
 using Microsoft.EntityFrameworkCore;
+using SharedModels.Models;
 
 namespace ResourceServer.Data
 {
@@ -27,18 +27,24 @@ namespace ResourceServer.Data
             modelBuilder.Entity<PurposeType>().HasData(service, eventType, meeting);
 
             // Seed data for AdminTypes
-            var masterAdmin = new AdminType
+            var masterAdmin = new AccountType
             {
                 Id = Guid.NewGuid(),
                 Name = "MasterAdmin"
             };
-            var loggAdmin = new AdminType
+            var loggAdmin = new AccountType
             {
                 Id = Guid.NewGuid(),
                 Name = "LoggAdmin"
             };
 
-            modelBuilder.Entity<AdminType>().HasData(masterAdmin, loggAdmin);
+            var visitorType = new AccountType
+            {
+                Id = Guid.NewGuid(),
+                Name = "Visitor"
+            };
+
+            modelBuilder.Entity<AccountType>().HasData(masterAdmin, loggAdmin, visitorType);
 
             // Seed data for Countries
             var country1 = new Country
@@ -121,16 +127,16 @@ namespace ResourceServer.Data
                 new Admin
                 {
                     Id = Guid.NewGuid(),
-                    FullName = "Master-Admin",
+                    Username = "Master-Admin",
                     Password = "Password123!",
-                    AdminTypeId = masterAdmin.Id
+                    AccountTypeId = masterAdmin.Id
                 },
                 new Admin
                 {
                     Id = Guid.NewGuid(),
-                    FullName = "Logging-Admin",
+                    Username = "Logging-Admin",
                     Password = "Password321!",
-                    AdminTypeId = loggAdmin.Id
+                    AccountTypeId = loggAdmin.Id
                 }
             );
 
@@ -139,22 +145,35 @@ namespace ResourceServer.Data
                 new VisitorAccount
                 {
                     Id = Guid.NewGuid(),
-                    UserName = "john.doe",
+                    Username = "john.doe",
                     Password = "securePass1!",
                     StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
                     EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
                     PurposeTypeId = service.Id,
-                    VisitorId = visitor1.Id
+                    VisitorId = visitor1.Id,
+                    AccountTypeId = visitorType.Id
                 },
                 new VisitorAccount
                 {
                     Id = Guid.NewGuid(),
-                    UserName = "jane.smith",
+                    Username = "jane.smith",
                     Password = "securePass2!",
                     StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
                     EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
                     PurposeTypeId = eventType.Id,
-                    VisitorId = visitor2.Id
+                    VisitorId = visitor2.Id,
+                    AccountTypeId = visitorType.Id
+                },
+                 new VisitorAccount
+                {
+                    Id = Guid.NewGuid(),
+                    Username = "Angel.man",
+                    Password = "securePass1!",
+                    StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+                    EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
+                    PurposeTypeId = service.Id,
+                    VisitorId = null,
+                    AccountTypeId = visitorType.Id
                 }
             );
         }

@@ -1,7 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-namespace ResourceServer.Model
+
+namespace SharedModels.Models
 {
     [Table("nodes")]
     public class Node
@@ -14,5 +15,4 @@ namespace ResourceServer.Model
         public string NodeName { get; set; }
 
     }
-
 }

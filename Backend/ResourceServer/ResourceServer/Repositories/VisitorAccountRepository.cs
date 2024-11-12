@@ -1,5 +1,5 @@
 using ResourceServer.Data;
-using ResourceServer.Model;
+using SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Repositories
