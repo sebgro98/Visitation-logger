@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace ResourceServer.Model
 {
@@ -13,7 +14,7 @@ namespace ResourceServer.Model
 
         // Navigation property to PurposeType
         [ForeignKey("PurposeTypeId")]
-        public PurposeType PurposeType { get; set; }
+        public virtual PurposeType PurposeType { get; set; }
 
         [Column("id")]
         public Guid Id { get; set; }
@@ -36,26 +37,6 @@ namespace ResourceServer.Model
 
         public Guid? VisitorId { get; set; }
 
-        public Visitor Visitor { get; set; }
-
-
-        [NotMapped]
-        public PurposeTypeEnum PurposeTypeEnum
-        {
-            get
-            {
-                return PurposeType.Name switch
-                {
-                    "Service" => PurposeTypeEnum.Service,
-                    "Event" => PurposeTypeEnum.Event,
-                    "Meeting" => PurposeTypeEnum.Meeting,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
-            set
-            {
-                PurposeType.Name = value.ToString();
-            }
-        }
+        public virtual Visitor Visitor { get; set; }
     }
 }

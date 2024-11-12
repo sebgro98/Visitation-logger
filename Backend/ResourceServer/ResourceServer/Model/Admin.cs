@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ResourceServer.Model
@@ -25,25 +24,6 @@ namespace ResourceServer.Model
 
         // Navigation property
         [ForeignKey("AdminTypeId")]
-        public AdminType AdminType { get; set; }
-
-        
-        [NotMapped]  // This will not be stored in the database
-        public AdminTypeEnum AdminTypeEnum
-        {
-            get
-            {
-                return AdminType.Name switch
-                {
-                    "MasterAdmin" => AdminTypeEnum.MasterAdmin,
-                    "LoggAdmin" => AdminTypeEnum.LoggAdmin,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
-            set
-            {
-                AdminType.Name = value.ToString();
-            }
-        }
+        public virtual AdminType AdminType { get; set; }
     }
 }

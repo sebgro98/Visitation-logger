@@ -1,6 +1,6 @@
 using ResourceServer.Model;
 
-namespace ResourceServer.Repository
+namespace ResourceServer.Repositories
 {
     public interface IVisitorRepository
     {
