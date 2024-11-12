@@ -33,4 +33,8 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharedModels\SharedModels\SharedModels.csproj" />
+  </ItemGroup>
+
 </Project>

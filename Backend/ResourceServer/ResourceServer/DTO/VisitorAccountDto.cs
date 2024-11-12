@@ -1,7 +1,6 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ResourceServer.Model;
+
 
 namespace ResourceServer.DTO
 {
@@ -22,6 +21,8 @@ namespace ResourceServer.DTO
 
         public Guid PurposeTypeId { get; set; }
 
-        public Guid VisitorId { get; set; }
+        public Guid? VisitorId { get; set; }
+
+        public Guid AccountTypeId { get; set; }
     }
 }
