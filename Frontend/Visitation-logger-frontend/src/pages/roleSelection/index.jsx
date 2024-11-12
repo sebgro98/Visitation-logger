@@ -9,7 +9,7 @@ const RoleSelection = () => {
 
   return (
     <main>
-      <div className="main-login-card">
+      <div className="main-role-selection-card">
         <Link
           style={{
             textDecoration: "none",
