@@ -1,12 +1,18 @@
 import './logEntry.css';
 import PropTypes from 'prop-types';
 
-const LogEntry = ({ log }) => {
-    console.log(log);
+const LogEntry = ({ log, index }) => {
+
+
+    const lightgrey = "#d3d3d3";
+    const darkgrey = "#a9a9a9";
+    const backgroundColor = index % 2 === 0 ? lightgrey : darkgrey;
+
+    console.log(index);
+    
     
     return (
-        <tr>
-
+        <tr style={{ backgroundColor }} className='logPage-table-entry'>
             <td>{log.visitor}</td>
             <td>{log.description}</td>
             <td>{log.node}</td>
@@ -15,6 +21,7 @@ const LogEntry = ({ log }) => {
     );
 };
 LogEntry.propTypes = {
+    index: PropTypes.number.isRequired,
     log: PropTypes.shape({
         visitor: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,

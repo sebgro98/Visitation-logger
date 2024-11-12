@@ -18,9 +18,10 @@ const AuthProvider = ({ children }) => {
       setToken(storedToken);
       setUser(storedUser);
       navigate(location.pathname || "/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
-    } else {
-      navigate("/");
-    }
+    } 
+    // else {
+    //   navigate("/");
+    // } Temporär utkommentering i testsyfte TODO: Ska finnas med vid prod
   }, []);
 
   const handleLogin = async (/*username, password, isAdminMode*/) => {

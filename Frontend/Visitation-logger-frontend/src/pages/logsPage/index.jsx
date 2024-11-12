@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import LogEntry from "./logEntry";
+import "./logsPage.css";
 
 const Logs = () => {
   const [logs, setLogs] = useState([]);
@@ -62,13 +63,15 @@ const Logs = () => {
     // Create a Blob from the CSV string and create a downloadable URL
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
+    const currentdate = new Date(); 
+    const datetime = currentdate.getMilliseconds();
     link.href = URL.createObjectURL(blob);
-    link.download = "logs.csv"; // Set the file name for the download
+    link.download = "logs.csv" + datetime; // Set the file name for the download
     link.click(); // Trigger the download
   };
 
   return (
-    <>
+    <div className="logsPage">
       <div className="logsPage-header">
         <button className="logsPage-filter" type="button">
           Filtrera
@@ -78,7 +81,7 @@ const Logs = () => {
         </button>
       </div>
       <div className="logsPage-results">
-        <table>
+        <table className="logsPage-table">
           <thead>
             <tr>
               <th>Besökare</th>
@@ -89,12 +92,12 @@ const Logs = () => {
           </thead>
           <tbody>
             {logs.map((log, index) => (
-              <LogEntry log={log} key={index} />
+              <LogEntry log={log} key={index} index={index}/>
             ))}
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
 
