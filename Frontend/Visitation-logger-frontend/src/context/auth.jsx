@@ -64,8 +64,8 @@ const AuthProvider = ({ children }) => {
   const value = {
     token,
     user,
-    handleLogin,
-    handleLogout,
+    onLogin: handleLogin,
+    onLogout: handleLogout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

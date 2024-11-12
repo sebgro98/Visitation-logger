@@ -1,12 +1,11 @@
-﻿using ResourceServer.Model;
+﻿using SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace ResourceServer.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        //tom konsturkor så kommer att använda base options vilket betyder att DbContext kommer sätta dem åt mig
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -21,16 +20,15 @@ namespace ResourceServer.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<VisitorAccount>()
-                .HasIndex(v => v.UserName)
+                .HasIndex(v => v.Username)
                 .IsUnique();
 
             modelBuilder.Entity<Admin>()
-                .HasIndex(a => a.FullName)
+                .HasIndex(a => a.Username)
                 .IsUnique();
+
             base.OnModelCreating(modelBuilder);
             DatabaseSeeder.Seed(modelBuilder);
         }
-
-
     }
 }

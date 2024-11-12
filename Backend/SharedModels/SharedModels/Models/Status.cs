@@ -1,7 +1,9 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace ResourceServer.Model
+
+namespace SharedModels.Models
 {
     [Table("status")]
     public class Status
@@ -10,6 +12,8 @@ namespace ResourceServer.Model
         public Guid Id { get; set; }
 
         // Foreign key for Visitor
+        [JsonIgnore]
+        [Column("visitor_id")]
         public Guid VisitorId { get; set; }
 
         // Navigation property for Visitor
@@ -19,7 +23,7 @@ namespace ResourceServer.Model
         public DateTime CheckInTime { get; set; }
 
         [Column("check_in_sign")]
-        public string CheckInSign { get; set; } 
+        public string CheckInSign { get; set; }
 
         [Column("check_out_time")]
         public DateTime CheckOutTime { get; set; }
@@ -31,6 +35,7 @@ namespace ResourceServer.Model
         public DateTime LastExportDate { get; set; }
 
         // Foreign key for Node
+        [Required]
         public Guid NodeId { get; set; }
 
         // Navigation property for Node

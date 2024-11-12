@@ -1,10 +1,11 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ResourceServer.Model
+
+namespace SharedModels.Models
 {
-    [Table("admin_types")]
-    public class AdminType
+    [Table("account_types")]
+    public class AccountType
     {
         [Key]
         [Column("id")]
