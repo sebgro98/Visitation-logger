@@ -15,6 +15,7 @@ namespace ResourceServer.Repositories{
       } 
 
       public async Task<IEnumerable<Admin>> GetAll(){
+            
          return await _table.ToListAsync();
       }
 
