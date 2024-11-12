@@ -11,7 +11,8 @@ main {
   border-radius: 5px;
   margin-top: 40px;
   padding: 20px 30px;
-  min-width: 50%;
+  min-width: 20%;
+  max-width: 40%;
 }
 .login-header {
   margin: 5px;
