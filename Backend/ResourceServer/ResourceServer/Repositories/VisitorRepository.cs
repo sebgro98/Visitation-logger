@@ -1,5 +1,6 @@
 using ResourceServer.Data;
 using ResourceServer.Model;
+using ResourceServer.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Repositories
@@ -23,8 +24,6 @@ namespace ResourceServer.Repositories
             return await _context.Visitors.FindAsync(id);
         }
 
-
-
         public async Task<Visitor> UpdateVisitor(int id, Visitor visitor)
         {
             var visitorToUpdate = await _context.Visitors.FindAsync(id);
@@ -45,7 +44,6 @@ namespace ResourceServer.Repositories
             return visitorToUpdate;
         }
 
-
         public async Task DeleteVisitor(int id)
         {
             var visitor = await _context.Visitors.FindAsync(id);
@@ -56,11 +54,25 @@ namespace ResourceServer.Repositories
             }
         }
 
-        public async Task<Visitor> CreateVisitor(Visitor visitor)
+        public async Task<Visitor> CreateVisitor(VisitorDTO dto)
         {
-            _context.Visitors.Add(visitor);
+            //Find country by name. Can be replaced with AutoMapper
+            var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == dto.CountryName);
+
+            var newVisitor = new Visitor
+            {
+                Id = Guid.NewGuid(),
+                FullName = dto.FullName,
+                SSN = dto.SSN,
+                Country = foundCountry,
+                PassportNo = dto.PassportNo,
+                Company = dto.Company,
+                City = dto.City,
+            };
+
+            _context.Visitors.Add(newVisitor);
             await _context.SaveChangesAsync();
-            return visitor;
+            return newVisitor;
         }
     }
 }

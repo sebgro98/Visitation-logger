@@ -42,6 +42,7 @@ namespace ResourceServer.Model
         [Required]
         [Column("city")]
         public string City { get; set; }
+        
         [JsonIgnore]
         public virtual ICollection<VisitorAccount> VisitorAccounts { get; set; }
     }
