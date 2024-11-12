@@ -34,6 +34,17 @@ namespace ResourceServer.Controllers
             return Ok(admin);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Admin>> GetAdminById(Guid id)
+        {
+            var admin = await _adminRepository.GetById(id);
+            if (admin == null)
+            {
+                return NotFound();
+            }
+            return Ok(admin);
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Admin>>> GetAllAdmins()
         {
