@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ResourceServer.Model;
+using SharedModels.Models;
 
 namespace ResourceServer.Repositories{
 	public interface IAdminRepository{

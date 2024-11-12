@@ -1,5 +1,5 @@
 using ResourceServer.DTO;
-using ResourceServer.Model;
+using SharedModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repositories;
@@ -30,12 +30,13 @@ namespace ResourceServer.Controller
             var visitorAccount = new VisitorAccount
             {
                 Id = Guid.NewGuid(),
-                UserName = visitorAccountDto.UserName,
+                Username = visitorAccountDto.UserName,
                 Password = visitorAccountDto.Password,
                 StartDate = visitorAccountDto.StartDate,
                 EndDate = visitorAccountDto.EndDate,
                 PurposeTypeId = visitorAccountDto.PurposeTypeId,
-                VisitorId = visitorAccountDto.VisitorId
+                VisitorId = visitorAccountDto.VisitorId,
+                AccountTypeId = visitorAccountDto.AccountTypeId
             };
 
             // Save the new visitor account
