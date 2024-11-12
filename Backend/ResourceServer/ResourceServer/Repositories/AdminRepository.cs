@@ -19,7 +19,7 @@ namespace ResourceServer.Repositories{
          return await _table.ToListAsync();
       }
 
-      public async Task<Admin> GetById(object id){
+      public async Task<Admin> GetById(Guid id){
          return await _table.FindAsync(id);
       }
 
