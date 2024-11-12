@@ -1,9 +1,20 @@
 .main-login-card {
-  height: 40vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.adress-card-icon {
+  color: #006eaf;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+
+.user-cog-icon {
+  color: #006eaf;
+  margin-top: 58px;
+  margin-bottom: 28px;
 }
 
 .login-header {
@@ -11,22 +22,11 @@
   font-weight: 600;
   font-size: 1rem;
   font-family: sans-serif;
-  margin-top: 5px;
   text-align: center;
 }
 
-.adress-card-icon {
-  color: #006eaf;
-  margin-top: 50px;
-}
-
-.user-cog-icon {
-  color: #006eaf;
-  margin: 58px 0;
-}
-
 .admin-toggle-button {
-  margin-top: auto;
+  margin-top: 50rem;
   background-color: #3d8bcd;
   color: white;
   font-size: 0.7rem;
