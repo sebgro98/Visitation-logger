@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AuthenticationServer.DTO;
+using AuthenticationServer.Services;
 
 namespace AuthenticationServer.Controllers
 {
@@ -7,21 +8,31 @@ namespace AuthenticationServer.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        public LoginController()
+        private readonly IAuthService _authService;
+        public LoginController(IAuthService authService)
         {
-
+            _authService = authService;
         }
 
         [HttpGet]
         public string Get()
         {
+
             return "LoginController test get";
         }
 
         [HttpPost]
-        public async Task<IActionResult> Get([FromBody] LoginDTO dto)
+        public async Task<IActionResult> Get([FromBody] LoginDto dto)
         {
-            return Ok(dto);
+            var token = await _authService.AuthenticateAsync(dto);
+            if (token == null)
+            {
+                return Unauthorized();
+            }
+            return Ok(token);
         }
+
+
     }
+
 }
