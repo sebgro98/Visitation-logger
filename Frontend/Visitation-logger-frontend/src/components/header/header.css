@@ -9,7 +9,7 @@
 
 .header-title {
   margin: 0;
-  font-size: 20px;
+  font-size: 1rem;
   font-weight: 500;
 }
 
@@ -17,11 +17,10 @@
   background-color: transparent;
   color: white;
   border: none;
-  padding: 10px 20px;
   cursor: pointer;
-  font-size: 17px;
+  font-size: 1rem;
 }
 
 .logout-button:hover {
-  background-color: lightgray;
+  color: rgb(94, 92, 92);
 }
