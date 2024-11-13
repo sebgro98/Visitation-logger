@@ -52,5 +52,19 @@ namespace ResourceServer.Controller
             return Ok(visitorAccounts);
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateVisitorAccount(Guid id, [FromBody] VisitorAccountDto visitorAccountDto)
+        {
+            VisitorAccount updateVisitorAccount =
+                await _visitorAccountRepository.UpdateVisitorAccount(id, visitorAccountDto);
+
+            if (updateVisitorAccount == null)
+            {
+                return NotFound();
+            } 
+
+            return Ok(updateVisitorAccount);
+        }
+
     }
 }
