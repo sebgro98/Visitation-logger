@@ -28,6 +28,12 @@ namespace ResourceServer.Controllers
         public async Task<ActionResult<Visitor>> GetVisitorById(Guid id)
         {
             var visitor = await _visitorRepository.GetVisitorById(id);
+
+            if(visitor == null)
+            {
+                return NotFound();
+            }
+
             return Ok(visitor);
         }
     }
