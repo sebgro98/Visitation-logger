@@ -40,10 +40,10 @@ namespace ResourceServer.Repositories
             visitorAccountToUpdate.PurposeTypeId = visitorAccountDto.PurposeTypeId;
             visitorAccountToUpdate.Username = visitorAccountDto.UserName;
             visitorAccountToUpdate.Password = visitorAccountDto.Password;
-            visitorAccountToUpdate.StartDate = visitorAccountToUpdate.StartDate;
-            visitorAccountToUpdate.EndDate = visitorAccountToUpdate.EndDate;
-            visitorAccountToUpdate.VisitorId = visitorAccountToUpdate.VisitorId;
-            visitorAccountToUpdate.AccountTypeId = visitorAccountToUpdate.AccountTypeId;
+            visitorAccountToUpdate.StartDate = visitorAccountDto.StartDate;
+            visitorAccountToUpdate.EndDate = visitorAccountDto.EndDate;
+            visitorAccountToUpdate.VisitorId = visitorAccountDto.VisitorId;
+            visitorAccountToUpdate.AccountTypeId = visitorAccountDto.AccountTypeId;
 
             _context.VisitorAccounts.Update(visitorAccountToUpdate);
             await _context.SaveChangesAsync();
