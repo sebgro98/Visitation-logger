@@ -2,11 +2,11 @@ import PropTypes from "prop-types";
 import "./login.css";
 import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { useState } from "react";
 
 const Login = ({ isAdminMode }) => {
-  // const { onLogin } = useAuth(); Waiting for the backend to be implemented
+  const { onLogin } = useAuth();
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({ username: "", password: "" });
 
@@ -24,7 +24,7 @@ const Login = ({ isAdminMode }) => {
       return;
     }
 
-    // onLogin(username, password, isAdminMode); Waiting for the backend to be implemented
+    onLogin(formData.username, formData.password, isAdminMode);
     console.log("Form submitted", formData.username, formData.password);
   };
 
