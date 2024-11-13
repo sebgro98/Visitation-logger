@@ -24,7 +24,7 @@ namespace ResourceServer.Repositories
             return await _context.Visitors.FindAsync(id);
         }
 
-        public async Task<Visitor> UpdateVisitor(int id, Visitor visitor)
+        public async Task<Visitor> UpdateVisitor(Guid id, VisitorPutDTO visitorPutDTO)
         {
             var visitorToUpdate = await _context.Visitors.FindAsync(id);
 
@@ -32,12 +32,13 @@ namespace ResourceServer.Repositories
             {
                 return null;
             }
-            visitorToUpdate.FullName = visitor.FullName;
-            visitorToUpdate.SSN = visitor.SSN;
-            visitorToUpdate.City = visitor.City;
-            visitorToUpdate.Country = visitor.Country;
-            visitorToUpdate.PassportNo = visitor.PassportNo;
-            visitorToUpdate.Company = visitor.Company;
+
+            visitorToUpdate.FullName = visitorPutDTO.FullName;
+            visitorToUpdate.SSN = visitorPutDTO.SSN;
+            visitorToUpdate.City = visitorPutDTO.City;
+            visitorToUpdate.CountryId = visitorPutDTO.CountryId;
+            visitorToUpdate.PassportNo = visitorPutDTO.PassportNo;
+            visitorToUpdate.Company = visitorPutDTO.Company;
             _context.Visitors.Update(visitorToUpdate);
             await _context.SaveChangesAsync();
 
