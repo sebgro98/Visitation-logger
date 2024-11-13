@@ -25,7 +25,6 @@ const Login = ({ isAdminMode }) => {
     }
 
     onLogin(formData.username, formData.password, isAdminMode);
-    console.log("Form submitted", formData.username, formData.password);
   };
 
   return (
