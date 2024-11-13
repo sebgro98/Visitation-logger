@@ -1,6 +1,7 @@
 using ResourceServer.Data;
 using SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
+using ResourceServer.DTO;
 
 namespace ResourceServer.Repositories
 {
@@ -27,7 +28,7 @@ namespace ResourceServer.Repositories
 
 
 
-        public async Task<VisitorAccount> UpdateVisitorAccount(int id, VisitorAccount visitorAccount)
+        public async Task<VisitorAccount> UpdateVisitorAccount(Guid id, VisitorAccountDto visitorAccountDto)
         {
             var visitorAccountToUpdate = await _context.VisitorAccounts.FindAsync(id);
 
@@ -35,9 +36,15 @@ namespace ResourceServer.Repositories
             {
                 return null;
             }
-            /*
-            * Update the visitorAccountToUpdate object with the new values
-            */
+            
+            visitorAccountToUpdate.PurposeTypeId = visitorAccountDto.PurposeTypeId;
+            visitorAccountToUpdate.Username = visitorAccountDto.UserName;
+            visitorAccountToUpdate.Password = visitorAccountDto.Password;
+            visitorAccountToUpdate.StartDate = visitorAccountDto.StartDate;
+            visitorAccountToUpdate.EndDate = visitorAccountDto.EndDate;
+            visitorAccountToUpdate.VisitorId = visitorAccountDto.VisitorId;
+            visitorAccountToUpdate.AccountTypeId = visitorAccountDto.AccountTypeId;
+
             _context.VisitorAccounts.Update(visitorAccountToUpdate);
             await _context.SaveChangesAsync();
 
