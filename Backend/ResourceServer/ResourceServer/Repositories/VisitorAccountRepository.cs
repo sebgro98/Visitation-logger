@@ -21,7 +21,7 @@ namespace ResourceServer.Repositories
                 .ToListAsync();
         }
 
-        public async Task<VisitorAccount> GetVisitorAccountById(int id)
+        public async Task<VisitorAccount> GetVisitorAccountById(Guid id)
         {
             return await _context.VisitorAccounts.FindAsync(id);
         }

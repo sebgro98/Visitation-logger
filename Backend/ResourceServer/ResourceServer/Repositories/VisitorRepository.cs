@@ -60,6 +60,11 @@ namespace ResourceServer.Repositories
             //Find country by name. Can be replaced with AutoMapper
             var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == dto.CountryName);
 
+            if (foundCountry == null)
+            {
+                return null;
+            }
+
             var newVisitor = new Visitor
             {
                 Id = Guid.NewGuid(),
