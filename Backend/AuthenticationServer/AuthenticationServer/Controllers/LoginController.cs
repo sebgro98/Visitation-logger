@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using AuthenticationServer.DTO;
 
 namespace AuthenticationServer.Controllers
 {
@@ -18,10 +19,9 @@ namespace AuthenticationServer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Get([FromBody] object obj)
+        public async Task<IActionResult> Get([FromBody] LoginDTO dto)
         {
-            string objString = obj.ToString();
-            return Ok("LoginController test get " + objString);
+            return Ok(dto);
         }
     }
 }
