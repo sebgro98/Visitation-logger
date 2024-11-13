@@ -7,13 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\**" />
     <Compile Remove="Migrations\**" />
-    <Content Remove="Controllers\**" />
     <Content Remove="Migrations\**" />
-    <EmbeddedResource Remove="Controllers\**" />
     <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Controllers\**" />
     <None Remove="Migrations\**" />
   </ItemGroup>
 
@@ -29,10 +25,6 @@
     <PackageReference Include="Npgsql" Version="8.0.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

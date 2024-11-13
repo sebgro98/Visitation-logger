@@ -4,6 +4,7 @@ using AuthenticationServer.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using AuthenticationServer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +40,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireVisitorRole", policy => policy.RequireRole("Visitor"));
     options.AddPolicy("RequireLogAdminRole", policy => policy.RequireRole("LogAdmin"));
 });
-
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
