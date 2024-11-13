@@ -2,47 +2,35 @@ import { createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../services/apiClient";
-import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
 
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(storedUser);
+    if (storedToken) {
       navigate(location.pathname || "/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
-    } /* else {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
       navigate("/");
-    } */
+    }
   }, []);
 
   const handleLogin = async (username, password, isAdminMode) => {
     const res = await login(username, password, isAdminMode);
 
-    console.log("Result from backend:", res);
-
-    const decodedToken = jwt_decode(res.data.token);
-
-    console.log("Decoded token:", decodedToken);
-
-    /*  if (!res.data.token || !res.data.user) {
+    if (!res.token) {
       return navigate("/");
-    } */
+    }
 
-    /* localStorage.setItem("token", res.data.token);
-    localStorage.setItem("role", res.data.user);
-
-    setToken(res.data.token);
-    setUser(res.data.user); */
+    localStorage.setItem("token", res.token);
+    setIsLoggedIn(true);
 
     // This is a placeholder for the actual admin dashboard that will be implemented later
     /*   if (isAdminMode) {
@@ -54,14 +42,12 @@ const AuthProvider = ({ children }) => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    setToken(null);
-    setUser(null);
+    setIsLoggedIn(false);
+    navigate("/");
   };
 
   const value = {
-    token,
-    user,
+    isLoggedIn,
     onLogin: handleLogin,
     onLogout: handleLogout,
   };
