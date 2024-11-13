@@ -16,10 +16,10 @@ const AuthProvider = ({ children }) => {
     if (storedToken) {
       navigate(location.pathname || "/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
       setIsLoggedIn(true);
-    } else {
+    } /* else {
       setIsLoggedIn(false);
       navigate("/");
-    }
+    } */ // This is for when a user is not logged in and should be redirected to the role selection page
   }, []);
 
   const handleLogin = async (username, password, isAdminMode) => {
