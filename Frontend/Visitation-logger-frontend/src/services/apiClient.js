@@ -1,7 +1,6 @@
 import { API_URL } from "./constants";
 
 async function login(username, password, isAdmin) {
-  console.log("username", username, "password", password, "isAdmin", isAdmin);
   return await post("Login", { username, password, isAdmin }, false);
 }
 
@@ -15,7 +14,6 @@ async function post(endpoint, data, auth = true) {
 } */
 
 async function request(method, endpoint, data, auth = true) {
-  console.log("data", data);
   const opts = {
     headers: {
       "Content-Type": "application/json",
@@ -31,7 +29,6 @@ async function request(method, endpoint, data, auth = true) {
     opts.headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
   }
 
-  console.log("Request options", opts);
   const response = await fetch(`${API_URL}/${endpoint}`, opts);
 
   if (!response.ok) {
