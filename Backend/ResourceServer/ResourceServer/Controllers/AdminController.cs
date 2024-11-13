@@ -17,8 +17,9 @@ namespace ResourceServer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Admin>> PostAdmin([FromBody] AdminPostDTO dto)
+        public async Task<ActionResult<Admin>> PostAdmin([FromBody] AdminDTO dto)
         {
+            //Add validation of required fields (required not present in AdminDTO) to avoid null values
 
             var admin = new Admin
             {
@@ -51,6 +52,41 @@ namespace ResourceServer.Controllers
             var admins = await _adminRepository.GetAll();
 
             return Ok(admins);
+        }
+
+        [HttpPut("{id}")] //The ID of the admin to be updated
+        public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
+        {
+            var adminToUpdate = await _adminRepository.GetById(id);
+
+            if (adminToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            var updatedAdmin = await _adminRepository.Update(id, dto);
+
+            return Ok(updatedAdmin);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteAdmin(Guid id)
+        {
+            var adminToDelete = await _adminRepository.GetById(id);
+
+            if(adminToDelete == null)
+            {
+                return NotFound();
+            }
+
+            var successfulDelete = await _adminRepository.Delete(id);
+
+            if(!successfulDelete)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }
