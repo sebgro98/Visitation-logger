@@ -23,5 +23,12 @@ namespace ResourceServer.Controllers
 
             return Ok(createdVisitor);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Visitor>> GetVisitorById(Guid id)
+        {
+            var visitor = await _visitorRepository.GetVisitorById(id);
+            return Ok(visitor);
+        }
     }
 }
