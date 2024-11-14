@@ -1,70 +1,53 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useLocation, useNavigate } from "react-router-dom";
+import { login } from "../services/apiClient";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
 
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(storedUser);
+    if (storedToken) {
       navigate(location.pathname || "/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
-    } 
-    // else {
-    //   navigate("/");
-    // } Temporär utkommentering i testsyfte TODO: Ska finnas med vid prod
+      setIsLoggedIn(true);
+    } /* else {
+      setIsLoggedIn(false);
+      navigate("/");
+    } */ // This is for when a user is not logged in and should be redirected to the role selection page
   }, []);
 
-  const handleLogin = async (/*username, password, isAdminMode*/) => {
-    const res = {
-      data: {
-        token: "fake",
-        user: {
-          username: "fake",
-          role: "Visitor",
-        },
-      },
-    };
+  const handleLogin = async (username, password, isAdminMode) => {
+    const res = await login(username, password, isAdminMode);
 
-    // await login(username, password, isAdminMode);  This is a placeholder for the actual login function that will be implemented later
-
-    if (!res.data.token || !res.data.user) {
-      return navigate("/login");
+    if (!res.token) {
+      return navigate("/");
     }
 
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("role", res.data.user);
-
-    setToken(res.data.token);
-    setUser(res.data.user);
+    localStorage.setItem("token", res.token);
+    setIsLoggedIn(true);
 
     // This is a placeholder for the actual admin dashboard that will be implemented later
     /*   if (isAdminMode) {
       navigate("/admin");
     } */
 
-    navigate("/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
+    // navigate("/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    setToken(null);
-    setUser(null);
+    setIsLoggedIn(false);
+    navigate("/");
   };
 
   const value = {
-    token,
-    user,
+    isLoggedIn,
     onLogin: handleLogin,
     onLogout: handleLogout,
   };

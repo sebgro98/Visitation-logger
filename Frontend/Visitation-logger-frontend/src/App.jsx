@@ -9,11 +9,11 @@ import { AuthProvider } from "./context/auth";
 function App() {
   return (
     <>
-      <header>
-        <Header />
-      </header>
-
       <AuthProvider>
+        <header>
+          <Header />
+        </header>
+
         <Routes>
           <Route path="/" element={<RoleSelection />} />
           <Route path="/logs" element={<Logspage/>}/>

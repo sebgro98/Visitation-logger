@@ -1,8 +1,7 @@
-using System;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ResourceServer.Model
+namespace SharedModels.Models
 {
     [Table("purpose_types")]
     public class PurposeType
