@@ -1,3 +1,24 @@
+.dashboard-actions {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 5rem 3rem 0 3rem;
+}
+
+.dashboard-action {
+  width: 40rem;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Justera gapet mellan ikonerna efter behov */
+}
+
 .dashboard-header {
   display: flex;
   flex-direction: column;
@@ -21,10 +42,6 @@
 .dashboard-icon {
   font-size: 80px;
   color: #006eaf;
-}
-
-.dashboard-action-header {
-  width: 25%;
 }
 
 .dashboard-action-header-title {

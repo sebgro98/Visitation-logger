@@ -1,19 +1,1 @@
-.master-dashboard-actions {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin: 5rem 3rem 0 3rem;
-}
 
-.master-dashboard-action {
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-}
-
-.icon-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px; /* Justera gapet mellan ikonerna efter behov */
-}
