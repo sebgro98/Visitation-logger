@@ -10,14 +10,14 @@ namespace ResourceServer.Controllers
     public class LoginController : ControllerBase
     {
         private readonly HttpClient _httpClient;
-        
+
         public LoginController(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
         [HttpPost]
-        public async Task<ActionResult<object>> Login([FromBody] LoginDTO dto)
+        public async Task<ActionResult<string>> Login([FromBody] LoginDTO dto)
         {
             // Define the URL of the authentication server
             var authServerUrl = "http://localhost:5247/login";
@@ -31,12 +31,18 @@ namespace ResourceServer.Controllers
             // Check if the response is successful
             if (response.IsSuccessStatusCode)
             {
-                var responseData = await response.Content.ReadAsStringAsync();
-                return Ok(responseData);
+                var token = await response.Content.ReadAsStringAsync();
+
+                // Create a JSON object with the token
+                var jsonResponse = JsonSerializer.Serialize(new { token });
+
+                return Content(jsonResponse, "application/json");
             }
             else
             {
-                return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+                // Handle unsuccessful response
+                var errorData = await response.Content.ReadAsStringAsync();
+                return Content(errorData, "application/json");
             }
         }
     }

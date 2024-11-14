@@ -1,22 +1,20 @@
-import PropTypes from "prop-types";
 import "./header.css";
+import useAuth from "../../hooks/useAuth";
 
-const Header = ({ isLoggedIn = false, onLogout = () => {} }) => {
+const Header = () => {
+  const { onLogout, isLoggedIn } = useAuth();
+  console.log(isLoggedIn);
+
   return (
     <div className="header">
       <h1 className="header-title">Combitech</h1>
       {isLoggedIn && (
-        <button className="logout-button" onClick={onLogout}>
-          Log Out
-        </button>
+        <div className="logout-button" onClick={onLogout}>
+          Logga ut
+        </div>
       )}
     </div>
   );
-};
-
-Header.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  onLogout: PropTypes.func,
 };
 
 export default Header;
