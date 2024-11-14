@@ -5,8 +5,8 @@ import "./loggAdminDashboard.css";
 
 const LoggAdminDashboard = () => {
   return (
-    <div className="logg-admin-dashboard">
-      <div className="-logg-dashboard-header">
+    <>
+      <div className="dashboard-header">
         <h1 className="dashboard-header-title">Loggadministratör</h1>
         <p className="dashboard-header-info">
           Som loggadministratör så kan du visa/exportera samtliga
@@ -31,7 +31,7 @@ const LoggAdminDashboard = () => {
           </p>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
