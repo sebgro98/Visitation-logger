@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{5CDCB06F-186E-4958-9367-348BACC288C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdministrationServer", "AdministrationServer", "{461D65ED-F0B0-47A4-AB8A-B70E05C808BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdministrationServer", "Backend\AdministrationServer\AdministrationServer\AdministrationServer.csproj", "{B9E7C630-3BFA-400D-AC0F-11995E2239EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthenticationServer", "AuthenticationServer", "{ACBDBC40-C582-43F9-B89D-CBCD04BE9060}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationServer", "Backend\AuthenticationServer\AuthenticationServer\AuthenticationServer.csproj", "{CF0CDC7F-E128-49B8-824B-A722306ABC62}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResourceServer", "ResourceServer", "{831FFE5C-60D3-44B2-8E82-2532B61689BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceServer", "Backend\ResourceServer\ResourceServer\ResourceServer.csproj", "{2CC8B636-EDC4-4790-B186-1F7262834E1F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9E7C630-3BFA-400D-AC0F-11995E2239EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9E7C630-3BFA-400D-AC0F-11995E2239EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9E7C630-3BFA-400D-AC0F-11995E2239EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9E7C630-3BFA-400D-AC0F-11995E2239EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF0CDC7F-E128-49B8-824B-A722306ABC62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF0CDC7F-E128-49B8-824B-A722306ABC62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF0CDC7F-E128-49B8-824B-A722306ABC62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF0CDC7F-E128-49B8-824B-A722306ABC62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CC8B636-EDC4-4790-B186-1F7262834E1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC8B636-EDC4-4790-B186-1F7262834E1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC8B636-EDC4-4790-B186-1F7262834E1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC8B636-EDC4-4790-B186-1F7262834E1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{461D65ED-F0B0-47A4-AB8A-B70E05C808BB} = {5CDCB06F-186E-4958-9367-348BACC288C1}
+		{B9E7C630-3BFA-400D-AC0F-11995E2239EF} = {461D65ED-F0B0-47A4-AB8A-B70E05C808BB}
+		{ACBDBC40-C582-43F9-B89D-CBCD04BE9060} = {5CDCB06F-186E-4958-9367-348BACC288C1}
+		{CF0CDC7F-E128-49B8-824B-A722306ABC62} = {ACBDBC40-C582-43F9-B89D-CBCD04BE9060}
+		{831FFE5C-60D3-44B2-8E82-2532B61689BB} = {5CDCB06F-186E-4958-9367-348BACC288C1}
+		{2CC8B636-EDC4-4790-B186-1F7262834E1F} = {831FFE5C-60D3-44B2-8E82-2532B61689BB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE11D67C-4C31-4A67-B367-A6CCA015A236}
+	EndGlobalSection
+EndGlobal
