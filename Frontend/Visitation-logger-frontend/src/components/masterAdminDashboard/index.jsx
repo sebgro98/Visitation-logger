@@ -10,7 +10,7 @@ import "./masterAdminDashboard.css";
 
 const MasterAdminDashboard = () => {
   return (
-    <div className="logg-admin-dashboard">
+    <>
       <div className="dashboard-header">
         <h1 className="dashboard-header-title">Masterdministratör</h1>
         <p className="dashboard-header-info">
@@ -83,7 +83,7 @@ const MasterAdminDashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
