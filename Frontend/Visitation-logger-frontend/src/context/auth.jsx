@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { login } from "../services/apiClient";
 
 const AuthContext = createContext();
@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
     const storedToken = localStorage.getItem("token");
 
     if (storedToken) {
-      navigate(location.pathname || "/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
+      navigate(location.pathname || "/dashboard"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
       setIsLoggedIn(true);
     } /* else {
       setIsLoggedIn(false);
@@ -24,6 +24,7 @@ const AuthProvider = ({ children }) => {
 
   const handleLogin = async (username, password, isAdminMode) => {
     const res = await login(username, password, isAdminMode);
+    console.log(res.token);
 
     if (!res.token) {
       return navigate("/");
@@ -32,12 +33,7 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("token", res.token);
     setIsLoggedIn(true);
 
-    // This is a placeholder for the actual admin dashboard that will be implemented later
-    /*   if (isAdminMode) {
-      navigate("/admin");
-    } */
-
-    // navigate("/"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
+    navigate("/dashboard"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
   };
 
   const handleLogout = () => {
@@ -59,4 +55,15 @@ AuthProvider.propTypes = {
   children: PropTypes.node,
 };
 
-export { AuthContext, AuthProvider };
+// eslint-disable-next-line react/prop-types
+const ProtectedRoute = ({ children }) => {
+  const storedToken = localStorage.getItem("token");
+  const location = useLocation();
+  if (!storedToken) {
+    return <Navigate to={"/"} replace state={{ from: location }} />;
+  }
+
+  return <>{children}</>;
+};
+
+export { AuthContext, AuthProvider, ProtectedRoute };
