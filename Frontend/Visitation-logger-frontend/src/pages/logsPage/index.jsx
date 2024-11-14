@@ -70,10 +70,24 @@ const Logs = () => {
     link.click(); // Trigger the download
   };
 
+  const filter = () => {
+    console.log("Filter logs");
+    
+  }
+
+  const previousLogPage = () => {
+    console.log("Previous log page");
+  };
+
+  const nextLogPage = () => {
+    console.log("Next log page");
+  };
+    
+
   return (
     <div className="logsPage">
       <div className="logsPage-header">
-        <button className="logsPage-filter" type="button">
+        <button className="logsPage-filter" type="button" onClick={filter}>
           Filtrera
         </button>
         <button className="logsPage-export" onClick={exportToCSV}>
@@ -96,6 +110,14 @@ const Logs = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="logsPage-footer">
+        <button className="logsPage-previous" onClick={previousLogPage}>
+          Föregående
+        </button>
+        <button className="logsPage-next" type="button" onClick={nextLogPage}>
+          Nästa
+        </button>
       </div>
     </div>
   );
