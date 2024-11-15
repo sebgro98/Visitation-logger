@@ -5,6 +5,7 @@ using AuthenticationServer.Data;
 using AuthenticationServer.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SharedModels.Hasher;
 
 namespace AuthenticationServer.Services
 {
@@ -12,7 +13,6 @@ namespace AuthenticationServer.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-
 
         public AuthService(ApplicationDbContext context, IConfiguration configuration)
         {
@@ -25,10 +25,14 @@ namespace AuthenticationServer.Services
             Guid? accountTypeId = null;
             Guid? userId = null;
 
+            //Hash provided DTO password
+            var hashedPassword = Hasher.HashPassword(loginDto.Password);
+
             if (loginDto.IsAdmin)
             {
-                var admin = await _context.Admins
-                    .FirstOrDefaultAsync(a => a.Username == loginDto.Username && a.Password == loginDto.Password);
+                var admin = await _context.Admins.FirstOrDefaultAsync(a =>
+                    a.Username == loginDto.Username && a.Password == hashedPassword
+                );
 
                 if (admin == null)
                 {
@@ -40,8 +44,9 @@ namespace AuthenticationServer.Services
             }
             else
             {
-                var visitorAccount = await _context.VisitorAccounts
-                    .FirstOrDefaultAsync(v => v.Username == loginDto.Username && v.Password == loginDto.Password);
+                var visitorAccount = await _context.VisitorAccounts.FirstOrDefaultAsync(v =>
+                    v.Username == loginDto.Username && v.Password == hashedPassword
+                );
 
                 if (visitorAccount == null)
                 {
@@ -59,7 +64,6 @@ namespace AuthenticationServer.Services
                 return null;
             }
 
-           
             var jwtSecret = _configuration["JwtSettings:Secret"];
             var key = Encoding.UTF8.GetBytes(jwtSecret);
 
@@ -67,19 +71,22 @@ namespace AuthenticationServer.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                    new Claim(ClaimTypes.Role, role.Name)
-                }),
+                Subject = new ClaimsIdentity(
+                    new[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                        new Claim(ClaimTypes.Role, role.Name)
+                    }
+                ),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature
+                )
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
     }
 }
