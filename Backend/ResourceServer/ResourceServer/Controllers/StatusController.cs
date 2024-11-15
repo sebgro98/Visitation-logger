@@ -17,7 +17,7 @@ namespace ResourceServer.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Status>>> GetAllAdmins()
+        public async Task<ActionResult<IEnumerable<Status>>> GetAllStatuses()
         {
             var status = await _statusRepository.GetAllStatuses();
 
