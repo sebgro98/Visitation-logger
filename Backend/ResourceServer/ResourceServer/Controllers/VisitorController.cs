@@ -20,11 +20,17 @@ namespace ResourceServer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Visitor>> CreateVisitor([FromBody] VisitorDTO dto)
+        public async Task<ActionResult<Visitor>> CreateVisitor([FromBody] VisitorDTO visitorDto)
         {
+            if(visitorDto.FullName.Length < 4 || visitorDto.FullName.Length > 20 || !visitorDto.FullName.All(char.IsLetter))
+            {
+                return BadRequest("Name must be at least 4 and at most 20 characters long, and can only contain letters. " + visitorDto.FullName);
+            }
 
-            var createdVisitor = await _visitorRepository.CreateVisitor(dto);
-            var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(dto.VisitorAccountId);
+            var createdVisitor = await _visitorRepository.CreateVisitor(visitorDto);
+
+            
+            var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(visitorDto.VisitorAccountId);
 
             if (visitorAccount == null)
             {
@@ -41,6 +47,7 @@ namespace ResourceServer.Controllers
                 Password = visitorAccount.Password,
                 VisitorId = createdVisitor.Id
             });
+            
 
             return Ok(createdVisitor);
         }

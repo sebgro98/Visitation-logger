@@ -35,7 +35,7 @@ namespace ResourceServer.Repositories
 
             visitorToUpdate.FullName = visitorPutDTO.FullName;
             visitorToUpdate.SSN = visitorPutDTO.SSN;
-            visitorToUpdate.City = visitorPutDTO.City;
+            visitorToUpdate.City = visitorPutDTO.City;    
             visitorToUpdate.CountryId = visitorPutDTO.CountryId;
             visitorToUpdate.PassportNo = visitorPutDTO.PassportNo;
             visitorToUpdate.Company = visitorPutDTO.Company;
