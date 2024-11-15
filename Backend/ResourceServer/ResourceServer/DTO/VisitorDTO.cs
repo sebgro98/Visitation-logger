@@ -21,5 +21,8 @@ namespace ResourceServer.DTO
 
         [Required]
         public string City { get; set; }
+
+        [Required]
+        public Guid VisitorAccountId { get; set; }
     }
 }
