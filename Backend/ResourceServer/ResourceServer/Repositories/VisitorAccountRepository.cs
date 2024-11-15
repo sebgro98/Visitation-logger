@@ -1,8 +1,8 @@
-using ResourceServer.Data;
-using SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
+using ResourceServer.Data;
 using ResourceServer.DTO;
 using SharedModels.Hasher;
+using SharedModels.Models;
 
 namespace ResourceServer.Repositories
 {
@@ -17,8 +17,8 @@ namespace ResourceServer.Repositories
 
         public async Task<IEnumerable<VisitorAccount>> GetAllVisitorAccounts()
         {
-            return await _context.VisitorAccounts
-                .Include(v => v.Visitor) // Eagerly load the Visitor related entity
+            return await _context
+                .VisitorAccounts.Include(v => v.Visitor) // Eagerly load the Visitor related entity
                 .ToListAsync();
         }
 
@@ -27,7 +27,10 @@ namespace ResourceServer.Repositories
             return await _context.VisitorAccounts.FindAsync(id);
         }
 
-        public async Task<VisitorAccount> UpdateVisitorAccount(Guid id, VisitorAccountDto visitorAccountDto)
+        public async Task<VisitorAccount> UpdateVisitorAccount(
+            Guid id,
+            VisitorAccountDto dto
+        )
         {
             var visitorAccountToUpdate = await _context.VisitorAccounts.FindAsync(id);
 
@@ -36,22 +39,21 @@ namespace ResourceServer.Repositories
                 return null;
             }
 
-            var hashedPassword = Hasher.HashPassword(visitorAccountDto.Password);
-            
-            visitorAccountToUpdate.PurposeTypeId = visitorAccountDto.PurposeTypeId;
-            visitorAccountToUpdate.Username = visitorAccountDto.UserName;
+            var hashedPassword = Hasher.HashPassword(dto.Password);
+
+            visitorAccountToUpdate.PurposeTypeId = dto.PurposeTypeId;
+            visitorAccountToUpdate.Username = dto.UserName;
             visitorAccountToUpdate.Password = hashedPassword;
-            visitorAccountToUpdate.StartDate = visitorAccountDto.StartDate;
-            visitorAccountToUpdate.EndDate = visitorAccountDto.EndDate;
-            visitorAccountToUpdate.VisitorId = visitorAccountDto.VisitorId;
-            visitorAccountToUpdate.AccountTypeId = visitorAccountDto.AccountTypeId;
+            visitorAccountToUpdate.StartDate = dto.StartDate;
+            visitorAccountToUpdate.EndDate = dto.EndDate;
+            visitorAccountToUpdate.VisitorId = dto.VisitorId;
+            visitorAccountToUpdate.AccountTypeId = dto.AccountTypeId;
 
             _context.VisitorAccounts.Update(visitorAccountToUpdate);
             await _context.SaveChangesAsync();
 
             return visitorAccountToUpdate;
         }
-
 
         public async Task DeleteVisitorAccount(int id)
         {
@@ -63,8 +65,22 @@ namespace ResourceServer.Repositories
             }
         }
 
-        public async Task<VisitorAccount> CreateVisitorAccount(VisitorAccount visitorAccount)
+        public async Task<VisitorAccount> CreateVisitorAccount(VisitorAccountDto dto)
         {
+            var hashedPassword = Hasher.HashPassword(dto.Password);
+
+            var visitorAccount = new VisitorAccount
+            {
+                Id = Guid.NewGuid(),
+                Username = dto.UserName,
+                Password = hashedPassword,
+                StartDate = dto.StartDate,
+                EndDate = dto.EndDate,
+                PurposeTypeId = dto.PurposeTypeId,
+                VisitorId = dto.VisitorId,
+                AccountTypeId = dto.AccountTypeId
+            };
+
             _context.VisitorAccounts.Add(visitorAccount);
             await _context.SaveChangesAsync();
             return visitorAccount;
