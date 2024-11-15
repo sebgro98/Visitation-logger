@@ -2,7 +2,6 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
-using SharedModels.Hasher;
 
 namespace ResourceServer.Controllers
 {
@@ -20,21 +19,7 @@ namespace ResourceServer.Controllers
         [HttpPost]
         public async Task<ActionResult<Admin>> PostAdmin([FromBody] AdminDTO dto)
         {
-            //Add validation of required fields (required not present in AdminDTO) to avoid null values
-
-            //Hash password
-            var hashedPassword = Hasher.HashPassword(dto.Password);
-
-            var admin = new Admin
-            {
-                Id = Guid.NewGuid(),
-                Username = dto.Username,
-                Password = hashedPassword,
-                AccountTypeId = dto.AccountTypeId
-            };
-
-            await _adminRepository.Insert(admin);
-            await _adminRepository.SaveChangesAsync();
+            var admin = await _adminRepository.Create(dto);
 
             return Ok(admin);
         }
@@ -61,24 +46,22 @@ namespace ResourceServer.Controllers
         [HttpPut("{id}")] //The ID of the admin to be updated
         public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
         {
-            var adminToUpdate = await _adminRepository.GetById(id);
+            var admin = await _adminRepository.Update(id, dto);
 
-            if (adminToUpdate == null)
+            if (admin == null)
             {
                 return NotFound();
             }
 
-            var updatedAdmin = await _adminRepository.Update(id, dto);
-
-            return Ok(updatedAdmin);
+            return Ok(admin);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAdmin(Guid id)
         {
-            var adminToDelete = await _adminRepository.GetById(id);
+            var admin = await _adminRepository.GetById(id);
 
-            if(adminToDelete == null)
+            if(admin == null)
             {
                 return NotFound();
             }
