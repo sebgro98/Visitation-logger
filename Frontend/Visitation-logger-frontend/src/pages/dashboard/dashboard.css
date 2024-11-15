@@ -55,5 +55,18 @@
   font-size: 0.7rem;
   font-weight: 400;
   text-align: center;
-  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Media query för små skärmar */
+@media (max-width: 600px) {
+  .dashboard-actions {
+    flex-direction: column;
+    gap: 2rem; /* Justera gapet efter behov */
+  }
+
+  .dashboard-action {
+    width: 100%; /* Gör att varje action tar upp hela bredden på små skärmar */
+    max-width: none; /* Ta bort maxbredden */
+  }
 }
