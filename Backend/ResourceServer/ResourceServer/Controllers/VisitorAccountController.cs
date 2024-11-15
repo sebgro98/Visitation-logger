@@ -42,7 +42,7 @@ namespace ResourceServer.Controller
                 AccountTypeId = visitorAccountDto.AccountTypeId
             };
 
-            // Save the new visitor account
+            // Save the new visitor account 
             await _visitorAccountRepository.CreateVisitorAccount(visitorAccount);
             return Ok(visitorAccount);
         }

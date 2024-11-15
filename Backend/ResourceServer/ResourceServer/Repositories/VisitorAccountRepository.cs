@@ -2,6 +2,7 @@ using ResourceServer.Data;
 using SharedModels.Models;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.DTO;
+using SharedModels.Hasher;
 
 namespace ResourceServer.Repositories
 {
@@ -26,8 +27,6 @@ namespace ResourceServer.Repositories
             return await _context.VisitorAccounts.FindAsync(id);
         }
 
-
-
         public async Task<VisitorAccount> UpdateVisitorAccount(Guid id, VisitorAccountDto visitorAccountDto)
         {
             var visitorAccountToUpdate = await _context.VisitorAccounts.FindAsync(id);
@@ -36,10 +35,12 @@ namespace ResourceServer.Repositories
             {
                 return null;
             }
+
+            var hashedPassword = Hasher.HashPassword(visitorAccountDto.Password);
             
             visitorAccountToUpdate.PurposeTypeId = visitorAccountDto.PurposeTypeId;
             visitorAccountToUpdate.Username = visitorAccountDto.UserName;
-            visitorAccountToUpdate.Password = visitorAccountDto.Password;
+            visitorAccountToUpdate.Password = hashedPassword;
             visitorAccountToUpdate.StartDate = visitorAccountDto.StartDate;
             visitorAccountToUpdate.EndDate = visitorAccountDto.EndDate;
             visitorAccountToUpdate.VisitorId = visitorAccountDto.VisitorId;
