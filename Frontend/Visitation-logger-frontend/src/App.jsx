@@ -4,7 +4,8 @@ import RoleSelection from "./pages/roleSelection";
 import Login from "./pages/login";
 import Logspage from "./pages/logsPage";
 import Header from "./components/header";
-import { AuthProvider } from "./context/auth";
+import { AuthProvider, ProtectedRoute } from "./context/auth";
+import Dashboard from "./pages/dashboard";
 
 function App() {
   return (
@@ -21,6 +22,15 @@ function App() {
           <Route
             path="/login/visitor"
             element={<Login isAdminMode={false} />}
+          />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </AuthProvider>
