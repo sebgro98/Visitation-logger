@@ -2,7 +2,6 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
-using SharedModels.Hasher;
 
 namespace ResourceServer.Controllers
 {
@@ -22,14 +21,11 @@ namespace ResourceServer.Controllers
         {
             //Add validation of required fields (required not present in AdminDTO) to avoid null values
 
-            //Hash password
-            var hashedPassword = Hasher.HashPassword(dto.Password);
-
             var admin = new Admin
             {
                 Id = Guid.NewGuid(),
                 Username = dto.Username,
-                Password = hashedPassword,
+                Password = dto.Password,
                 AccountTypeId = dto.AccountTypeId
             };
 

@@ -1,0 +1,15 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=<PGHOST>;Database=<PGDATABASE>;Username=<PGUSER>;Password=<password>;Port=5432;"
+  },
+  "JwtSettings": {
+    "Secret": "YourSuperSecretKeyMustBe32Bytes!!"
+  }
+}

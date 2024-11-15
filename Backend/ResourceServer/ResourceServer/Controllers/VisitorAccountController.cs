@@ -1,6 +1,5 @@
 using ResourceServer.DTO;
 using SharedModels.Models;
-using SharedModels.Hasher;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repositories;
@@ -27,14 +26,12 @@ namespace ResourceServer.Controller
                 return BadRequest("Invalid data.");
             }
 
-            //Hash password
-            var hashedPassword = Hasher.HashPassword(visitorAccountDto.Password);
-
+            
             var visitorAccount = new VisitorAccount
             {
                 Id = Guid.NewGuid(),
                 Username = visitorAccountDto.UserName,
-                Password = hashedPassword,
+                Password = visitorAccountDto.Password,
                 StartDate = visitorAccountDto.StartDate,
                 EndDate = visitorAccountDto.EndDate,
                 PurposeTypeId = visitorAccountDto.PurposeTypeId,
