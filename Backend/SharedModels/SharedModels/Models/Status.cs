@@ -26,13 +26,13 @@ namespace SharedModels.Models
         public string CheckInSign { get; set; }
 
         [Column("check_out_time")]
-        public DateTime CheckOutTime { get; set; }
+        public DateTime? CheckOutTime { get; set; }
 
         [Column("check_out_sign")]
         public string CheckOutSign { get; set; }
 
         [Column("last_export_date")]
-        public DateTime LastExportDate { get; set; }
+        public DateTime? LastExportDate { get; set; }
 
         // Foreign key for Node
         [Required]
