@@ -54,7 +54,6 @@ namespace SharedModels.Models
         [Column("node_id")]
         public Guid NodeId { get; set; }
 
-        [JsonIgnore]
         public Node Node { get; set; }
     }
 }
