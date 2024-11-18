@@ -1,0 +1,36 @@
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+  overflow-y: auto;
+  margin: 30px 60px;
+}
+
+.table {
+  border-collapse: collapse; /* Optional: Makes the table look cleaner */
+  width: 100%; /* Adjusts to the content width */
+}
+
+.table th,
+.table td {
+  padding: 15px 60px; /* Adds padding for a cleaner look */
+  text-align: left; /* Adjust as needed */
+}
+
+/* Header row */
+.table th {
+  background-color: #006eaf; /* Blue background */
+  color: #ffffff; /* White text */
+}
+
+/* Alternating row colors */
+.table tr:nth-child(even) {
+  background-color: #d3d3d3; /* Light grey */
+}
+
+.table tr:nth-child(odd) {
+  background-color: #a9a9a9; /* Dark grey */
+}
+
+.clickable-row {
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
