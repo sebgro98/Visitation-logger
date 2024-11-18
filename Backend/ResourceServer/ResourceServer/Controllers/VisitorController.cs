@@ -3,6 +3,7 @@ using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ResourceServer.Controllers
 {
@@ -19,11 +20,19 @@ namespace ResourceServer.Controllers
             _visitorRepository = visitorRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin, Visitor")]
         [HttpPost]
         public async Task<ActionResult<Visitor>> CreateVisitor([FromBody] VisitorDTO dto)
         {
 
             var createdVisitor = await _visitorRepository.CreateVisitor(dto);
+
+            if (createdVisitor == null)
+            {
+                // Handle error if the visitor creation fails
+                return BadRequest("Failed to create visitor.");
+            }
+
             var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(dto.VisitorAccountId);
 
             if (visitorAccount == null)
@@ -31,7 +40,7 @@ namespace ResourceServer.Controllers
                 return NotFound();
             }
 
-            await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, new VisitorAccountDto
+            var updatedVisitorAccountDto = new VisitorAccountDto
             {
                 AccountTypeId = visitorAccount.AccountTypeId,
                 PurposeTypeId = visitorAccount.PurposeTypeId,
@@ -39,12 +48,18 @@ namespace ResourceServer.Controllers
                 EndDate = visitorAccount.EndDate,
                 UserName = visitorAccount.Username,
                 Password = visitorAccount.Password,
-                VisitorId = createdVisitor.Id
-            });
+                VisitorId = createdVisitor.Id,
+                NodeId = visitorAccount.NodeId
+            };
+
+           
+            await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, updatedVisitorAccountDto);
+
 
             return Ok(createdVisitor);
         }
 
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Visitor>> GetVisitorById(Guid id)
         {
@@ -58,6 +73,7 @@ namespace ResourceServer.Controllers
             return Ok(visitor);
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Visitor>> UpdateVisitor(Guid id, [FromBody] VisitorPutDTO visitorPutDTO)
         {

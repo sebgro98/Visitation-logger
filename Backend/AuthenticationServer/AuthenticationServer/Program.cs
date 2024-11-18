@@ -16,30 +16,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
         .UseLazyLoadingProxies());
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    var key = builder.Configuration["JwtSettings:Secret"];
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        RoleClaimType = ClaimTypes.Role,
-        ValidateLifetime = true
-    };
-});
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequireMasterAdminRole", policy => policy.RequireRole("MasterAdmin"));
-    options.AddPolicy("RequireVisitorRole", policy => policy.RequireRole("Visitor"));
-    options.AddPolicy("RequireLogAdminRole", policy => policy.RequireRole("LogAdmin"));
-});
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

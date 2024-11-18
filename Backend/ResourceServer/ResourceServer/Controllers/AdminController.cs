@@ -2,6 +2,7 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ResourceServer.Controllers
 {
@@ -16,6 +17,7 @@ namespace ResourceServer.Controllers
             _adminRepository = adminRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPost]
         public async Task<ActionResult<Admin>> PostAdmin([FromBody] AdminDTO dto)
         {
@@ -34,7 +36,7 @@ namespace ResourceServer.Controllers
             }
             return Ok(admin);
         }
-
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Admin>>> GetAllAdmins()
         {
@@ -42,7 +44,7 @@ namespace ResourceServer.Controllers
 
             return Ok(admins);
         }
-
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")] //The ID of the admin to be updated
         public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
         {
@@ -56,6 +58,7 @@ namespace ResourceServer.Controllers
             return Ok(admin);
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAdmin(Guid id)
         {

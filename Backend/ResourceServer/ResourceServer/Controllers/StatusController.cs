@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ResourceServer.Controllers
 {
@@ -15,7 +16,7 @@ namespace ResourceServer.Controllers
         {
             _statusRepository = statusRepository;
         }
-
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Status>>> GetAllStatuses()
         {
@@ -24,6 +25,7 @@ namespace ResourceServer.Controllers
             return Ok(status);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpPost]
         public async Task<IActionResult> CreateStatus([FromBody] StatusCheckInDTO statusCheckInDto)
         {
@@ -36,6 +38,7 @@ namespace ResourceServer.Controllers
             return Ok(status);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateStatus(Guid id, [FromBody] StatusCheckOutDTO statusCheckOutDto)
         {
