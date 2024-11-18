@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode";
 import LoggAdminDashboard from "../../components/loggAdminDashboard";
 import "./dashboard.css";
 import MasterAdminDashboard from "../../components/masterAdminDashboard";
+import VisitorDashboard from "../../components/visitorDashboard";
 
 const Dashboard = () => {
   const storedToken = localStorage.getItem("token");
@@ -11,7 +12,7 @@ const Dashboard = () => {
   return (
     <main>
       {role === "Visitor" ? (
-        <h1>Visitor Dashboard</h1>
+        <VisitorDashboard />
       ) : role === "LoggAdmin" ? (
         <LoggAdminDashboard />
       ) : (
