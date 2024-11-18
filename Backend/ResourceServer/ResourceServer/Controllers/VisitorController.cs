@@ -16,7 +16,6 @@ namespace ResourceServer.Controllers
     {
         private readonly IVisitorRepository _visitorRepository;
         private readonly IVisitorAccountRepository _visitorAccountRepository;
-        private readonly ApplicationDbContext _countryContext;
         private static readonly Regex SsnRegex = new Regex("^\\d{8}-\\d{4}$");
         private static readonly Regex OnlyLettersAndNumbersRegex = new Regex(@"^[a-zA-Z0-9]+$");
 
@@ -24,7 +23,6 @@ namespace ResourceServer.Controllers
         {
             _visitorAccountRepository = visitorAccountRepository;
             _visitorRepository = visitorRepository;
-            _countryContext = new ApplicationDbContext();
         }
 
         [HttpPost]
@@ -105,7 +103,7 @@ namespace ResourceServer.Controllers
             {
                 return BadRequest("SSN/Personal number must have this format: YYYYMMDD-XXXX.");
             }
-            else if (await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == dto.CountryName)) == null)
+            else if (_visitorRepository.GetCountry(iVisitorDto.CountryName) == null)
             {
                 return BadRequest("Country must be either Norway or Sweden.");
             }
@@ -115,11 +113,11 @@ namespace ResourceServer.Controllers
             }
             else if (iVisitorDto.Company.Length > 50 || !OnlyLettersAndNumbersRegex.IsMatch(iVisitorDto.Company))
             {
-                return BadRequest("Company name cannot be longer than 20 characters and can only contain letters and numbers.");
+                return BadRequest("Company name cannot be longer than 50 characters and can only contain letters and numbers." + _visitorRepository.GetCountry(iVisitorDto.CountryName));
             }
             else if (iVisitorDto.City.Length > 50 || !iVisitorDto.City.All(char.IsLetter))
             {
-                return BadRequest("City name cannot be longer than 20 characters and can only contain letters.");
+                return BadRequest("City name cannot be longer than 50 characters and can only contain letters.");
             }
             return Ok();
         }

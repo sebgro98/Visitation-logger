@@ -10,5 +10,6 @@ namespace ResourceServer.Repositories
         Task<Visitor> UpdateVisitor(Guid id, VisitorDTOPut dto);
         Task<Visitor> CreateVisitor(VisitorDTOPost dto);
         Task DeleteVisitor(int id);
+        Task<Country> GetCountry(string countryName);
     }
 }
