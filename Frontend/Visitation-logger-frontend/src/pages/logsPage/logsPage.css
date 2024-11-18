@@ -1,6 +1,3 @@
-.logsPage{
-}
-
 .logsPage-results table {
   width: auto; /* Adjusts to the content width */
   margin: 0 auto; /* Ensures proper centering if width is specified */
@@ -20,11 +17,12 @@
   padding: 10px;
 }
 
-.logsPage-footer{
+.logsPage-footer {
   display: flex;
   justify-content: center;
   margin-top: 20px;
   padding: 10px;
+  gap: 20px;
 }
 
 .logsPage-previous,
@@ -36,23 +34,4 @@
   margin-left: 10px;             /* Add margin for spacing */
   border-radius: 4px;        /* Rounded corners */
   cursor: pointer;           /* Pointer cursor on hover */
-}
-
-/* For the filter button */
-.logsPage-filter,
-.logsPage-export{
-  background-color: #006eaf; /* Blue background */
-  color: #ffffff;            /* White text */
-  border: none;              /* Remove default border */
-  padding: 10px 20px;        /* Add padding for size */
-  border-radius: 4px;        /* Rounded corners */
-  cursor: pointer;           /* Pointer cursor on hover */
-}
-.logsPage-filter:hover,
-.logsPage-export:hover,
-.logsPage-previous,
-.logsPage-next {
-  background-color: #0056b3; /* Darker blue on hover for filter */
-  color: #ffffff;            /* Keep text white on hover */
-  transition: background-color 0.3s ease; /* Smooth transition */
 }

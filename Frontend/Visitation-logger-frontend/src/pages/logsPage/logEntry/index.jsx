@@ -7,8 +7,6 @@ const LogEntry = ({ log, index }) => {
     const lightgrey = "#d3d3d3";
     const darkgrey = "#a9a9a9";
     const backgroundColor = index % 2 === 0 ? lightgrey : darkgrey;
-
-    console.log(index);
     
     
     return (
