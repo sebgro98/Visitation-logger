@@ -24,7 +24,7 @@ namespace ResourceServer.Repositories
             return await _context.Status.FindAsync(id);
         }
 
-        public async Task<Status> UpdateStatus(Guid id, StatusDTO statusDTO)
+        public async Task<Status> UpdateStatus(Guid id, StatusCheckOutDTO statusDTO)
         {
             var statusToUpdate = await _context.Status.FindAsync(id);
 
@@ -62,16 +62,16 @@ namespace ResourceServer.Repositories
             }
         }
 
-        public async Task<Status> CreateStatus(StatusDTO statusDto)
+        public async Task<Status> CreateStatus(StatusCheckInDTO statusCheckInDto)
         {
 
             var newStatus = new Status
             {
                 Id = Guid.NewGuid(),
-                VisitorId = statusDto.VisitorId,
-                CheckInSign = statusDto.CheckInSign,
-                CheckInTime = statusDto.CheckInTime,
-                NodeId = statusDto.NodeId,
+                VisitorId = statusCheckInDto.VisitorId,
+                CheckInSign = statusCheckInDto.CheckInSign,
+                CheckInTime = statusCheckInDto.CheckInTime,
+                NodeId = statusCheckInDto.NodeId,
             };
 
             _context.Status.Add(newStatus);
