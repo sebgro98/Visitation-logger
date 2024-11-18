@@ -29,7 +29,7 @@ namespace SharedModels.Models
         [ForeignKey("AccountTypeId")]
         public virtual AccountType AccountType { get; set; }
 
-        [Column("node_id")]
+        [Column("node_Id")]
         public Guid NodeId { get; set; }
 
         public virtual Node Node { get; set; }
