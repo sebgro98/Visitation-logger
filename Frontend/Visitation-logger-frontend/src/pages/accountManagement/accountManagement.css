@@ -1,0 +1,18 @@
+.management-button-add {
+  display: flex;
+  justify-content: left;
+}
+
+.management-buttons-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.management-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 60px;
+}
