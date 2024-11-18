@@ -90,9 +90,18 @@ const Logs = () => {
           </tbody>
         </table>
       </div>
-      <div className="logsPage-footer">
-        <LogsPageButton name={"Föregående"} onClick={previousLogPage} />
-        <LogsPageButton name={"Nästa"} onClick={nextLogPage} />
+        <div className="logsPage-footer">
+          <br></br>
+          <LogsPageButton
+            name={"Föregående"}
+            onClick={previousLogPage}
+            disabled={currentPage === 1}
+          />
+          <LogsPageButton
+            name={"Nästa"}
+            onClick={nextLogPage}
+            disabled={currentPage === Math.ceil(filteredLogs.length / 10)}
+          />
       </div>
     </div>
   );

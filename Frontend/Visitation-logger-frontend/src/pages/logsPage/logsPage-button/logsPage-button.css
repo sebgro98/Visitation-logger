@@ -12,3 +12,10 @@
   color: #ffffff;            /* Keep text white on hover */
   transition: background-color 0.3s ease; /* Smooth transition */
 }
+
+.logsPage-button:disabled {
+  background-color: #d3d3d3; /* Light gray */
+  color: #a9a9a9; /* Darker gray for text */
+  cursor: not-allowed; /* Show that the button cannot be clicked */
+  opacity: 0.7;
+}
