@@ -28,5 +28,11 @@ namespace SharedModels.Models
         // Navigation property
         [ForeignKey("AccountTypeId")]
         public virtual AccountType AccountType { get; set; }
+
+        [Column("node_id")]
+        public Guid NodeId { get; set; }
+
+        [JsonIgnore]
+        public virtual Node Node { get; set; }
     }
 }
