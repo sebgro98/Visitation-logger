@@ -24,9 +24,12 @@ namespace ResourceServer.Repositories
             return await _context.Visitors.FindAsync(id);
         }
 
-        public async Task<Visitor> UpdateVisitor(Guid id, VisitorPutDTO visitorPutDTO)
+        public async Task<Visitor> UpdateVisitor(Guid id, VisitorDTOPut visitorPutDTO)
         {
             var visitorToUpdate = await _context.Visitors.FindAsync(id);
+
+            //Find country by name. Can be replaced with AutoMapper
+            var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == visitorPutDTO.CountryName);
 
             if (visitorToUpdate == null)
             {
@@ -36,7 +39,7 @@ namespace ResourceServer.Repositories
             visitorToUpdate.FullName = visitorPutDTO.FullName;
             visitorToUpdate.SSN = visitorPutDTO.SSN;
             visitorToUpdate.City = visitorPutDTO.City;    
-            visitorToUpdate.CountryId = visitorPutDTO.CountryId;
+            visitorToUpdate.Country = foundCountry;
             visitorToUpdate.PassportNo = visitorPutDTO.PassportNo;
             visitorToUpdate.Company = visitorPutDTO.Company;
             _context.Visitors.Update(visitorToUpdate);
@@ -55,7 +58,7 @@ namespace ResourceServer.Repositories
             }
         }
 
-        public async Task<Visitor> CreateVisitor(VisitorDTO dto)
+        public async Task<Visitor> CreateVisitor(VisitorDTOPost dto)
         {
             //Find country by name. Can be replaced with AutoMapper
             var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == dto.CountryName);
