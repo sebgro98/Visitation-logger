@@ -5,9 +5,11 @@ namespace ResourceServer.DTO
 {
     public class AdminDTO
     {
+        [Required]
         [DefaultValue("Logging-Admin")]
         public string Username { get; set; }
 
+        [Required]
         [DefaultValue("Testpassword1!")]
         public string Password { get; set; }
 
@@ -16,5 +18,8 @@ namespace ResourceServer.DTO
 
         [DefaultValue("bd22cb11-ff86-4295-ac73-a9c79516087b")]
         public Guid NodeId { get; set; }
+
+        [Required]
+        public string FullName { get; set; }
     }
 }
