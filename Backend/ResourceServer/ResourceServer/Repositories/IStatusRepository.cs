@@ -8,8 +8,8 @@ namespace ResourceServer.Repositories
         Task<IEnumerable<Status>> GetAllStatuses();
         IQueryable<Status> GetAllStatusesForFiltering();
         Task<Status> GetStatusById(Guid id);
-        Task<Status> UpdateStatus(Guid id, StatusDTO statusDTO);
-        Task<Status> CreateStatus(StatusDTO statusDTO);
+        Task<Status> UpdateStatus(Guid id, StatusCheckOutDTO statusCheckOutDto);
+        Task<Status> CreateStatus(StatusCheckInDTO statusCheckInDto);
         Task DeleteStatus(Guid id);
     }
 }

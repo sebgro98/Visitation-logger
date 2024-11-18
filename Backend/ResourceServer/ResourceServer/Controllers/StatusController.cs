@@ -66,5 +66,31 @@ namespace ResourceServer.Controllers
 
             return Ok(statusList);
         }
+        [HttpPost]
+        public async Task<IActionResult> CreateStatus([FromBody] StatusCheckInDTO statusCheckInDto)
+        {
+            if (statusCheckInDto == null)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            var status = await _statusRepository.CreateStatus(statusCheckInDto);
+            return Ok(status);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateStatus(Guid id, [FromBody] StatusCheckOutDTO statusCheckOutDto)
+        {
+            Status updateStatus =
+                await _statusRepository.UpdateStatus(id, statusCheckOutDto);
+
+            if (updateStatus == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updateStatus);
+        }
+
     }
 }

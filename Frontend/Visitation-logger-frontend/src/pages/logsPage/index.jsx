@@ -1,50 +1,45 @@
 import { useEffect, useState } from "react";
 import LogEntry from "./logEntry";
+import LogsPageButton from "./logsPage-button";
 import "./logsPage.css";
+import dummyLogs from "./dummylogs";
 
 const Logs = () => {
   const [logs, setLogs] = useState([]);
+  const [filteredLogs, setFilteredLogs] = useState([]);
+  const [displayedLogs, setDisplayedLogs] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    // Define the dummy logs
-    const dummyLogs = [
-      {
-        visitor: "Anna Karlsson",
-        description: "Besök för systemuppdatering",
-        node: "SESTO1",
-        date: "2024-11-01"
-      },
-      {
-        visitor: "Johan Rysk",
-        description: "Teknisk felsökning",
-        node: "SEGOT3",
-        date: "2024-11-02"
-      },
-      {
-        visitor: "Emma Persson",
-        description: "Underhållsarbete",
-        node: "SEMAL10",
-        date: "2024-11-03"
-      },
-      {
-        visitor: "Lars Svensson",
-        description: "Systemtestning",
-        node: "NOOSL3",
-        date: "2024-11-04"
-      },
-      {
-        visitor: "Sara Lindgren",
-        description: "Programuppdatering",
-        node: "SEUPP5",
-        date: "2024-11-05"
-      }
-    ];
+    setLogs(dummyLogs);
+    setFilteredLogs(dummyLogs);
+  }, []);
 
-    // Set the logs in state
-    setLogs(dummyLogs); // Initialize logs with dummy data on first render
-  }, []); // Empty dependency array ensures this runs only once when the component mounts
+  useEffect(() => {
+    paginate();
+  }, [filteredLogs, currentPage]);
 
-  // Function to convert logs to CSV format
+  const paginate = () => {
+    const logsPerPage = 10;
+    const lastLogIndex = Math.min(currentPage * logsPerPage, filteredLogs.length);
+    const firstLogIndex = lastLogIndex - logsPerPage;
+
+    const currentLogs = filteredLogs.slice(firstLogIndex, lastLogIndex);
+    setDisplayedLogs(currentLogs);
+  };
+
+  const previousLogPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextLogPage = () => {
+    if (currentPage < Math.ceil(filteredLogs.length / 10)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   const exportToCSV = () => {
     const header = ["Besökare", "Besöksbeskrivning", "Nod", "Datum"];
     const rows = logs.map(log => [
@@ -54,45 +49,29 @@ const Logs = () => {
       log.date
     ]);
 
-    // Combine header and rows into a single CSV string
     const csvContent = [
       header.join(","),
       ...rows.map(row => row.join(","))
     ].join("\n");
 
-    // Create a Blob from the CSV string and create a downloadable URL
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
-    const currentdate = new Date(); 
-    const datetime = currentdate.getMilliseconds();
+    const currentdate = new Date();
+    const datetime = currentdate.toISOString();
     link.href = URL.createObjectURL(blob);
-    link.download = "logs.csv" + datetime; // Set the file name for the download
-    link.click(); // Trigger the download
+    link.download = `logs_${datetime}.csv`;
+    link.click();
   };
 
   const filter = () => {
     console.log("Filter logs");
-    
-  }
-
-  const previousLogPage = () => {
-    console.log("Previous log page");
   };
-
-  const nextLogPage = () => {
-    console.log("Next log page");
-  };
-    
 
   return (
     <div className="logsPage">
       <div className="logsPage-header">
-        <button className="logsPage-filter" type="button" onClick={filter}>
-          Filtrera
-        </button>
-        <button className="logsPage-export" onClick={exportToCSV}>
-          Exportera
-        </button>
+        <LogsPageButton name={"Filtrera"} onClick={filter} />
+        <LogsPageButton name={"Exportera"} onClick={exportToCSV} />
       </div>
       <div className="logsPage-results">
         <table className="logsPage-table">
@@ -105,22 +84,28 @@ const Logs = () => {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log, index) => (
-              <LogEntry log={log} key={index} index={index}/>
+            {displayedLogs.map((log, index) => (
+              <LogEntry log={log} key={index} index={index} />
             ))}
           </tbody>
         </table>
       </div>
-      <div className="logsPage-footer">
-        <button className="logsPage-previous" onClick={previousLogPage}>
-          Föregående
-        </button>
-        <button className="logsPage-next" type="button" onClick={nextLogPage}>
-          Nästa
-        </button>
+        <div className="logsPage-footer">
+          <br></br>
+          <LogsPageButton
+            name={"Föregående"}
+            onClick={previousLogPage}
+            disabled={currentPage === 1}
+          />
+          <LogsPageButton
+            name={"Nästa"}
+            onClick={nextLogPage}
+            disabled={currentPage === Math.ceil(filteredLogs.length / 10)}
+          />
       </div>
     </div>
   );
 };
 
 export default Logs;
+

@@ -36,7 +36,8 @@ namespace ResourceServer.Repositories
                 Id = Guid.NewGuid(),
                 Username = dto.Username,
                 Password = hashedPassword,
-                AccountTypeId = dto.AccountTypeId
+                AccountTypeId = dto.AccountTypeId,
+                NodeId = dto.NodeId,
             };
 
             _table.Add(admin);
@@ -59,6 +60,7 @@ namespace ResourceServer.Repositories
             adminToBeUpdated.Username = dto.Username;
             adminToBeUpdated.Password = hashedPassword;
             adminToBeUpdated.AccountTypeId = dto.AccountTypeId;
+            adminToBeUpdated.NodeId = dto.NodeId;
 
             _table.Attach(adminToBeUpdated);
             _db.Entry(adminToBeUpdated).State = EntityState.Modified;
