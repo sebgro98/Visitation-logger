@@ -12,8 +12,8 @@ using ResourceServer.Data;
 namespace ResourceServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241115111002_addNodeIdToVisitorAccountandAdmin")]
-    partial class addNodeIdToVisitorAccountandAdmin
+    [Migration("20241118091327_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,17 +47,17 @@ namespace ResourceServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9824fcfe-c126-432f-9014-eec8e77c055b"),
+                            Id = new Guid("ea1035f4-8391-433a-b35b-107674218234"),
                             Name = "MasterAdmin"
                         },
                         new
                         {
-                            Id = new Guid("bcddf013-219d-4441-ae06-75b556c18c9d"),
+                            Id = new Guid("b3761d34-0069-461c-9122-7e2ea8729f6b"),
                             Name = "LoggAdmin"
                         },
                         new
                         {
-                            Id = new Guid("40ef53a6-c0ef-42f7-81c6-c3b0b63916d8"),
+                            Id = new Guid("faa6e3ed-0eef-4a32-b1ec-edfcfa08d172"),
                             Name = "Visitor"
                         });
                 });
@@ -75,7 +75,7 @@ namespace ResourceServer.Migrations
 
                     b.Property<Guid>("NodeId")
                         .HasColumnType("uuid")
-                        .HasColumnName("Node_Id");
+                        .HasColumnName("node_Id");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -103,17 +103,17 @@ namespace ResourceServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2ba850a9-daa6-4b6c-aa77-0552b5a22d57"),
-                            AccountTypeId = new Guid("9824fcfe-c126-432f-9014-eec8e77c055b"),
-                            NodeId = new Guid("a0ba9661-5079-49a5-b478-3060a384b521"),
+                            Id = new Guid("df292dc5-80e7-47d3-8085-28d3edff833b"),
+                            AccountTypeId = new Guid("ea1035f4-8391-433a-b35b-107674218234"),
+                            NodeId = new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"),
                             Password = "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013",
                             Username = "Master-Admin"
                         },
                         new
                         {
-                            Id = new Guid("e387be5e-f712-43c9-a0d5-a7e24d3a5e7f"),
-                            AccountTypeId = new Guid("bcddf013-219d-4441-ae06-75b556c18c9d"),
-                            NodeId = new Guid("8ce46f8c-1ee1-4cbe-8c05-56b4cff2ab30"),
+                            Id = new Guid("2a04dde4-59a4-48fc-ad92-6ef67da5a707"),
+                            AccountTypeId = new Guid("b3761d34-0069-461c-9122-7e2ea8729f6b"),
+                            NodeId = new Guid("51905299-a0a4-4837-a0bb-496cfebd2106"),
                             Password = "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013",
                             Username = "Logging-Admin"
                         });
@@ -138,12 +138,12 @@ namespace ResourceServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("18d66487-2f9d-4b54-9a05-407fb832d2d7"),
+                            Id = new Guid("0e36492f-a97b-4fb0-91fd-a5aac404da36"),
                             CountryName = "Sweden"
                         },
                         new
                         {
-                            Id = new Guid("34083064-6a77-4a65-9f98-70c6a5c5fb19"),
+                            Id = new Guid("d4db364c-2ab2-4fc4-882e-153322d8ba6b"),
                             CountryName = "Norway"
                         });
                 });
@@ -167,13 +167,13 @@ namespace ResourceServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a0ba9661-5079-49a5-b478-3060a384b521"),
-                            NodeName = "Main Gate"
+                            Id = new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"),
+                            NodeName = "Stockholm Office"
                         },
                         new
                         {
-                            Id = new Guid("8ce46f8c-1ee1-4cbe-8c05-56b4cff2ab30"),
-                            NodeName = "Lobby Entrance"
+                            Id = new Guid("51905299-a0a4-4837-a0bb-496cfebd2106"),
+                            NodeName = "Oslo Office"
                         });
                 });
 
@@ -196,17 +196,17 @@ namespace ResourceServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("446f5d56-e6a9-448e-8f55-ecfc21ea32ea"),
+                            Id = new Guid("d69f3e72-21d8-4aec-9cec-fdf74d30b19d"),
                             Name = "Service"
                         },
                         new
                         {
-                            Id = new Guid("c4a21a09-a6b0-438d-a985-19cde8985ce0"),
+                            Id = new Guid("e2db4df7-7a91-47dd-84bb-ab2383b4f9f2"),
                             Name = "Event"
                         },
                         new
                         {
-                            Id = new Guid("ef5ac975-0f3e-40e2-8aa8-9b67fb2efec7"),
+                            Id = new Guid("26d51fa9-fb51-40ad-af11-cb364763cf40"),
                             Name = "Meeting"
                         });
                 });
@@ -219,7 +219,6 @@ namespace ResourceServer.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("CheckInSign")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("check_in_sign");
 
@@ -240,7 +239,8 @@ namespace ResourceServer.Migrations
                         .HasColumnName("last_export_date");
 
                     b.Property<Guid>("NodeId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("node_id");
 
                     b.Property<Guid>("VisitorId")
                         .HasColumnType("uuid")
@@ -257,25 +257,25 @@ namespace ResourceServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("33a22346-515c-4f88-80a0-0bccd4c53807"),
+                            Id = new Guid("20e81c0f-1aed-4acd-81b4-51e57b8a207f"),
                             CheckInSign = "JD123",
                             CheckInTime = new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             CheckOutSign = "JD456",
                             CheckOutTime = new DateTime(2024, 1, 1, 17, 0, 0, 0, DateTimeKind.Utc),
                             LastExportDate = new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc),
-                            NodeId = new Guid("a0ba9661-5079-49a5-b478-3060a384b521"),
-                            VisitorId = new Guid("3a549ddb-ddac-4965-b8ae-916c46621ddb")
+                            NodeId = new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"),
+                            VisitorId = new Guid("bc16967d-ddf6-47fa-a61b-1a818f1fabb9")
                         },
                         new
                         {
-                            Id = new Guid("5fa0962b-19af-4d24-a29b-75dec17c69cd"),
+                            Id = new Guid("9bdd4e54-c3c0-472b-b534-4b9425c2e66c"),
                             CheckInSign = "JS321",
                             CheckInTime = new DateTime(2024, 1, 2, 9, 0, 0, 0, DateTimeKind.Utc),
                             CheckOutSign = "JS654",
                             CheckOutTime = new DateTime(2024, 1, 2, 18, 0, 0, 0, DateTimeKind.Utc),
                             LastExportDate = new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc),
-                            NodeId = new Guid("8ce46f8c-1ee1-4cbe-8c05-56b4cff2ab30"),
-                            VisitorId = new Guid("4fdb1b83-f4a4-4a57-b8e6-ee8854a87b7f")
+                            NodeId = new Guid("51905299-a0a4-4837-a0bb-496cfebd2106"),
+                            VisitorId = new Guid("bf9cc4e7-149c-4b01-9ed7-e5ec38ede3c7")
                         });
                 });
 
@@ -324,20 +324,20 @@ namespace ResourceServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3a549ddb-ddac-4965-b8ae-916c46621ddb"),
+                            Id = new Guid("bc16967d-ddf6-47fa-a61b-1a818f1fabb9"),
                             City = "Stockholm",
                             Company = "TechCorp",
-                            CountryId = new Guid("18d66487-2f9d-4b54-9a05-407fb832d2d7"),
+                            CountryId = new Guid("0e36492f-a97b-4fb0-91fd-a5aac404da36"),
                             FullName = "John Doe",
                             PassportNo = "A1234567",
                             SSN = "123-45-6789"
                         },
                         new
                         {
-                            Id = new Guid("4fdb1b83-f4a4-4a57-b8e6-ee8854a87b7f"),
+                            Id = new Guid("bf9cc4e7-149c-4b01-9ed7-e5ec38ede3c7"),
                             City = "Oslo",
                             Company = "InnovateInc",
-                            CountryId = new Guid("34083064-6a77-4a65-9f98-70c6a5c5fb19"),
+                            CountryId = new Guid("d4db364c-2ab2-4fc4-882e-153322d8ba6b"),
                             FullName = "Jane Smith",
                             PassportNo = "B7654321",
                             SSN = "987-65-4321"
@@ -361,7 +361,7 @@ namespace ResourceServer.Migrations
 
                     b.Property<Guid>("NodeId")
                         .HasColumnType("uuid")
-                        .HasColumnName("Node_id");
+                        .HasColumnName("node_id");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -404,36 +404,36 @@ namespace ResourceServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("85cabd85-9c3f-432f-a7f2-39e89301ed77"),
-                            AccountTypeId = new Guid("40ef53a6-c0ef-42f7-81c6-c3b0b63916d8"),
+                            Id = new Guid("2402460b-51dd-4949-9b69-2138c3d77a96"),
+                            AccountTypeId = new Guid("faa6e3ed-0eef-4a32-b1ec-edfcfa08d172"),
                             EndDate = new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc),
-                            NodeId = new Guid("a0ba9661-5079-49a5-b478-3060a384b521"),
+                            NodeId = new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"),
                             Password = "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013",
-                            PurposeTypeId = new Guid("446f5d56-e6a9-448e-8f55-ecfc21ea32ea"),
+                            PurposeTypeId = new Guid("d69f3e72-21d8-4aec-9cec-fdf74d30b19d"),
                             StartDate = new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             Username = "john.doe",
-                            VisitorId = new Guid("3a549ddb-ddac-4965-b8ae-916c46621ddb")
+                            VisitorId = new Guid("bc16967d-ddf6-47fa-a61b-1a818f1fabb9")
                         },
                         new
                         {
-                            Id = new Guid("0d21e05f-43fb-49a1-9cbc-a9a19ebb6a5c"),
-                            AccountTypeId = new Guid("40ef53a6-c0ef-42f7-81c6-c3b0b63916d8"),
+                            Id = new Guid("bba51f98-3a64-41c6-ad4d-9d1826f0ec50"),
+                            AccountTypeId = new Guid("faa6e3ed-0eef-4a32-b1ec-edfcfa08d172"),
                             EndDate = new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc),
-                            NodeId = new Guid("8ce46f8c-1ee1-4cbe-8c05-56b4cff2ab30"),
+                            NodeId = new Guid("51905299-a0a4-4837-a0bb-496cfebd2106"),
                             Password = "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013",
-                            PurposeTypeId = new Guid("c4a21a09-a6b0-438d-a985-19cde8985ce0"),
+                            PurposeTypeId = new Guid("e2db4df7-7a91-47dd-84bb-ab2383b4f9f2"),
                             StartDate = new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             Username = "jane.smith",
-                            VisitorId = new Guid("4fdb1b83-f4a4-4a57-b8e6-ee8854a87b7f")
+                            VisitorId = new Guid("bf9cc4e7-149c-4b01-9ed7-e5ec38ede3c7")
                         },
                         new
                         {
-                            Id = new Guid("78342c12-5d3d-46be-93c8-c597d867d666"),
-                            AccountTypeId = new Guid("40ef53a6-c0ef-42f7-81c6-c3b0b63916d8"),
+                            Id = new Guid("a0b813ae-52d3-4586-ad73-86abaf0a2640"),
+                            AccountTypeId = new Guid("faa6e3ed-0eef-4a32-b1ec-edfcfa08d172"),
                             EndDate = new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc),
-                            NodeId = new Guid("a0ba9661-5079-49a5-b478-3060a384b521"),
+                            NodeId = new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"),
                             Password = "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013",
-                            PurposeTypeId = new Guid("446f5d56-e6a9-448e-8f55-ecfc21ea32ea"),
+                            PurposeTypeId = new Guid("d69f3e72-21d8-4aec-9cec-fdf74d30b19d"),
                             StartDate = new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             Username = "Angel.man"
                         });
