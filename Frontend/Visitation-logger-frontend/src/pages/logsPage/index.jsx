@@ -2,48 +2,18 @@ import { useEffect, useState } from "react";
 import LogEntry from "./logEntry";
 import LogsPageButton from "./logsPage-button";
 import "./logsPage.css";
+import dummyLogs from "./dummylogs";
 
 const Logs = () => {
   const [logs, setLogs] = useState([]);
+  const [filteredLogs, setFilteredLogs] = useState([]);
 
   useEffect(() => {
-    // Define the dummy logs
-    const dummyLogs = [
-      {
-        visitor: "Anna Karlsson",
-        description: "Besök för systemuppdatering",
-        node: "SESTO1",
-        date: "2024-11-01"
-      },
-      {
-        visitor: "Johan Rysk",
-        description: "Teknisk felsökning",
-        node: "SEGOT3",
-        date: "2024-11-02"
-      },
-      {
-        visitor: "Emma Persson",
-        description: "Underhållsarbete",
-        node: "SEMAL10",
-        date: "2024-11-03"
-      },
-      {
-        visitor: "Lars Svensson",
-        description: "Systemtestning",
-        node: "NOOSL3",
-        date: "2024-11-04"
-      },
-      {
-        visitor: "Sara Lindgren",
-        description: "Programuppdatering",
-        node: "SEUPP5",
-        date: "2024-11-05"
-      }
-    ];
 
-    // Set the logs in state
-    setLogs(dummyLogs); // Initialize logs with dummy data on first render
-  }, []); // Empty dependency array ensures this runs only once when the component mounts
+    //TODO: Fetch logs from the backend
+    setLogs(dummyLogs);
+    setFilteredLogs(dummyLogs); 
+  }, []);
 
   // Function to convert logs to CSV format
   const exportToCSV = () => {
@@ -102,7 +72,7 @@ const Logs = () => {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log, index) => (
+            {filteredLogs.map((log, index) => (
               <LogEntry log={log} key={index} index={index}/>
             ))}
           </tbody>
