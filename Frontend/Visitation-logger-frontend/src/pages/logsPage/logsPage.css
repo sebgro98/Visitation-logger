@@ -17,11 +17,12 @@
   padding: 10px;
 }
 
-.logsPage-footer{
+.logsPage-footer {
   display: flex;
   justify-content: center;
   margin-top: 20px;
   padding: 10px;
+  gap: 20px;
 }
 
 .logsPage-previous,
