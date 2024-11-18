@@ -82,5 +82,15 @@ namespace ResourceServer.Repositories
             await _context.SaveChangesAsync();
             return newStatus;
         }
+
+        public async Task<Status> GetCheckInStatus(Guid visitorId)
+        {
+            var latestStatus = await _context.Status
+            .Where(s => s.VisitorId == visitorId)
+            .OrderByDescending(s => s.CheckInTime)
+            .FirstOrDefaultAsync();
+
+            return latestStatus;
+        }
     }
 }

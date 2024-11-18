@@ -92,5 +92,27 @@ namespace ResourceServer.Controllers
             return Ok(updateStatus);
         }
 
+        [HttpGet("{visitorId}/checkin-status")]
+        public async Task<IActionResult> GetCheckInStatus(Guid visitorId)
+        {
+            Status latestStatus = await _statusRepository.GetCheckInStatus(visitorId);
+
+            if (latestStatus == null) {
+                return NotFound();
+            }
+
+            if (latestStatus != null && latestStatus.CheckInTime.Date == DateTime.UtcNow.Date)
+            {
+                return Ok(new
+                {
+                    CheckedInToday = true,
+                    StatusId = latestStatus.Id,
+                    CheckInTime = latestStatus.CheckInTime
+                });
+            }
+
+            return Ok(new { CheckedInToday = false });
+        }
+
     }
 }
