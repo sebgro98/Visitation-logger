@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import LogEntry from "./logEntry";
+import LogsPageButton from "./logsPage-button";
 import "./logsPage.css";
 
 const Logs = () => {
@@ -87,12 +88,8 @@ const Logs = () => {
   return (
     <div className="logsPage">
       <div className="logsPage-header">
-        <button className="logsPage-filter" type="button" onClick={filter}>
-          Filtrera
-        </button>
-        <button className="logsPage-export" onClick={exportToCSV}>
-          Exportera
-        </button>
+        <LogsPageButton name={"Filtrera"} onClick={filter} />
+        <LogsPageButton name={"Exportera"} onClick={exportToCSV} />
       </div>
       <div className="logsPage-results">
         <table className="logsPage-table">
@@ -112,12 +109,8 @@ const Logs = () => {
         </table>
       </div>
       <div className="logsPage-footer">
-        <button className="logsPage-previous" onClick={previousLogPage}>
-          Föregående
-        </button>
-        <button className="logsPage-next" type="button" onClick={nextLogPage}>
-          Nästa
-        </button>
+        <LogsPageButton name={"Föregående"} onClick={previousLogPage} />
+        <LogsPageButton name={"Nästa"} onClick={nextLogPage} />
       </div>
     </div>
   );
