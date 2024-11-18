@@ -27,10 +27,7 @@ namespace ResourceServer.Repositories
             return await _context.VisitorAccounts.FindAsync(id);
         }
 
-        public async Task<VisitorAccount> UpdateVisitorAccount(
-            Guid id,
-            VisitorAccountDto dto
-        )
+        public async Task<VisitorAccount> UpdateVisitorAccount(Guid id, VisitorAccountDto dto)
         {
             var visitorAccountToUpdate = await _context.VisitorAccounts.FindAsync(id);
 
@@ -48,6 +45,7 @@ namespace ResourceServer.Repositories
             visitorAccountToUpdate.EndDate = dto.EndDate;
             visitorAccountToUpdate.VisitorId = dto.VisitorId;
             visitorAccountToUpdate.AccountTypeId = dto.AccountTypeId;
+            visitorAccountToUpdate.NodeId = dto.NodeId;
 
             _context.VisitorAccounts.Update(visitorAccountToUpdate);
             await _context.SaveChangesAsync();
@@ -78,7 +76,8 @@ namespace ResourceServer.Repositories
                 EndDate = dto.EndDate,
                 PurposeTypeId = dto.PurposeTypeId,
                 VisitorId = dto.VisitorId,
-                AccountTypeId = dto.AccountTypeId
+                AccountTypeId = dto.AccountTypeId,
+                NodeId = dto.NodeId,
             };
 
             _context.VisitorAccounts.Add(visitorAccount);

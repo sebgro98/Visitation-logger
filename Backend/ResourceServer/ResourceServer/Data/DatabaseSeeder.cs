@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SharedModels.Hasher;
 using SharedModels.Models;
 
 namespace ResourceServer.Data
@@ -88,12 +89,12 @@ namespace ResourceServer.Data
             var node1 = new Node
             {
                 Id = Guid.NewGuid(),
-                NodeName = "Main Gate"
+                NodeName = "Stockholm Office"
             };
             var node2 = new Node
             {
                 Id = Guid.NewGuid(),
-                NodeName = "Lobby Entrance"
+                NodeName = "Oslo Office"
             };
             modelBuilder.Entity<Node>().HasData(node1, node2);
 
@@ -128,15 +129,17 @@ namespace ResourceServer.Data
                 {
                     Id = Guid.NewGuid(),
                     Username = "Master-Admin",
-                    Password = "Password123!",
-                    AccountTypeId = masterAdmin.Id
+                    Password = Hasher.HashPassword("Testpassword1!"),
+                    AccountTypeId = masterAdmin.Id,
+                    NodeId = node1.Id
                 },
                 new Admin
                 {
                     Id = Guid.NewGuid(),
                     Username = "Logging-Admin",
-                    Password = "Password321!",
-                    AccountTypeId = loggAdmin.Id
+                    Password = Hasher.HashPassword("Testpassword1!"),
+                    AccountTypeId = loggAdmin.Id,
+                    NodeId = node2.Id
                 }
             );
 
@@ -146,36 +149,39 @@ namespace ResourceServer.Data
                 {
                     Id = Guid.NewGuid(),
                     Username = "john.doe",
-                    Password = "securePass1!",
+                    Password = Hasher.HashPassword("Testpassword1!"),
                     StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
                     EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
                     PurposeTypeId = service.Id,
                     VisitorId = visitor1.Id,
-                    AccountTypeId = visitorType.Id
+                    AccountTypeId = visitorType.Id,
+                    NodeId = node1.Id
                 },
                 new VisitorAccount
                 {
                     Id = Guid.NewGuid(),
                     Username = "jane.smith",
-                    Password = "securePass2!",
+                    Password = Hasher.HashPassword("Testpassword1!"),
                     StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
                     EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
                     PurposeTypeId = eventType.Id,
                     VisitorId = visitor2.Id,
-                    AccountTypeId = visitorType.Id
+                    AccountTypeId = visitorType.Id,
+                    NodeId = node2.Id
                 },
                  new VisitorAccount
-                {
-                    Id = Guid.NewGuid(),
-                    Username = "Angel.man",
-                    Password = "securePass1!",
-                    StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
-                    EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
-                    PurposeTypeId = service.Id,
-                    VisitorId = null,
-                    AccountTypeId = visitorType.Id
-                }
-            );
+                 {
+                     Id = Guid.NewGuid(),
+                     Username = "Angel.man",
+                     Password = Hasher.HashPassword("Testpassword1!"),
+                     StartDate = new DateTime(2024, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+                     EndDate = new DateTime(2023, 1, 16, 0, 0, 0, DateTimeKind.Utc),
+                     PurposeTypeId = service.Id,
+                     VisitorId = null,
+                     AccountTypeId = visitorType.Id,
+                     NodeId = node1.Id
+                 }
+            ) ;
         }
     }
 }

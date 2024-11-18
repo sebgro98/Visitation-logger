@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ResourceServer.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateaAndSeed : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -62,26 +62,6 @@ namespace ResourceServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "admins",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    password = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    account_type_id = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_admins", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_admins_account_types_account_type_id",
-                        column: x => x.account_type_id,
-                        principalTable: "account_types",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "visitors",
                 columns: table => new
                 {
@@ -105,24 +85,51 @@ namespace ResourceServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "admins",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    password = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    account_type_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    node_Id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_admins", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_admins_account_types_account_type_id",
+                        column: x => x.account_type_id,
+                        principalTable: "account_types",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_admins_nodes_node_Id",
+                        column: x => x.node_Id,
+                        principalTable: "nodes",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "status",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     visitor_id = table.Column<Guid>(type: "uuid", nullable: false),
                     check_in_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    check_in_sign = table.Column<string>(type: "text", nullable: false),
-                    check_out_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    check_out_sign = table.Column<string>(type: "text", nullable: false),
-                    last_export_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    NodeId = table.Column<Guid>(type: "uuid", nullable: false)
+                    check_in_sign = table.Column<string>(type: "text", nullable: true),
+                    check_out_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    check_out_sign = table.Column<string>(type: "text", nullable: true),
+                    last_export_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    node_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_status", x => x.id);
                     table.ForeignKey(
-                        name: "FK_status_nodes_NodeId",
-                        column: x => x.NodeId,
+                        name: "FK_status_nodes_node_id",
+                        column: x => x.node_id,
                         principalTable: "nodes",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -145,7 +152,8 @@ namespace ResourceServer.Migrations
                     end_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     VisitorId = table.Column<Guid>(type: "uuid", nullable: true),
                     account_type_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    purpose_type_id = table.Column<Guid>(type: "uuid", nullable: false)
+                    purpose_type_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    node_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -154,6 +162,12 @@ namespace ResourceServer.Migrations
                         name: "FK_visitorAccounts_account_types_account_type_id",
                         column: x => x.account_type_id,
                         principalTable: "account_types",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_visitorAccounts_nodes_node_id",
+                        column: x => x.node_id,
+                        principalTable: "nodes",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -174,8 +188,8 @@ namespace ResourceServer.Migrations
                 columns: new[] { "id", "country_name" },
                 values: new object[,]
                 {
-                    { new Guid("3732d939-b4bd-4aa5-9d1e-cf8bb3711abd"), "Sweden" },
-                    { new Guid("7db8e65e-092d-45f3-bf5b-0bb21621047e"), "Norway" }
+                    { new Guid("0e36492f-a97b-4fb0-91fd-a5aac404da36"), "Sweden" },
+                    { new Guid("d4db364c-2ab2-4fc4-882e-153322d8ba6b"), "Norway" }
                 });
 
             migrationBuilder.InsertData(
@@ -183,9 +197,9 @@ namespace ResourceServer.Migrations
                 columns: new[] { "id", "name" },
                 values: new object[,]
                 {
-                    { new Guid("28633ad3-cce7-4cd5-85dd-5b27d93a60c9"), "Visitor" },
-                    { new Guid("36a817d3-4445-4779-a60b-23dc36d72cbf"), "LoggAdmin" },
-                    { new Guid("3a868a47-34fd-41e9-9e4e-1280007e933b"), "MasterAdmin" }
+                    { new Guid("b3761d34-0069-461c-9122-7e2ea8729f6b"), "LoggAdmin" },
+                    { new Guid("ea1035f4-8391-433a-b35b-107674218234"), "MasterAdmin" },
+                    { new Guid("faa6e3ed-0eef-4a32-b1ec-edfcfa08d172"), "Visitor" }
                 });
 
             migrationBuilder.InsertData(
@@ -193,8 +207,8 @@ namespace ResourceServer.Migrations
                 columns: new[] { "id", "node_name" },
                 values: new object[,]
                 {
-                    { new Guid("140c797b-330e-4882-8f93-98765bc01caa"), "Main Gate" },
-                    { new Guid("561007e8-0075-475e-9ffa-86de967d2568"), "Lobby Entrance" }
+                    { new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"), "Stockholm Office" },
+                    { new Guid("51905299-a0a4-4837-a0bb-496cfebd2106"), "Oslo Office" }
                 });
 
             migrationBuilder.InsertData(
@@ -202,50 +216,50 @@ namespace ResourceServer.Migrations
                 columns: new[] { "id", "name" },
                 values: new object[,]
                 {
-                    { new Guid("a98dc435-e2ce-4470-be62-bf58f677aec7"), "Service" },
-                    { new Guid("ab3e25bf-7fec-41af-bc14-eaed5a93f652"), "Event" },
-                    { new Guid("b2f41591-cf26-4531-ab41-062441156a34"), "Meeting" }
+                    { new Guid("26d51fa9-fb51-40ad-af11-cb364763cf40"), "Meeting" },
+                    { new Guid("d69f3e72-21d8-4aec-9cec-fdf74d30b19d"), "Service" },
+                    { new Guid("e2db4df7-7a91-47dd-84bb-ab2383b4f9f2"), "Event" }
                 });
 
             migrationBuilder.InsertData(
                 table: "admins",
-                columns: new[] { "id", "account_type_id", "password", "username" },
+                columns: new[] { "id", "account_type_id", "node_Id", "password", "username" },
                 values: new object[,]
                 {
-                    { new Guid("5f2de9fe-96d6-4fcc-94ea-cc61a23e95f4"), new Guid("36a817d3-4445-4779-a60b-23dc36d72cbf"), "Password321!", "Logging-Admin" },
-                    { new Guid("a1990d8a-edc3-43bd-93d9-b927acb3ce61"), new Guid("3a868a47-34fd-41e9-9e4e-1280007e933b"), "Password123!", "Master-Admin" }
+                    { new Guid("2a04dde4-59a4-48fc-ad92-6ef67da5a707"), new Guid("b3761d34-0069-461c-9122-7e2ea8729f6b"), new Guid("51905299-a0a4-4837-a0bb-496cfebd2106"), "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013", "Logging-Admin" },
+                    { new Guid("df292dc5-80e7-47d3-8085-28d3edff833b"), new Guid("ea1035f4-8391-433a-b35b-107674218234"), new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"), "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013", "Master-Admin" }
                 });
 
             migrationBuilder.InsertData(
                 table: "visitorAccounts",
-                columns: new[] { "id", "account_type_id", "end_date", "password", "purpose_type_id", "start_date", "username", "VisitorId" },
-                values: new object[] { new Guid("73efd26a-3ef3-4a51-b917-a6696635466a"), new Guid("28633ad3-cce7-4cd5-85dd-5b27d93a60c9"), new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc), "securePass1!", new Guid("a98dc435-e2ce-4470-be62-bf58f677aec7"), new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), "Angel.man", null });
+                columns: new[] { "id", "account_type_id", "end_date", "node_id", "password", "purpose_type_id", "start_date", "username", "VisitorId" },
+                values: new object[] { new Guid("a0b813ae-52d3-4586-ad73-86abaf0a2640"), new Guid("faa6e3ed-0eef-4a32-b1ec-edfcfa08d172"), new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"), "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013", new Guid("d69f3e72-21d8-4aec-9cec-fdf74d30b19d"), new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), "Angel.man", null });
 
             migrationBuilder.InsertData(
                 table: "visitors",
                 columns: new[] { "id", "city", "company", "country_id", "fullname", "passport_no", "SSN" },
                 values: new object[,]
                 {
-                    { new Guid("a02cecf6-0749-48ba-bccd-f5871df211ab"), "Oslo", "InnovateInc", new Guid("7db8e65e-092d-45f3-bf5b-0bb21621047e"), "Jane Smith", "B7654321", "987-65-4321" },
-                    { new Guid("ca1f1a3e-b406-4702-aae8-661c00123b40"), "Stockholm", "TechCorp", new Guid("3732d939-b4bd-4aa5-9d1e-cf8bb3711abd"), "John Doe", "A1234567", "123-45-6789" }
+                    { new Guid("bc16967d-ddf6-47fa-a61b-1a818f1fabb9"), "Stockholm", "TechCorp", new Guid("0e36492f-a97b-4fb0-91fd-a5aac404da36"), "John Doe", "A1234567", "123-45-6789" },
+                    { new Guid("bf9cc4e7-149c-4b01-9ed7-e5ec38ede3c7"), "Oslo", "InnovateInc", new Guid("d4db364c-2ab2-4fc4-882e-153322d8ba6b"), "Jane Smith", "B7654321", "987-65-4321" }
                 });
 
             migrationBuilder.InsertData(
                 table: "status",
-                columns: new[] { "id", "check_in_sign", "check_in_time", "check_out_sign", "check_out_time", "last_export_date", "NodeId", "visitor_id" },
+                columns: new[] { "id", "check_in_sign", "check_in_time", "check_out_sign", "check_out_time", "last_export_date", "node_id", "visitor_id" },
                 values: new object[,]
                 {
-                    { new Guid("2528cb14-9998-465c-a77a-df388986fc00"), "JS321", new DateTime(2024, 1, 2, 9, 0, 0, 0, DateTimeKind.Utc), "JS654", new DateTime(2024, 1, 2, 18, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("561007e8-0075-475e-9ffa-86de967d2568"), new Guid("a02cecf6-0749-48ba-bccd-f5871df211ab") },
-                    { new Guid("873e8a5c-dda4-4884-b1cd-6dc44f7a664e"), "JD123", new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), "JD456", new DateTime(2024, 1, 1, 17, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("140c797b-330e-4882-8f93-98765bc01caa"), new Guid("ca1f1a3e-b406-4702-aae8-661c00123b40") }
+                    { new Guid("20e81c0f-1aed-4acd-81b4-51e57b8a207f"), "JD123", new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), "JD456", new DateTime(2024, 1, 1, 17, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 1, 2, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"), new Guid("bc16967d-ddf6-47fa-a61b-1a818f1fabb9") },
+                    { new Guid("9bdd4e54-c3c0-472b-b534-4b9425c2e66c"), "JS321", new DateTime(2024, 1, 2, 9, 0, 0, 0, DateTimeKind.Utc), "JS654", new DateTime(2024, 1, 2, 18, 0, 0, 0, DateTimeKind.Utc), new DateTime(2024, 1, 3, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("51905299-a0a4-4837-a0bb-496cfebd2106"), new Guid("bf9cc4e7-149c-4b01-9ed7-e5ec38ede3c7") }
                 });
 
             migrationBuilder.InsertData(
                 table: "visitorAccounts",
-                columns: new[] { "id", "account_type_id", "end_date", "password", "purpose_type_id", "start_date", "username", "VisitorId" },
+                columns: new[] { "id", "account_type_id", "end_date", "node_id", "password", "purpose_type_id", "start_date", "username", "VisitorId" },
                 values: new object[,]
                 {
-                    { new Guid("076e538a-e0d1-4f90-b9f5-246afca9ac16"), new Guid("28633ad3-cce7-4cd5-85dd-5b27d93a60c9"), new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc), "securePass1!", new Guid("a98dc435-e2ce-4470-be62-bf58f677aec7"), new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), "john.doe", new Guid("ca1f1a3e-b406-4702-aae8-661c00123b40") },
-                    { new Guid("3f442613-8804-414e-8517-f36c22a90a84"), new Guid("28633ad3-cce7-4cd5-85dd-5b27d93a60c9"), new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc), "securePass2!", new Guid("ab3e25bf-7fec-41af-bc14-eaed5a93f652"), new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), "jane.smith", new Guid("a02cecf6-0749-48ba-bccd-f5871df211ab") }
+                    { new Guid("2402460b-51dd-4949-9b69-2138c3d77a96"), new Guid("faa6e3ed-0eef-4a32-b1ec-edfcfa08d172"), new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("0b7b2113-7681-4dc1-b485-f08d0b46adda"), "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013", new Guid("d69f3e72-21d8-4aec-9cec-fdf74d30b19d"), new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), "john.doe", new Guid("bc16967d-ddf6-47fa-a61b-1a818f1fabb9") },
+                    { new Guid("bba51f98-3a64-41c6-ad4d-9d1826f0ec50"), new Guid("faa6e3ed-0eef-4a32-b1ec-edfcfa08d172"), new DateTime(2023, 1, 16, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("51905299-a0a4-4837-a0bb-496cfebd2106"), "695d6cc588c73738c7b30d21954af72431eeb703ae6ae1b013", new Guid("e2db4df7-7a91-47dd-84bb-ab2383b4f9f2"), new DateTime(2024, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), "jane.smith", new Guid("bf9cc4e7-149c-4b01-9ed7-e5ec38ede3c7") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -254,15 +268,20 @@ namespace ResourceServer.Migrations
                 column: "account_type_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_admins_node_Id",
+                table: "admins",
+                column: "node_Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_admins_username",
                 table: "admins",
                 column: "username",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_status_NodeId",
+                name: "IX_status_node_id",
                 table: "status",
-                column: "NodeId");
+                column: "node_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_status_visitor_id",
@@ -273,6 +292,11 @@ namespace ResourceServer.Migrations
                 name: "IX_visitorAccounts_account_type_id",
                 table: "visitorAccounts",
                 column: "account_type_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_visitorAccounts_node_id",
+                table: "visitorAccounts",
+                column: "node_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_visitorAccounts_purpose_type_id",
@@ -309,10 +333,10 @@ namespace ResourceServer.Migrations
                 name: "visitorAccounts");
 
             migrationBuilder.DropTable(
-                name: "nodes");
+                name: "account_types");
 
             migrationBuilder.DropTable(
-                name: "account_types");
+                name: "nodes");
 
             migrationBuilder.DropTable(
                 name: "purpose_types");
