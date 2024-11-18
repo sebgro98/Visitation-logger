@@ -3,7 +3,6 @@ import useAuth from "../../hooks/useAuth";
 
 const Header = () => {
   const { onLogout, isLoggedIn } = useAuth();
-  console.log(isLoggedIn);
 
   return (
     <div className="header">

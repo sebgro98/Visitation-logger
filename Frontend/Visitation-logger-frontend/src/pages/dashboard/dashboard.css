@@ -1,0 +1,72 @@
+.dashboard-actions {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 5rem 3rem 0 3rem;
+}
+
+.dashboard-action {
+  width: 40rem;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Justera gapet mellan ikonerna efter behov */
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 1.5rem 1rem;
+  background-color: #d9d9d9;
+  margin: 1.5rem 1rem;
+}
+
+.dashboard-header-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.dashboard-header-info {
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.dashboard-icon {
+  font-size: 80px;
+  color: #006eaf;
+}
+
+.dashboard-action-header-title {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 3px;
+}
+
+.dashboard-action-header-info {
+  font-size: 0.7rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+/* Media query för små skärmar */
+@media (max-width: 600px) {
+  .dashboard-actions {
+    flex-direction: column;
+    gap: 2rem; /* Justera gapet efter behov */
+  }
+
+  .dashboard-action {
+    width: 100%; /* Gör att varje action tar upp hela bredden på små skärmar */
+    max-width: none; /* Ta bort maxbredden */
+  }
+}

@@ -20,30 +20,14 @@ namespace ResourceServer.Controller
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDto visitorAccountDto)
+        public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDto dto)
         {
-            if (visitorAccountDto == null)
+            if (dto == null)
             {
                 return BadRequest("Invalid data.");
             }
 
-            //Hash password
-            var hashedPassword = Hasher.HashPassword(visitorAccountDto.Password);
-
-            var visitorAccount = new VisitorAccount
-            {
-                Id = Guid.NewGuid(),
-                Username = visitorAccountDto.UserName,
-                Password = hashedPassword,
-                StartDate = visitorAccountDto.StartDate,
-                EndDate = visitorAccountDto.EndDate,
-                PurposeTypeId = visitorAccountDto.PurposeTypeId,
-                VisitorId = visitorAccountDto.VisitorId,
-                AccountTypeId = visitorAccountDto.AccountTypeId
-            };
-
-            // Save the new visitor account
-            await _visitorAccountRepository.CreateVisitorAccount(visitorAccount);
+            var visitorAccount = await _visitorAccountRepository.CreateVisitorAccount(dto);
             return Ok(visitorAccount);
         }
 

@@ -1,61 +1,81 @@
 using Microsoft.EntityFrameworkCore;
-using SharedModels.Models;
 using ResourceServer.Data;
 using ResourceServer.DTO;
+using SharedModels.Models;
+using SharedModels.Hasher;
 
+namespace ResourceServer.Repositories
+{
+    public class AdminRepository : IAdminRepository
+    {
+        private ApplicationDbContext _db;
+        private DbSet<Admin> _table = null;
 
-namespace ResourceServer.Repositories{
+        public AdminRepository(ApplicationDbContext db)
+        {
+            _db = db;
+            _table = _db.Set<Admin>();
+        }
 
-   public class AdminRepository : IAdminRepository{
+        public async Task<IEnumerable<Admin>> GetAll()
+        {
+            return await _table.ToListAsync();
+        }
 
-      private ApplicationDbContext _db;
-      private DbSet<Admin> _table = null;
+        public async Task<Admin> GetById(Guid id)
+        {
+            return await _table.FindAsync(id);
+        }
 
-      public AdminRepository(ApplicationDbContext db){
-         _db = db;
-         _table  = _db.Set<Admin>();
-      } 
+        public async Task<Admin> Create(AdminDTO dto)
+        {
+            var hashedPassword = Hasher.HashPassword(dto.Password);
 
-      public async Task<IEnumerable<Admin>> GetAll(){
-            
-         return await _table.ToListAsync();
-      }
+            var admin = new Admin
+            {
+                Id = Guid.NewGuid(),
+                Username = dto.Username,
+                Password = hashedPassword,
+                AccountTypeId = dto.AccountTypeId,
+                NodeId = dto.NodeId,
+            };
 
-      public async Task<Admin> GetById(Guid id){
-         return await _table.FindAsync(id);
-      }
+            _table.Add(admin);
+            await _db.SaveChangesAsync();
 
-      public async Task<Admin> Insert(Admin obj){
-        _table.Add(obj);
-         await _db.SaveChangesAsync();
-         return obj;
-      }
+            return admin;
+        }
 
-      public async Task<Admin> Update(Guid id, AdminDTO dto){
-         var adminToBeUpdated = await GetById(id);
+        public async Task<Admin> Update(Guid id, AdminDTO dto)
+        {
+            var adminToBeUpdated = await GetById(id);
 
-         if(adminToBeUpdated == null)
-         {
-            return null;
-         }
+            if (adminToBeUpdated == null)
+            {
+                return null;
+            }
 
-         adminToBeUpdated.Username = dto.Username;
-         adminToBeUpdated.Password = dto.Password;
-         adminToBeUpdated.AccountTypeId = dto.AccountTypeId; //Cannot be updated due to FK restraint
+            var hashedPassword = Hasher.HashPassword(dto.Password);
 
-         _table.Attach(adminToBeUpdated);
-         _db.Entry(adminToBeUpdated).State = EntityState.Modified;
-         await _db.SaveChangesAsync();
+            adminToBeUpdated.Username = dto.Username;
+            adminToBeUpdated.Password = hashedPassword;
+            adminToBeUpdated.AccountTypeId = dto.AccountTypeId;
+            adminToBeUpdated.NodeId = dto.NodeId;
 
-         return adminToBeUpdated;
-      }
-        
-      public async Task<bool> Delete(Guid id){
+            _table.Attach(adminToBeUpdated);
+            _db.Entry(adminToBeUpdated).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            return adminToBeUpdated;
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
             var adminToBeDeleted = await GetById(id);
 
-            if(adminToBeDeleted == null)
+            if (adminToBeDeleted == null)
             {
-               return false;
+                return false;
             }
 
             _table.Remove(adminToBeDeleted);
@@ -67,5 +87,5 @@ namespace ResourceServer.Repositories{
         {
             return await _db.SaveChangesAsync();
         }
-   }
+    }
 }

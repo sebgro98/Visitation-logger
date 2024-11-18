@@ -50,5 +50,10 @@ namespace SharedModels.Models
         // Navigation property to PurposeType
         [ForeignKey("PurposeTypeId")]
         public virtual PurposeType PurposeType { get; set; }
+
+        [Column("node_id")]
+        public Guid NodeId { get; set; }
+
+        public virtual Node Node { get; set; }
     }
 }
