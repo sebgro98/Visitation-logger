@@ -6,7 +6,7 @@ import Logspage from "./pages/logsPage";
 import Header from "./components/header";
 import { AuthProvider, ProtectedRoute } from "./context/auth";
 import Dashboard from "./pages/dashboard";
-import AccountManagement from "./pages/visitorManagement";
+import AccountManagement from "./pages/accountManagement";
 
 function App() {
   return (
