@@ -7,15 +7,39 @@ import dummyLogs from "./dummylogs";
 const Logs = () => {
   const [logs, setLogs] = useState([]);
   const [filteredLogs, setFilteredLogs] = useState([]);
+  const [displayedLogs, setDisplayedLogs] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-
-    //TODO: Fetch logs from the backend
     setLogs(dummyLogs);
-    setFilteredLogs(dummyLogs); 
+    setFilteredLogs(dummyLogs);
   }, []);
 
-  // Function to convert logs to CSV format
+  useEffect(() => {
+    paginate();
+  }, [filteredLogs, currentPage]);
+
+  const paginate = () => {
+    const logsPerPage = 10;
+    const lastLogIndex = Math.min(currentPage * logsPerPage, filteredLogs.length);
+    const firstLogIndex = lastLogIndex - logsPerPage;
+
+    const currentLogs = filteredLogs.slice(firstLogIndex, lastLogIndex);
+    setDisplayedLogs(currentLogs);
+  };
+
+  const previousLogPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const nextLogPage = () => {
+    if (currentPage < Math.ceil(filteredLogs.length / 10)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   const exportToCSV = () => {
     const header = ["Besökare", "Besöksbeskrivning", "Nod", "Datum"];
     const rows = logs.map(log => [
@@ -25,35 +49,23 @@ const Logs = () => {
       log.date
     ]);
 
-    // Combine header and rows into a single CSV string
     const csvContent = [
       header.join(","),
       ...rows.map(row => row.join(","))
     ].join("\n");
 
-    // Create a Blob from the CSV string and create a downloadable URL
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
-    const currentdate = new Date(); 
-    const datetime = currentdate.getMilliseconds();
+    const currentdate = new Date();
+    const datetime = currentdate.toISOString();
     link.href = URL.createObjectURL(blob);
-    link.download = "logs.csv" + datetime; // Set the file name for the download
-    link.click(); // Trigger the download
+    link.download = `logs_${datetime}.csv`;
+    link.click();
   };
 
   const filter = () => {
     console.log("Filter logs");
-    
-  }
-
-  const previousLogPage = () => {
-    console.log("Previous log page");
   };
-
-  const nextLogPage = () => {
-    console.log("Next log page");
-  };
-    
 
   return (
     <div className="logsPage">
@@ -72,8 +84,8 @@ const Logs = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredLogs.map((log, index) => (
-              <LogEntry log={log} key={index} index={index}/>
+            {displayedLogs.map((log, index) => (
+              <LogEntry log={log} key={index} index={index} />
             ))}
           </tbody>
         </table>
@@ -87,3 +99,4 @@ const Logs = () => {
 };
 
 export default Logs;
+
