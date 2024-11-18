@@ -17,6 +17,5 @@ namespace ResourceServer.DTO
         public Guid NodeId { get; set; }
 
         public bool IsExport {  get; set; }
-
     }
 }

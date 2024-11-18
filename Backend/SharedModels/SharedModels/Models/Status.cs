@@ -36,6 +36,7 @@ namespace SharedModels.Models
 
         // Foreign key for Node
         [Required]
+        [Column("node_id")]
         public Guid NodeId { get; set; }
 
         // Navigation property for Node
