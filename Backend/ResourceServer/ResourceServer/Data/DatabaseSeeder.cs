@@ -131,7 +131,8 @@ namespace ResourceServer.Data
                     Username = "Master-Admin",
                     Password = Hasher.HashPassword("Testpassword1!"),
                     AccountTypeId = masterAdmin.Id,
-                    NodeId = node1.Id
+                    NodeId = node1.Id,
+                    FullName = "Master Admin"
                 },
                 new Admin
                 {
@@ -139,7 +140,8 @@ namespace ResourceServer.Data
                     Username = "Logging-Admin",
                     Password = Hasher.HashPassword("Testpassword1!"),
                     AccountTypeId = loggAdmin.Id,
-                    NodeId = node2.Id
+                    NodeId = node2.Id,
+                    FullName = "Logging Admin"
                 }
             );
 
