@@ -53,5 +53,12 @@ namespace ResourceServer.Controller
             return Ok(updateVisitorAccount);
         }
 
+        [HttpGet("byPage")]
+        public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var visitorAccounts = await _visitorAccountRepository.GetVisitorAccountByPage(pageNumber, pageSize);
+            return Ok(visitorAccounts);
+        }
+
     }
 }

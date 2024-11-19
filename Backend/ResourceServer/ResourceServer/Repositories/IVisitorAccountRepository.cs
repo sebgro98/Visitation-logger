@@ -10,5 +10,7 @@ namespace ResourceServer.Repositories
         Task<VisitorAccount> UpdateVisitorAccount(Guid id, VisitorAccountDto dto);
         Task<VisitorAccount> CreateVisitorAccount(VisitorAccountDto dto);
         Task DeleteVisitorAccount(int id);
+
+        Task<IEnumerable<VisitorAccount>> GetVisitorAccountByPage(int pageNumber, int pageSize);
     }
 }
