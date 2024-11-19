@@ -1,8 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./createAdmin.css";
 import Button from "../../components/button";
+import {
+  validateFullName,
+  validatePassword,
+  validateUsername,
+} from "../../utils/utils";
+import {
+  createAdminAccount,
+  getAllAccountTypes,
+  getAllNodes,
+} from "../../services/apiClient";
 
 const CreateAdmin = () => {
+  const [nodes, setNodes] = useState([]);
+  const [accountTypes, setAccountTypes] = useState([]);
   const [account, setAccount] = useState({
     username: "",
     password: "",
@@ -10,32 +22,44 @@ const CreateAdmin = () => {
     accountTypeId: "",
     nodeId: "",
   });
+  console.log(account);
+  console.log(accountTypes[0]?.id);
+
+  useEffect(() => {
+    const fetchNodes = async () => {
+      try {
+        const response = await getAllNodes();
+        setNodes(response);
+      } catch (error) {
+        console.error("Error fetching nodes:", error);
+      }
+    };
+
+    const fetchAccountTypes = async () => {
+      try {
+        const response = await getAllAccountTypes();
+        const filteredResponse = response.filter(
+          (type) => type.name !== "Visitor"
+        );
+        setAccountTypes(filteredResponse);
+      } catch (error) {
+        console.error("Error fetching account types:", error);
+      }
+    };
+
+    fetchNodes();
+    fetchAccountTypes();
+  }, []);
 
   const [confirmPassword, setConfirmPassword] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [fullNameError, setFullNameError] = useState("");
+  const [accountTypeError, setAccountTypeError] = useState("");
+  const [nodeError, setNodeError] = useState("");
 
-  const validateUsername = (username) => {
-    return username.length >= 4;
-  };
-
-  const validatePassword = (password) => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
-  };
-
-  const validateFullName = (fullName) => {
-    return (
-      fullName.length > 3 &&
-      fullName.length <= 50 &&
-      /^[a-zA-Z ]+$/.test(fullName)
-    );
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
 
@@ -69,11 +93,32 @@ const CreateAdmin = () => {
       setFullNameError("");
     }
 
+    if (!account.accountTypeId) {
+      setAccountTypeError("Vänligen välj en kontotyp.");
+      valid = false;
+    } else {
+      setAccountTypeError("");
+    }
+
+    if (!account.nodeId) {
+      setNodeError("Vänligen välj en nod.");
+      valid = false;
+    } else {
+      setNodeError("");
+    }
+
     if (valid) {
       console.log("submit", account);
-      // Skicka account till backend här
+      try {
+        const response = await createAdminAccount(account);
+        console.log("Admin account created:", response);
+      } catch (error) {
+        console.error("Error creating admin account:", error);
+      }
     }
   };
+
+  console.log(account.accountTypeId);
 
   return (
     <main className="create-admin-main">
@@ -150,27 +195,55 @@ const CreateAdmin = () => {
           <div className="error-container">
             {fullNameError && <p className="error">{fullNameError}</p>}
           </div>
+
           <label htmlFor="accountTypeId">Kontotyp</label>
           <select
             id="accountTypeId"
             value={account.accountTypeId}
-            onChange={(e) =>
-              setAccount({ ...account, accountTypeId: e.target.value })
-            }
+            onChange={(e) => {
+              if (accountTypeError) {
+                setAccountTypeError("");
+              }
+
+              setAccount({ ...account, accountTypeId: e.target.value });
+            }}
           >
-            <option value="1">Admin</option>
-            <option value="2">Besökare</option>
+            <option value="" disabled hidden>
+              -- Välj kontotyp --
+            </option>
+            {accountTypes.map((accountType) => (
+              <option key={accountType.id} value={accountType.id}>
+                {accountType.name}
+              </option>
+            ))}
           </select>
+          <div className="error-container">
+            {accountTypeError && <p className="error">{accountTypeError}</p>}
+          </div>
 
           <label htmlFor="nodeId">Nod</label>
           <select
             id="nodeId"
             value={account.nodeId}
-            onChange={(e) => setAccount({ ...account, nodeId: e.target.value })}
+            onChange={(e) => {
+              if (nodeError) {
+                setNodeError("");
+              }
+              setAccount({ ...account, nodeId: e.target.value });
+            }}
           >
-            <option value="1">Node 1</option>
-            <option value="2">Node 2</option>
+            <option value="" disabled hidden>
+              -- Välj nod --
+            </option>
+            {nodes.map((node) => (
+              <option key={node.id} value={node.id}>
+                {node.nodeName}
+              </option>
+            ))}
           </select>
+          <div className="error-container">
+            {nodeError && <p className="error">{nodeError}</p>}
+          </div>
 
           <div className="create-admin-button">
             <Button label={"Skapa konto"} type="submit" />
