@@ -27,20 +27,19 @@ namespace ResourceServer.Controllers
 
             var createdVisitor = await _visitorRepository.CreateVisitor(dto);
 
-            if (createdVisitor == null)
-            {
-                // Handle error if the visitor creation fails
-                return BadRequest("Failed to create visitor.");
-            }
-
             var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(dto.VisitorAccountId);
 
             if (visitorAccount == null)
             {
                 return NotFound();
             }
+            
+            if (createdVisitor == null)
+            {
+                return BadRequest("Country not found");
+            }
 
-            var updatedVisitorAccountDto = new VisitorAccountDto
+            await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, new VisitorAccountDto
             {
                 AccountTypeId = visitorAccount.AccountTypeId,
                 PurposeTypeId = visitorAccount.PurposeTypeId,
