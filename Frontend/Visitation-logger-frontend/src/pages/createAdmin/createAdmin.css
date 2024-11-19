@@ -25,6 +25,7 @@
 
 .create-admin-form input {
   width: 100%;
+  height: 40px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -35,7 +36,6 @@
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-bottom: 25px;
 }
 
 .create-admin-form label {
@@ -51,8 +51,7 @@
 
 /* createAdmin.css */
 .error-container {
-  height: 10px; /* Justera höjden efter behov */
-  margin: 2px 0;
+  height: 15px;
 }
 
 /* createAdmin.css */
@@ -60,4 +59,5 @@
   color: red;
   font-size: small;
   margin: 0;
+  height: 15px;
 }
