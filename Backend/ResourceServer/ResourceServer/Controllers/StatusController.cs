@@ -26,7 +26,8 @@ namespace ResourceServer.Controllers
 
             return Ok(status);
         }
-        
+
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet("/filter")]
         public async Task<ActionResult<IEnumerable<Status>>> GetFilteredStatuses(
             [FromQuery] int pageNumber,
@@ -119,6 +120,7 @@ namespace ResourceServer.Controllers
             return Ok(updateStatus);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpGet("{visitorId}/checkin-status")]
         public async Task<IActionResult> GetCheckInStatus(Guid visitorId)
         {
