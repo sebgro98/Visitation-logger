@@ -12,7 +12,7 @@
 
 .table th,
 .table td {
-  padding: 15px 60px; /* Adds padding for a cleaner look */
+  padding: 15px 20px; /* Adds padding for a cleaner look */
   text-align: left; /* Adjust as needed */
 }
 
