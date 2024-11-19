@@ -84,14 +84,7 @@ namespace ResourceServer.Repositories
         //Find country by name. Can be replaced with AutoMapper
         public async Task<Country> GetCountry(string countryName)
         {
-            var country = await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == countryName);
-
-            if(country == null)
-            {
-                return null;
-            }
-
-            return country;
+            return await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == countryName);
         }
     }
 }

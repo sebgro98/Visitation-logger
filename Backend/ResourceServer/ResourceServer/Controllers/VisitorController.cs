@@ -93,6 +93,7 @@ namespace ResourceServer.Controllers
             return Ok(visitorPutDTO);
         }
 
+        //Add whitespace check
         private ActionResult ValidateVisitorData(IVisitorDTO iVisitorDto)
         {
             if (iVisitorDto.FullName.Length < 4 || iVisitorDto.FullName.Length > 50 || !iVisitorDto.FullName.All(char.IsLetter))
@@ -103,7 +104,7 @@ namespace ResourceServer.Controllers
             {
                 return BadRequest("SSN/Personal number must have this format: YYYYMMDD-XXXX.");
             }
-            else if (_visitorRepository.GetCountry(iVisitorDto.CountryName) == null)
+            else if (_visitorRepository.GetCountry(iVisitorDto.CountryName).ToString().Equals("System.Threading.Tasks.Task`1[SharedModels.Models.Country]"))
             {
                 return BadRequest("Country must be either Norway or Sweden.");
             }

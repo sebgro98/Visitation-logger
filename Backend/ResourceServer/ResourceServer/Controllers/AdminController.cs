@@ -2,6 +2,7 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
+using System.Text.RegularExpressions;
 
 namespace ResourceServer.Controllers
 {
@@ -10,6 +11,7 @@ namespace ResourceServer.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminRepository _adminRepository;
+        private static readonly Regex adminUsernameRegex = new Regex("^[a-zA-Z0-9.@]{4,50}$");
 
         public AdminController(IAdminRepository adminRepository)
         {
@@ -73,6 +75,15 @@ namespace ResourceServer.Controllers
                 return BadRequest();
             }
 
+            return Ok();
+        }
+
+        private ActionResult ValidateAdminData(AdminDTO adminDto)
+        {
+            if (adminDto.Username.Length > 50)
+            {
+                return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
+            }
             return Ok();
         }
     }
