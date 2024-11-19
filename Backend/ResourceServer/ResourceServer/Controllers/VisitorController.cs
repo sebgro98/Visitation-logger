@@ -20,43 +20,43 @@ namespace ResourceServer.Controllers
             _visitorRepository = visitorRepository;
         }
 
-        [Authorize(Roles = "MasterAdmin, Visitor")]
-        [HttpPost]
-        public async Task<ActionResult<Visitor>> CreateVisitor([FromBody] VisitorDTO dto)
+    [Authorize(Roles = "MasterAdmin, Visitor")]
+    [HttpPost]
+    public async Task<ActionResult<Visitor>> CreateVisitor([FromBody] VisitorDTO dto)
+    {
+
+        var createdVisitor = await _visitorRepository.CreateVisitor(dto);
+
+        if (createdVisitor == null)
         {
-
-            var createdVisitor = await _visitorRepository.CreateVisitor(dto);
-
-            var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(dto.VisitorAccountId);
-
-            if (visitorAccount == null)
-            {
-                return NotFound();
-            }
-            
-            if (createdVisitor == null)
-            {
-                return BadRequest("Country not found");
-            }
-
-            await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, new VisitorAccountDto
-            {
-                AccountTypeId = visitorAccount.AccountTypeId,
-                PurposeTypeId = visitorAccount.PurposeTypeId,
-                StartDate = visitorAccount.StartDate,
-                EndDate = visitorAccount.EndDate,
-                UserName = visitorAccount.Username,
-                Password = visitorAccount.Password,
-                VisitorId = createdVisitor.Id,
-                NodeId = visitorAccount.NodeId
-            };
-
-           
-            await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, updatedVisitorAccountDto);
-
-
-            return Ok(createdVisitor);
+            return BadRequest("Country not found");
         }
+
+        var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(dto.VisitorAccountId);
+
+        if (visitorAccount == null)
+        {
+            return NotFound();
+        }
+
+        var updatedVisitorAccountDto = new VisitorAccountDto
+        {
+            AccountTypeId = visitorAccount.AccountTypeId,
+             PurposeTypeId = visitorAccount.PurposeTypeId,
+            StartDate = visitorAccount.StartDate,
+            EndDate = visitorAccount.EndDate,
+            UserName = visitorAccount.Username,
+            Password = visitorAccount.Password,
+            VisitorId = createdVisitor.Id,
+            NodeId = visitorAccount.NodeId
+        };
+
+   
+        await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, updatedVisitorAccountDto);
+
+
+        return Ok(createdVisitor);
+    }
 
         [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet("{id}")]
