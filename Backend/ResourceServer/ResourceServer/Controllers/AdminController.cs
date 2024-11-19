@@ -96,6 +96,9 @@ namespace ResourceServer.Controllers
             {
                 return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
             }
+            if (!adminDto.FullName.All(char.IsLetter)){
+                return BadRequest("Full name can only contain letters.");
+            }
             return Ok();
         }
     }
