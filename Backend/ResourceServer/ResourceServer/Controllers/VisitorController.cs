@@ -57,7 +57,6 @@ namespace ResourceServer.Controllers
                 VisitorId = createdVisitor.Id
             });
             
-
             return Ok(createdVisitor);
         }
 

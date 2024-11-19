@@ -4,6 +4,7 @@ using SharedModels.Hasher;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repositories;
+using System.Text.RegularExpressions;
 
 namespace ResourceServer.Controller
 {
@@ -12,7 +13,7 @@ namespace ResourceServer.Controller
     public class VisitorAccountController : ControllerBase
     {
         private readonly IVisitorAccountRepository _visitorAccountRepository;
-
+        private static readonly Regex usernameRegex = new Regex("^[a-zA-Z0-9.@]{4,50}$");
 
         public VisitorAccountController(IVisitorAccountRepository visitorAccountRepository)
         {
@@ -53,5 +54,13 @@ namespace ResourceServer.Controller
             return Ok(updateVisitorAccount);
         }
 
+        private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
+        {
+            if (visitorAccountDto.UserName)
+            {
+                return BadRequest("Invalid data.");
+            }
+            return Ok();
+        }
     }
 }
