@@ -23,7 +23,7 @@ const MasterAdminDashboard = () => {
           info="Klicka på ikonen ovan för att visa/exportera besöksloggningar"
         />
         <DashboardAction
-          to="/dashboard"
+          to="/manage-visitors"
           onClick={() =>
             console.log("Länken till gästkontosidan har klickats!")
           }
@@ -32,7 +32,7 @@ const MasterAdminDashboard = () => {
           info="Klicka på ikonen ovan för att hantera gästkonton"
         />
         <DashboardAction
-          to="/dashboard"
+          to="/manage-admins"
           onClick={() =>
             console.log("Länken till adminkontosidan har klickats!")
           }
