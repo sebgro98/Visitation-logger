@@ -11,10 +11,17 @@ import {
   getAllAccountTypes,
   getAllNodes,
 } from "../../services/apiClient";
+import SuccessPopup from "../../components/successPopup";
+import { useNavigate } from "react-router-dom";
 
 const CreateAdmin = () => {
+  const navigate = useNavigate();
   const [nodes, setNodes] = useState([]);
   const [accountTypes, setAccountTypes] = useState([]);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [showSuccess, setShowSuccess] = useState(false); // För att visa popup
+  const [successMessage, setSuccessMessage] = useState("");
   const [account, setAccount] = useState({
     username: "",
     password: "",
@@ -49,69 +56,57 @@ const CreateAdmin = () => {
     fetchAccountTypes();
   }, []);
 
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const [fullNameError, setFullNameError] = useState("");
-  const [accountTypeError, setAccountTypeError] = useState("");
-  const [nodeError, setNodeError] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     let valid = true;
+    const newErrors = {};
 
+    // Valideringar
     if (!validateUsername(account.username)) {
-      setUsernameError("Användarnamnet måste vara minst 4 tecken");
+      newErrors.username = "Användarnamnet måste vara minst 4 tecken";
       valid = false;
-    } else {
-      account.username = account.username.trim().toLowerCase();
-      setUsernameError("");
     }
-
     if (!validatePassword(account.password)) {
-      setPasswordError(
-        "Lösenordet måste vara minst 8 tecken, innehålla en versal, en gemen, en siffra och ett specialtecken"
-      );
+      newErrors.password =
+        "Lösenordet måste vara minst 8 tecken, innehålla en versal, en gemen, en siffra och ett specialtecken";
       valid = false;
-    } else {
-      account.password = account.password.trim();
-      setPasswordError("");
     }
-
     if (account.password !== confirmPassword) {
-      setConfirmPasswordError("Lösenorden matchar inte");
+      newErrors.confirmPassword = "Lösenorden matchar inte";
       valid = false;
-    } else {
-      setConfirmPasswordError("");
     }
-
     if (!validateFullName(account.fullName)) {
-      setFullNameError("Fullständigt namn måste vara mellan 4 och 50 tecken");
+      newErrors.fullName =
+        "Fullständigt namn måste vara mellan 4 och 50 tecken";
       valid = false;
-    } else {
-      account.fullName = account.fullName.trim();
-      setFullNameError("");
     }
-
     if (!account.accountTypeId) {
-      setAccountTypeError("Vänligen välj en kontotyp.");
+      newErrors.accountTypeId = "Vänligen välj en kontotyp.";
       valid = false;
-    } else {
-      setAccountTypeError("");
+    }
+    if (!account.nodeId) {
+      newErrors.nodeId = "Vänligen välj en nod.";
+      valid = false;
     }
 
-    if (!account.nodeId) {
-      setNodeError("Vänligen välj en nod.");
-      valid = false;
-    } else {
-      setNodeError("");
-    }
+    setErrors(newErrors);
 
     if (valid) {
       try {
         const response = await createAdminAccount(account);
         console.log("Admin account created:", response);
+
+        setSuccessMessage(`Konto för ${account.username} har skapats.`);
+        setShowSuccess(true);
+        // Återställ formuläret
+        setAccount({
+          username: "",
+          password: "",
+          fullName: "",
+          accountTypeId: "",
+          nodeId: "",
+        });
+        setConfirmPassword("");
       } catch (error) {
         console.error("Error creating admin account:", error);
       }
@@ -129,14 +124,14 @@ const CreateAdmin = () => {
             id="username"
             value={account.username}
             onChange={(e) => {
-              if (usernameError && validateUsername(e.target.value)) {
-                setUsernameError("");
+              if (errors.username && validateUsername(e.target.value)) {
+                setErrors({ ...errors, username: "" });
               }
               setAccount({ ...account, username: e.target.value });
             }}
           />
           <div className="error-container">
-            {usernameError && <p className="error">{usernameError}</p>}
+            {errors.username && <p className="error">{errors.username}</p>}
           </div>
 
           <label htmlFor="password">Lösenord</label>
@@ -145,14 +140,14 @@ const CreateAdmin = () => {
             id="password"
             value={account.password}
             onChange={(e) => {
-              if (passwordError && validatePassword(e.target.value)) {
-                setPasswordError("");
+              if (errors.password && validatePassword(e.target.value)) {
+                setErrors({ ...errors, password: "" });
               }
               setAccount({ ...account, password: e.target.value });
             }}
           />
           <div className="error-container">
-            {passwordError && <p className="error">{passwordError}</p>}
+            {errors.password && <p className="error">{errors.password}</p>}
           </div>
 
           <label htmlFor="confirmPassword">Bekräfta lösenord</label>
@@ -165,16 +160,22 @@ const CreateAdmin = () => {
                 e.target.value.length >= account.password.length &&
                 e.target.value !== account.password
               ) {
-                setConfirmPasswordError("Lösenorden matchar inte");
+                setErrors({
+                  ...errors,
+                  confirmPassword: "Lösenorden matchar inte",
+                });
               } else {
-                setConfirmPasswordError("");
+                setErrors({
+                  ...errors,
+                  confirmPassword: "",
+                });
               }
               setConfirmPassword(e.target.value);
             }}
           />
           <div className="error-container">
-            {confirmPasswordError && (
-              <p className="error">{confirmPasswordError}</p>
+            {errors.confirmPassword && (
+              <p className="error">{errors.confirmPassword}</p>
             )}
           </div>
 
@@ -184,14 +185,14 @@ const CreateAdmin = () => {
             id="fullName"
             value={account.fullName}
             onChange={(e) => {
-              if (fullNameError && validateFullName(e.target.value)) {
-                setFullNameError("");
+              if (errors.fullName && validateFullName(e.target.value)) {
+                setErrors({ ...errors, fullName: "" });
               }
               setAccount({ ...account, fullName: e.target.value });
             }}
           />
           <div className="error-container">
-            {fullNameError && <p className="error">{fullNameError}</p>}
+            {errors.fullName && <p className="error">{errors.fullName}</p>}
           </div>
 
           <label htmlFor="accountTypeId">Kontotyp</label>
@@ -199,8 +200,8 @@ const CreateAdmin = () => {
             id="accountTypeId"
             value={account.accountTypeId}
             onChange={(e) => {
-              if (accountTypeError) {
-                setAccountTypeError("");
+              if (errors.accountTypeId) {
+                setErrors({ ...errors, accountTypeId: "" });
               }
 
               setAccount({ ...account, accountTypeId: e.target.value });
@@ -216,7 +217,9 @@ const CreateAdmin = () => {
             ))}
           </select>
           <div className="error-container">
-            {accountTypeError && <p className="error">{accountTypeError}</p>}
+            {errors.accountTypeId && (
+              <p className="error">{errors.accountTypeId}</p>
+            )}
           </div>
 
           <label htmlFor="nodeId">Nod</label>
@@ -224,8 +227,8 @@ const CreateAdmin = () => {
             id="nodeId"
             value={account.nodeId}
             onChange={(e) => {
-              if (nodeError) {
-                setNodeError("");
+              if (errors.nodeId) {
+                setErrors({ ...errors, nodeId: "" });
               }
               setAccount({ ...account, nodeId: e.target.value });
             }}
@@ -240,13 +243,23 @@ const CreateAdmin = () => {
             ))}
           </select>
           <div className="error-container">
-            {nodeError && <p className="error">{nodeError}</p>}
+            {errors.nodeId && <p className="error">{errors.nodeId}</p>}
           </div>
 
           <div className="create-admin-button">
             <Button label={"Skapa konto"} type="submit" />
           </div>
         </form>
+        {showSuccess && (
+          <SuccessPopup
+            message={successMessage}
+            onClose={() => {
+              setShowSuccess(false);
+              setSuccessMessage("");
+              navigate("/manage-admins");
+            }}
+          />
+        )}
       </div>
     </main>
   );
