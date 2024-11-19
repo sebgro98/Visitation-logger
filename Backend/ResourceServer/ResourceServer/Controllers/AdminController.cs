@@ -80,7 +80,7 @@ namespace ResourceServer.Controllers
 
             return Ok();
         }
-
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet("byPage")]
         public async Task<ActionResult<IEnumerable<Admin>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {

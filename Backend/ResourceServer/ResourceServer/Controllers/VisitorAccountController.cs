@@ -57,6 +57,7 @@ namespace ResourceServer.Controller
             return Ok(updateVisitorAccount);
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet("byPage")]
         public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
