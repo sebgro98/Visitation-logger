@@ -23,7 +23,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
         .UseLazyLoadingProxies());
 
+
 builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepsoitory>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+
 builder.Services.AddScoped<INodeRepository, NodeRepository>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<IVisitorRepository, VisitorRepository>();
