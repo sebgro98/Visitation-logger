@@ -24,6 +24,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         .UseLazyLoadingProxies());
 
 
+builder.Services.AddScoped<IPurposeTypesRepository, PurposeTypesRepository>();
 builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepsoitory>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 
