@@ -4,14 +4,21 @@ async function login(username, password, isAdmin) {
   return await post("Login", { username, password, isAdmin }, false);
 }
 
+async function getAllVisitorAccounts() {
+  return await get("VisitorAccount");
+}
+
+async function getAllAdminAccounts() {
+  return await get("Admin");
+}
+
 async function post(endpoint, data, auth = true) {
   return await request("POST", endpoint, data, auth);
 }
 
-// This function is not used in the frontend yet but will be used later
-/* async function get(endpoint, auth = true) {
+async function get(endpoint, auth = true) {
   return await request("GET", endpoint, null, auth);
-} */
+}
 
 async function request(method, endpoint, data, auth = true) {
   const opts = {
@@ -38,4 +45,4 @@ async function request(method, endpoint, data, auth = true) {
   return response.json();
 }
 
-export { login };
+export { login, getAllVisitorAccounts, getAllAdminAccounts };

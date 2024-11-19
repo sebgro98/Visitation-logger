@@ -34,10 +34,11 @@ namespace ResourceServer.Repositories
             var admin = new Admin
             {
                 Id = Guid.NewGuid(),
-                Username = dto.Username,
+                Username = dto.Username.ToLower(),
                 Password = hashedPassword,
                 AccountTypeId = dto.AccountTypeId,
                 NodeId = dto.NodeId,
+                FullName = dto.FullName
             };
 
             _table.Add(admin);
@@ -57,10 +58,11 @@ namespace ResourceServer.Repositories
 
             var hashedPassword = Hasher.HashPassword(dto.Password);
 
-            adminToBeUpdated.Username = dto.Username;
+            adminToBeUpdated.Username = dto.Username.ToLower();
             adminToBeUpdated.Password = hashedPassword;
             adminToBeUpdated.AccountTypeId = dto.AccountTypeId;
             adminToBeUpdated.NodeId = dto.NodeId;
+            adminToBeUpdated.FullName = dto.FullName;
 
             _table.Attach(adminToBeUpdated);
             _db.Entry(adminToBeUpdated).State = EntityState.Modified;

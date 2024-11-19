@@ -58,7 +58,7 @@ namespace ResourceServer.Repositories
 
         public async Task<Visitor> CreateVisitor(VisitorDTOPost dto)
         {
-            var foundCountry = await GetCountry(dto.CountryName);
+            var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == dto.CountryName);
 
             if (foundCountry == default)
             {

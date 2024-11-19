@@ -6,6 +6,7 @@ import Logspage from "./pages/logsPage";
 import Header from "./components/header";
 import { AuthProvider, ProtectedRoute } from "./context/auth";
 import Dashboard from "./pages/dashboard";
+import AccountManagement from "./pages/accountManagement";
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<RoleSelection />} />
-          <Route path="/logs" element={<Logspage/>}/>
+          <Route path="/logs" element={<Logspage />} />
           <Route path="/login/admin" element={<Login isAdminMode={true} />} />
           <Route
             path="/login/visitor"
@@ -29,6 +30,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/manage-visitors"
+            element={
+              <ProtectedRoute>
+                <AccountManagement isVisitor={true} />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/manage-admins"
+            element={
+              <ProtectedRoute>
+                <AccountManagement isVisitor={false} />
               </ProtectedRoute>
             }
           />

@@ -31,7 +31,7 @@ namespace AuthenticationServer.Services
             if (loginDto.IsAdmin)
             {
                 var admin = await _context.Admins.FirstOrDefaultAsync(a =>
-                    a.Username == loginDto.Username && a.Password == hashedPassword
+                    a.Username == loginDto.Username.ToLower() && a.Password == hashedPassword
                 );
 
                 if (admin == null)
@@ -45,7 +45,7 @@ namespace AuthenticationServer.Services
             else
             {
                 var visitorAccount = await _context.VisitorAccounts.FirstOrDefaultAsync(v =>
-                    v.Username == loginDto.Username && v.Password == hashedPassword
+                    v.Username == loginDto.Username.ToLower() && v.Password == hashedPassword
                 );
 
                 if (visitorAccount == null)

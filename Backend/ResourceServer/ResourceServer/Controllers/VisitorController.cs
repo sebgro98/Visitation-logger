@@ -2,11 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using ResourceServer.Data;
 
 namespace ResourceServer.Controllers
 {
@@ -44,6 +40,11 @@ namespace ResourceServer.Controllers
             else if (visitorAccount.VisitorId != null)
             {
                 return NotFound("That account ID is already connected to another user.");
+            }
+
+            if (createdVisitor == null)
+            {
+                return BadRequest("Country not found");
             }
 
             await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, new VisitorAccountDto
@@ -99,23 +100,19 @@ namespace ResourceServer.Controllers
             {
                 return BadRequest("Name must be at least 4 and at most 50 characters long, and can only contain letters.");
             }
-            else if (!SsnRegex.IsMatch(iVisitorDto.SSN))
+            if (!SsnRegex.IsMatch(iVisitorDto.SSN))
             {
                 return BadRequest("SSN/Personal number must have this format: YYYYMMDD-XXXX.");
             }
-            else if (_visitorRepository.GetCountry(iVisitorDto.CountryName).ToString().Equals("System.Threading.Tasks.Task`1[SharedModels.Models.Country]"))
-            {
-                return BadRequest("Country must be either Norway or Sweden.");
-            }
-            else if (iVisitorDto.PassportNo.Length > 9 || !OnlyLettersAndNumbersRegex.IsMatch(iVisitorDto.PassportNo))
+            if (iVisitorDto.PassportNo.Length > 9 || !OnlyLettersAndNumbersRegex.IsMatch(iVisitorDto.PassportNo))
             {
                 return BadRequest("Passport number cannot be longer than 9 characters and can only contain letters and numbers.");
             }
-            else if (iVisitorDto.Company.Length > 50 || !OnlyLettersAndNumbersRegex.IsMatch(iVisitorDto.Company))
+            if (iVisitorDto.Company.Length > 50 || !OnlyLettersAndNumbersRegex.IsMatch(iVisitorDto.Company))
             {
                 return BadRequest("Company name cannot be longer than 50 characters and can only contain letters and numbers." + _visitorRepository.GetCountry(iVisitorDto.CountryName));
             }
-            else if (iVisitorDto.City.Length > 50 || !iVisitorDto.City.All(char.IsLetter))
+            if (iVisitorDto.City.Length > 50 || !iVisitorDto.City.All(char.IsLetter))
             {
                 return BadRequest("City name cannot be longer than 50 characters and can only contain letters.");
             }
