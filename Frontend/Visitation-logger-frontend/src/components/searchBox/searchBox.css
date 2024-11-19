@@ -1,0 +1,6 @@
+.search-box input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 200px; /* Justera bredden efter behov */
+}
