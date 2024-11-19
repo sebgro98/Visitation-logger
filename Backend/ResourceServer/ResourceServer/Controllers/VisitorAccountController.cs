@@ -23,6 +23,12 @@ namespace ResourceServer.Controller
         [HttpPost]
         public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDto dto)
         {
+            ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(dto);
+            if(visitorAccountValidationResult is BadRequestObjectResult)
+            {
+                return visitorAccountValidationResult;
+            }
+
             if (dto == null)
             {
                 return BadRequest("Invalid data.");
@@ -43,6 +49,12 @@ namespace ResourceServer.Controller
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateVisitorAccount(Guid id, [FromBody] VisitorAccountDto visitorAccountDto)
         {
+            ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(visitorAccountDto);
+            if (visitorAccountValidationResult is BadRequestObjectResult)
+            {
+                return visitorAccountValidationResult;
+            }
+
             VisitorAccount updateVisitorAccount =
                 await _visitorAccountRepository.UpdateVisitorAccount(id, visitorAccountDto);
 
@@ -56,9 +68,13 @@ namespace ResourceServer.Controller
 
         private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
         {
-            if (visitorAccountDto.UserName)
+            if (!usernameRegex.IsMatch(visitorAccountDto.UserName))
             {
-                return BadRequest("Invalid data.");
+                return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
+            }
+            if (visitorAccountDto.StartDate > visitorAccountDto.EndDate)
+            {
+                return BadRequest("Start date must be earlier or the same date as end date.");
             }
             return Ok();
         }

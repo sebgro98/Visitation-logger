@@ -21,6 +21,12 @@ namespace ResourceServer.Controllers
         [HttpPost]
         public async Task<ActionResult<Admin>> PostAdmin([FromBody] AdminDTO dto)
         {
+            ActionResult adminValidationResult = ValidateAdminData(dto);
+            if(adminValidationResult is BadRequestObjectResult)
+            {
+                return adminValidationResult;
+            }
+
             var admin = await _adminRepository.Create(dto);
 
             return Ok(admin);
@@ -48,6 +54,12 @@ namespace ResourceServer.Controllers
         [HttpPut("{id}")] //The ID of the admin to be updated
         public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
         {
+            ActionResult adminValidationResult = ValidateAdminData(dto);
+            if (adminValidationResult is BadRequestObjectResult)
+            {
+                return adminValidationResult;
+            }
+
             var admin = await _adminRepository.Update(id, dto);
 
             if (admin == null)
@@ -80,7 +92,7 @@ namespace ResourceServer.Controllers
 
         private ActionResult ValidateAdminData(AdminDTO adminDto)
         {
-            if (adminDto.Username.Length > 50 || !usernameRegex.IsMatch(adminDto.Username))
+            if (!usernameRegex.IsMatch(adminDto.Username))
             {
                 return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
             }
