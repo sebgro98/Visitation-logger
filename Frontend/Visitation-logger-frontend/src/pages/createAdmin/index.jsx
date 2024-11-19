@@ -22,8 +22,6 @@ const CreateAdmin = () => {
     accountTypeId: "",
     nodeId: "",
   });
-  console.log(account);
-  console.log(accountTypes[0]?.id);
 
   useEffect(() => {
     const fetchNodes = async () => {
@@ -67,6 +65,7 @@ const CreateAdmin = () => {
       setUsernameError("Användarnamnet måste vara minst 4 tecken");
       valid = false;
     } else {
+      account.username = account.username.trim().toLowerCase();
       setUsernameError("");
     }
 
@@ -76,6 +75,7 @@ const CreateAdmin = () => {
       );
       valid = false;
     } else {
+      account.password = account.password.trim();
       setPasswordError("");
     }
 
@@ -90,6 +90,7 @@ const CreateAdmin = () => {
       setFullNameError("Fullständigt namn måste vara mellan 4 och 50 tecken");
       valid = false;
     } else {
+      account.fullName = account.fullName.trim();
       setFullNameError("");
     }
 
@@ -108,7 +109,6 @@ const CreateAdmin = () => {
     }
 
     if (valid) {
-      console.log("submit", account);
       try {
         const response = await createAdminAccount(account);
         console.log("Admin account created:", response);
@@ -117,8 +117,6 @@ const CreateAdmin = () => {
       }
     }
   };
-
-  console.log(account.accountTypeId);
 
   return (
     <main className="create-admin-main">
