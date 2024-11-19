@@ -6,6 +6,7 @@ namespace ResourceServer.Repositories
     public interface IStatusRepository
     {
         Task<IEnumerable<Status>> GetAllStatuses();
+        IQueryable<Status> GetAllStatusesForFiltering();
         Task<Status> GetStatusById(Guid id);
         Task<Status> UpdateStatus(Guid id, StatusCheckOutDTO statusCheckOutDto);
         Task<Status> CreateStatus(StatusCheckInDTO statusCheckInDto);

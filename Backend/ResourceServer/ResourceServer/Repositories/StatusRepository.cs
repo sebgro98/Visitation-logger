@@ -1,7 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using ResourceServer.Data;
 using ResourceServer.DTO;
 using SharedModels.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Repositories
 {
@@ -17,6 +17,11 @@ namespace ResourceServer.Repositories
         public async Task<IEnumerable<Status>> GetAllStatuses()
         {
             return await _context.Status.ToListAsync();
+        }
+
+        public IQueryable<Status> GetAllStatusesForFiltering()
+        {
+            return _context.Status; //Returns IQueryable without executing the query
         }
 
         public async Task<Status> GetStatusById(Guid id)
@@ -45,7 +50,7 @@ namespace ResourceServer.Repositories
 
             statusToUpdate.CheckOutTime = statusDTO.CheckOutTime;
             statusToUpdate.CheckOutSign = statusDTO.CheckOutSign;
-          
+
             _context.Status.Update(statusToUpdate);
             await _context.SaveChangesAsync();
 
@@ -64,7 +69,6 @@ namespace ResourceServer.Repositories
 
         public async Task<Status> CreateStatus(StatusCheckInDTO statusCheckInDto)
         {
-
             var newStatus = new Status
             {
                 Id = Guid.NewGuid(),
