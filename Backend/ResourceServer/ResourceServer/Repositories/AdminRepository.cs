@@ -8,23 +8,23 @@ namespace ResourceServer.Repositories
 {
     public class AdminRepository : IAdminRepository
     {
-        private ApplicationDbContext _db;
-        private DbSet<Admin> _table = null;
+        private ApplicationDbContext _context;
+        
 
-        public AdminRepository(ApplicationDbContext db)
+        public AdminRepository(ApplicationDbContext context)
         {
-            _db = db;
-            _table = _db.Set<Admin>();
+            _context = context;
+           
         }
 
         public async Task<IEnumerable<Admin>> GetAll()
         {
-            return await _table.ToListAsync();
+            return await _context.Admins.ToListAsync();
         }
 
         public async Task<Admin> GetById(Guid id)
         {
-            return await _table.FindAsync(id);
+            return await _context.Admins.FindAsync(id);
         }
 
         public async Task<Admin> Create(AdminDTO dto)
@@ -41,8 +41,8 @@ namespace ResourceServer.Repositories
                 FullName = dto.FullName
             };
 
-            _table.Add(admin);
-            await _db.SaveChangesAsync();
+            _context.Admins.Add(admin);
+            await _context.SaveChangesAsync();
 
             return admin;
         }
@@ -64,9 +64,8 @@ namespace ResourceServer.Repositories
             adminToBeUpdated.NodeId = dto.NodeId;
             adminToBeUpdated.FullName = dto.FullName;
 
-            _table.Attach(adminToBeUpdated);
-            _db.Entry(adminToBeUpdated).State = EntityState.Modified;
-            await _db.SaveChangesAsync();
+            _context.Admins.Update(adminToBeUpdated);
+            await _context.SaveChangesAsync();
 
             return adminToBeUpdated;
         }
@@ -80,14 +79,17 @@ namespace ResourceServer.Repositories
                 return false;
             }
 
-            _table.Remove(adminToBeDeleted);
-            await _db.SaveChangesAsync();
+            _context.Admins.Remove(adminToBeDeleted);
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<int> SaveChangesAsync()
+        public async Task<IEnumerable<Admin>> GetAdminsByPage(int pageNumber, int pageSize)
         {
-            return await _db.SaveChangesAsync();
+            return await _context.Admins
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
     }
 }

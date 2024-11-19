@@ -2,6 +2,7 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Controllers
 {
@@ -75,5 +76,13 @@ namespace ResourceServer.Controllers
 
             return Ok();
         }
+
+        [HttpGet("byPage")]
+        public async Task<ActionResult<IEnumerable<Admin>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var admins = await _adminRepository.GetAdminsByPage(pageNumber, pageSize);
+            return Ok(admins);
+        }
+
     }
 }
