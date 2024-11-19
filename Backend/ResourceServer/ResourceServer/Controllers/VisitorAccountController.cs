@@ -66,6 +66,7 @@ namespace ResourceServer.Controller
             return Ok(updateVisitorAccount);
         }
 
+<<<<<<< HEAD
         private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
         {
             if (!usernameRegex.IsMatch(visitorAccountDto.UserName))
@@ -78,5 +79,14 @@ namespace ResourceServer.Controller
             }
             return Ok();
         }
+=======
+        [HttpGet("byPage")]
+        public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var visitorAccounts = await _visitorAccountRepository.GetVisitorAccountByPage(pageNumber, pageSize);
+            return Ok(visitorAccounts);
+        }
+
+>>>>>>> 0200bf13569543be7b7d2c5d2a50ec6801c81c47
     }
 }

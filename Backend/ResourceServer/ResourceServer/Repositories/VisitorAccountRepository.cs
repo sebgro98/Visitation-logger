@@ -84,5 +84,13 @@ namespace ResourceServer.Repositories
             await _context.SaveChangesAsync();
             return visitorAccount;
         }
+
+        public async Task<IEnumerable<VisitorAccount>> GetVisitorAccountByPage(int pageNumber, int pageSize)
+        {
+            return await _context.VisitorAccounts
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
     }
 }

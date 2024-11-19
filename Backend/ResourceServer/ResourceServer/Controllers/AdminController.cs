@@ -2,7 +2,11 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
+<<<<<<< HEAD
 using System.Text.RegularExpressions;
+=======
+using Microsoft.EntityFrameworkCore;
+>>>>>>> 0200bf13569543be7b7d2c5d2a50ec6801c81c47
 
 namespace ResourceServer.Controllers
 {
@@ -100,6 +104,13 @@ namespace ResourceServer.Controllers
                 return BadRequest("Full name can only contain letters.");
             }
             return Ok();
+        }
+
+        [HttpGet("byPage")]
+        public async Task<ActionResult<IEnumerable<Admin>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var admins = await _adminRepository.GetAdminsByPage(pageNumber, pageSize);
+            return Ok(admins);
         }
     }
 }

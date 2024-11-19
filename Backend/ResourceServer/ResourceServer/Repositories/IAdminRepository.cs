@@ -8,7 +8,6 @@ namespace ResourceServer.Repositories{
 		Task<Admin> Create(AdminDTO dto);
 		Task<Admin> Update(Guid id, AdminDTO dto);
 		Task<bool> Delete(Guid id);
-        Task<int> SaveChangesAsync();
-        // DbSet<Admin> Table { get; }
-	}
+		Task<IEnumerable<Admin>> GetAdminsByPage(int pageNumber, int pageSize);
+    }
 }
