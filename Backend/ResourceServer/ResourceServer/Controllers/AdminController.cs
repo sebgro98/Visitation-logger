@@ -3,6 +3,7 @@ using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Controllers
 {
@@ -97,6 +98,13 @@ namespace ResourceServer.Controllers
                 return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
             }
             return Ok();
+        }
+        
+        [HttpGet("byPage")]
+        public async Task<ActionResult<IEnumerable<Admin>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var admins = await _adminRepository.GetAdminsByPage(pageNumber, pageSize);
+            return Ok(admins);
         }
     }
 }

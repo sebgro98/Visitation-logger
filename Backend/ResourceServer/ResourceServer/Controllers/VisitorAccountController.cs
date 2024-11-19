@@ -65,7 +65,7 @@ namespace ResourceServer.Controller
 
             return Ok(updateVisitorAccount);
         }
-
+        
         private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
         {
             if (!usernameRegex.IsMatch(visitorAccountDto.UserName))
@@ -77,6 +77,13 @@ namespace ResourceServer.Controller
                 return BadRequest("Start date must be earlier or the same date as end date.");
             }
             return Ok();
+        }
+
+        [HttpGet("byPage")]
+        public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var visitorAccounts = await _visitorAccountRepository.GetVisitorAccountByPage(pageNumber, pageSize);
+            return Ok(visitorAccounts);
         }
     }
 }
