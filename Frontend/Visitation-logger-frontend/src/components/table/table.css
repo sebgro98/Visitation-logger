@@ -24,11 +24,11 @@
 
 /* Alternating row colors */
 .table tr:nth-child(even) {
-  background-color: #d3d3d3; /* Light grey */
+  background-color: #fff; /* white */
 }
 
 .table tr:nth-child(odd) {
-  background-color: #a9a9a9; /* Dark grey */
+  background-color: #dad9d9; /* Light grey */
 }
 
 .clickable-row {
