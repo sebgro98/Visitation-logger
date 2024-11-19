@@ -1,0 +1,63 @@
+.create-admin-main {
+  display: flex;
+  justify-content: center;
+  margin: 30px 60px; /* Ta bort standardmarginalen */
+}
+
+.create-admin-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  background-color: #f5f5f5;
+}
+
+.create-admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 100px;
+  align-items: start;
+}
+
+.create-admin-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.create-admin-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 25px;
+}
+
+.create-admin-form label {
+  font-weight: bold;
+}
+
+.create-admin-button {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  width: 100%;
+}
+
+/* createAdmin.css */
+.error-container {
+  height: 10px; /* Justera höjden efter behov */
+  margin: 2px 0;
+}
+
+/* createAdmin.css */
+.error {
+  color: red;
+  font-size: small;
+  margin: 0;
+}
