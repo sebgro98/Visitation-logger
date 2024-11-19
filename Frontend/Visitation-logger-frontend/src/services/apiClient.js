@@ -48,10 +48,6 @@ async function request(method, endpoint, data, auth = true) {
     opts.headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
   }
 
-  console.log("Requesting", endpoint, opts);
-  console.log("Data", data);
-  console.log("Auth", auth);
-
   const response = await fetch(`${API_URL}/${endpoint}`, opts);
 
   if (!response.ok) {
