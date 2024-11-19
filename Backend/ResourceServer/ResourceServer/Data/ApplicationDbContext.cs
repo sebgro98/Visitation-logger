@@ -16,6 +16,7 @@ namespace ResourceServer.Data
         public DbSet<Status> Status { get; set; }
         public DbSet<Visitor> Visitors { get; set; }
         public DbSet<VisitorAccount> VisitorAccounts { get; set; }
+        public DbSet<PurposeType> PurposeTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
