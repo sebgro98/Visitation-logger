@@ -27,6 +27,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
         .UseLazyLoadingProxies());
 
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,6 +53,10 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireLogAdminRole", policy => policy.RequireRole("LogAdmin"));
 });
 
+
+builder.Services.AddScoped<IPurposeTypesRepository, PurposeTypesRepository>();
+builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepsoitory>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<INodeRepository, NodeRepository>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<IVisitorRepository, VisitorRepository>();
