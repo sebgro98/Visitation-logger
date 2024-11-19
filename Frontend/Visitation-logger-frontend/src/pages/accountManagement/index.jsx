@@ -9,6 +9,7 @@ import {
 import "./accountManagement.css";
 import SearchBox from "../../components/searchBox";
 import { extractValueFromRow } from "../../utils/utils";
+import LoadingCircle from "../../components/loadingCircle";
 
 const getHeaders = (isVisitor) => {
   if (isVisitor) {
@@ -63,7 +64,7 @@ const AccountManagement = ({ isVisitor }) => {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingCircle />; // Använd LoadingCircle-komponenten
   }
 
   return (
