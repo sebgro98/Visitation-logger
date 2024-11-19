@@ -24,11 +24,17 @@ namespace ResourceServer.Controllers
         {
 
             var createdVisitor = await _visitorRepository.CreateVisitor(dto);
+
             var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(dto.VisitorAccountId);
 
             if (visitorAccount == null)
             {
                 return NotFound();
+            }
+
+            if (createdVisitor == null)
+            {
+                return BadRequest("Country not found");
             }
 
             await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, new VisitorAccountDto

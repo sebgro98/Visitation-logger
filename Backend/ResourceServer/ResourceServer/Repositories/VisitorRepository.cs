@@ -57,7 +57,7 @@ namespace ResourceServer.Repositories
 
         public async Task<Visitor> CreateVisitor(VisitorDTO dto)
         {
-            //Find country by name. Can be replaced with AutoMapper
+            
             var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == dto.CountryName);
 
             if (foundCountry == null)

@@ -39,7 +39,7 @@ namespace ResourceServer.Repositories
             var hashedPassword = Hasher.HashPassword(dto.Password);
 
             visitorAccountToUpdate.PurposeTypeId = dto.PurposeTypeId;
-            visitorAccountToUpdate.Username = dto.UserName;
+            visitorAccountToUpdate.Username = dto.UserName.ToLower();
             visitorAccountToUpdate.Password = hashedPassword;
             visitorAccountToUpdate.StartDate = dto.StartDate;
             visitorAccountToUpdate.EndDate = dto.EndDate;
@@ -70,7 +70,7 @@ namespace ResourceServer.Repositories
             var visitorAccount = new VisitorAccount
             {
                 Id = Guid.NewGuid(),
-                Username = dto.UserName,
+                Username = dto.UserName.ToLower(),
                 Password = hashedPassword,
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,

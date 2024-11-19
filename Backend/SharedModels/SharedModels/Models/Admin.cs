@@ -31,7 +31,8 @@ namespace SharedModels.Models
 
         [Column("node_Id")]
         public Guid NodeId { get; set; }
-
         public virtual Node Node { get; set; }
+
+        public string FullName { get; set; }
     }
 }
