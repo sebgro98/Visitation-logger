@@ -60,20 +60,6 @@ namespace ResourceServer.Controller
             return Ok(updateVisitorAccount);
         }
 
-
-        private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
-        {
-            if (!usernameRegex.IsMatch(visitorAccountDto.UserName))
-            {
-                return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
-            }
-            if (visitorAccountDto.StartDate > visitorAccountDto.EndDate)
-            {
-                return BadRequest("Start date must be earlier or the same date as end date.");
-            }
-            return Ok();
-        }
-
         [Authorize(Roles = "MasterAdmin")]
 
         [HttpGet("byPage")]
