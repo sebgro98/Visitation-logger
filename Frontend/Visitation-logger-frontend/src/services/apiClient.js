@@ -28,8 +28,16 @@ async function getAllAccountTypes() {
   return await get("AccountType");
 }
 
+async function getAllPurposeTypes() {
+  return await get("PurposeType");
+}
+
 async function createAdminAccount(account) {
   return await post("Admin", account);
+}
+
+async function createVisitorAccount(account) {
+  return await post("VisitorAccount", account);
 }
 
 async function post(endpoint, data, auth = true) {
@@ -78,5 +86,6 @@ export {
   getAllNodes,
   getAllAccountTypes,
   createAdminAccount,
-
+  getAllPurposeTypes,
+  createVisitorAccount,
 };
