@@ -10,7 +10,7 @@ const Table = ({ headers, data, onRowClick = () => {} }) => {
     node: "Nod",
     startDate: "Start datum",
     endDate: "Slut datum",
-    adminName: "Namn",
+    fullName: "Namn",
   };
 
   return (
