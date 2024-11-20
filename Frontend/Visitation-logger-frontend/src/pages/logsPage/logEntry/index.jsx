@@ -12,7 +12,7 @@ const LogEntry = ({ log, index }) => {
     return (
         <tr style={{ backgroundColor }} className='logPage-table-entry'>
             <td>{log.visitor}</td>
-            <td>{log.description}</td>
+            <td>{log.purpose}</td>
             <td>{log.node}</td>
             <td>{log.date}</td>
         </tr>
@@ -22,7 +22,7 @@ LogEntry.propTypes = {
     index: PropTypes.number.isRequired,
     log: PropTypes.shape({
         visitor: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
+        purpose: PropTypes.string.isRequired,
         node: PropTypes.string.isRequired,
         date: PropTypes.string.isRequired,
     }).isRequired,

@@ -1,27 +1,14 @@
-.logsPage-results table {
-  width: auto; /* Adjusts to the content width */
-  margin: 0 auto; /* Ensures proper centering if width is specified */
-  border-collapse: collapse; /* Optional: Makes the table look cleaner */
-}
-
-.logsPage-results th,
-.logsPage-results td {
-  padding: 15px 60px; /* Adds padding for a cleaner look */
-  text-align: left; /* Adjust as needed */
-}
-
-.logsPage-header{
+.logsPage-header {
   display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 20px;
-  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 60px;
 }
 
 .logsPage-footer {
   display: flex;
   justify-content: center;
   margin-top: 20px;
-  padding: 10px;
   gap: 20px;
 }
 

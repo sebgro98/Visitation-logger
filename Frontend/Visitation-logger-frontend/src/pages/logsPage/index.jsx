@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import LogEntry from "./logEntry";
 import LogsPageButton from "./logsPage-button";
 import "./logsPage.css";
+import Table from "../../components/table";
 import dummyLogs from "./dummylogs";
+import Button from "../../components/button";
 
 const Logs = () => {
   const [logs, setLogs] = useState([]);
@@ -44,7 +46,7 @@ const Logs = () => {
     const header = ["Besökare", "Besöksbeskrivning", "Nod", "Datum"];
     const rows = logs.map(log => [
       log.visitor,
-      log.description,
+      log.purpose,
       log.node,
       log.date
     ]);
@@ -68,42 +70,33 @@ const Logs = () => {
   };
 
   return (
-    <div className="logsPage">
-      <div className="logsPage-header">
-        <LogsPageButton name={"Filtrera"} onClick={filter} />
-        <LogsPageButton name={"Exportera"} onClick={exportToCSV} />
-      </div>
+    <>
+
       <div className="logsPage-results">
-        <table className="logsPage-table">
-          <thead>
-            <tr>
-              <th>Besökare</th>
-              <th>Besöksbeskrivning</th>
-              <th>Nod</th>
-              <th>Datum</th>
-            </tr>
-          </thead>
-          <tbody>
-            {displayedLogs.map((log, index) => (
-              <LogEntry log={log} key={index} index={index} />
-            ))}
-          </tbody>
-        </table>
+      <div className="logsPage-header">
+        <Button label={"Filtrera"} onClick={filter} />
+        <Button label={"Exportera"} onClick={exportToCSV} />
+      </div>
+        <Table
+          headers={["visitor", "purpose", "node", "date"]}
+          data={displayedLogs}
+          onRowClick={log => console.log(log)}
+        />
       </div>
         <div className="logsPage-footer">
           <br></br>
-          <LogsPageButton
-            name={"Föregående"}
+          <Button
+            label={"Föregående"}
             onClick={previousLogPage}
             disabled={currentPage === 1}
           />
-          <LogsPageButton
-            name={"Nästa"}
+          <Button
+            label={"Nästa"}
             onClick={nextLogPage}
             disabled={currentPage === Math.ceil(filteredLogs.length / 10)}
           />
       </div>
-    </div>
+    </>
   );
 };
 
