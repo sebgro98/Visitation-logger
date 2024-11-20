@@ -17,25 +17,18 @@ const MasterAdminDashboard = () => {
       <div className="dashboard-actions">
         <DashboardAction
           to="/dashboard"
-          onClick={() => console.log("Länken till loggsidan har klickats!")}
           icons={[faDownload]}
           title="Visa/Exportera besöksloggningar"
           info="Klicka på ikonen ovan för att visa/exportera besöksloggningar"
         />
         <DashboardAction
           to="/manage-visitors"
-          onClick={() =>
-            console.log("Länken till gästkontosidan har klickats!")
-          }
           icons={[faUserRegular, faTools]}
           title="Hantera gästkonton"
           info="Klicka på ikonen ovan för att hantera gästkonton"
         />
         <DashboardAction
           to="/manage-admins"
-          onClick={() =>
-            console.log("Länken till adminkontosidan har klickats!")
-          }
           icons={[faUserSolid, faTools]}
           title="Hantera adminkonton"
           info="Klicka på ikonen ovan för att hantera adminkonton"

@@ -3,13 +3,14 @@ import PropTypes from "prop-types";
 import Button from "../../components/button";
 import Table from "../../components/table";
 import {
-  getAllAdminAccounts,
-  getAllVisitorAccounts,
+  getAdminsByPage,
+  getVisitorAccountByPage,
 } from "../../services/apiClient";
 import "./accountManagement.css";
 import SearchBox from "../../components/searchBox";
 import { extractValueFromRow } from "../../utils/utils";
 import LoadingCircle from "../../components/loadingCircle";
+import { useNavigate } from "react-router-dom";
 
 const getHeaders = (isVisitor) => {
   if (isVisitor) {
@@ -25,14 +26,18 @@ const AccountManagement = ({ isVisitor }) => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize] = useState(10);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         let result;
         if (isVisitor) {
-          result = await getAllVisitorAccounts();
+          result = await getVisitorAccountByPage(pageNumber, pageSize);
         } else {
-          result = await getAllAdminAccounts();
+          result = await getAdminsByPage(pageNumber, pageSize);
         }
         setData(result);
       } catch (error) {
@@ -43,7 +48,7 @@ const AccountManagement = ({ isVisitor }) => {
     };
 
     fetchData();
-  }, [isVisitor]);
+  }, [isVisitor, pageNumber, pageSize]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -63,6 +68,18 @@ const AccountManagement = ({ isVisitor }) => {
     )
   );
 
+  const handleNextPage = () => {
+    setPageNumber((prev) => prev + 1);
+  };
+
+  const handlePrevPage = () => {
+    setPageNumber((prev) => prev - 1);
+  };
+
+  const isPrevDisabled = pageNumber === 1;
+
+  const isNextDisabled = filteredData.length === 0;
+
   if (loading) {
     return <LoadingCircle />; // Använd LoadingCircle-komponenten
   }
@@ -74,9 +91,9 @@ const AccountManagement = ({ isVisitor }) => {
           <div className="management-button-add">
             <Button
               label={"Lägg till +"}
-              onClick={() => {
-                console.log("Klickat på lägg till");
-              }}
+              onClick={() =>
+                navigate(isVisitor ? "/manage-visitors" : "/create-admin")
+              }
             />
           </div>
           <SearchBox
@@ -91,21 +108,21 @@ const AccountManagement = ({ isVisitor }) => {
             onRowClick={handleRowClick}
           />
         ) : (
-          <div className="no-visitor-accounts">Inga besökarkonton hittades</div>
+          <div className="no-visitor-accounts">
+            {isNextDisabled ? "Finns inga fler konton" : "Inga konton hittades"}
+          </div>
         )}
 
         <div className="management-buttons-pagination">
           <Button
             label={"Föregående"}
-            onClick={() => {
-              console.log("Klickat på föregående");
-            }}
+            onClick={handlePrevPage}
+            disabled={isPrevDisabled}
           />
           <Button
             label={"Nästa"}
-            onClick={() => {
-              console.log("Klickat på nästa");
-            }}
+            onClick={handleNextPage}
+            disabled={isNextDisabled}
           />
         </div>
       </div>

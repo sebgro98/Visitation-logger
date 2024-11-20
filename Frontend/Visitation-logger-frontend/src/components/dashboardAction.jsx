@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
-const DashboardAction = ({ to, onClick, icons, title, info }) => {
+const DashboardAction = ({ to, icons, title, info }) => {
   return (
     <div className="dashboard-action">
-      <Link onClick={onClick} to={to}>
+      <Link to={to}>
         <div className="icon-container">
           {icons.map((icon, index) => (
             <FontAwesomeIcon
