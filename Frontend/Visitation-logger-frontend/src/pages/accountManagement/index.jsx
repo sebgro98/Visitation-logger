@@ -30,7 +30,6 @@ const AccountManagement = ({ isVisitor }) => {
   const [pageSize] = useState(10);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -109,7 +108,9 @@ const AccountManagement = ({ isVisitor }) => {
             onRowClick={handleRowClick}
           />
         ) : (
-          <div className="no-visitor-accounts">Inga besökarkonton hittades</div>
+          <div className="no-visitor-accounts">
+            {isNextDisabled ? "Finns inga fler konton" : "Inga konton hittades"}
+          </div>
         )}
 
         <div className="management-buttons-pagination">
