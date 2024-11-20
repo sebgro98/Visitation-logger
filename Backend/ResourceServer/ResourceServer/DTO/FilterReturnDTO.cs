@@ -6,5 +6,6 @@ namespace ResourceServer.DTO
     {
         public List<Status> StatusList { get; set; }
         public int TotalNumberOfElements { get; set; }
+        public int TotalNumberOfPages { get; set; }
     }
 }

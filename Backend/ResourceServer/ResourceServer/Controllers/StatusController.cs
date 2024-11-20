@@ -80,6 +80,7 @@ namespace ResourceServer.Controllers
 
             //Get number of all elements
             int totalSize = await filteredStatuses.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalSize / pageSize); //Round up if it's a decimal number
 
             //Pagination
             filteredStatuses = filteredStatuses.Skip((pageNumber - 1) * pageSize).Take(pageSize);
@@ -91,6 +92,7 @@ namespace ResourceServer.Controllers
             {
                 StatusList = filteredStatusList,
                 TotalNumberOfElements = totalSize,
+                TotalNumberOfPages = totalPages
             };
 
             return Ok(returnDTO);
