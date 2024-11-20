@@ -26,7 +26,7 @@ namespace ResourceServer.Controllers
         }
 
         [HttpGet("/filter")]
-        public async Task<ActionResult<IEnumerable<Status>>> GetFilteredStatuses(
+        public async Task<ActionResult<FilterReturnDTO>> GetFilteredStatuses(
             [FromQuery] int pageNumber,
             [FromQuery] int pageSize,
             [FromQuery] FilterDTO dto
@@ -78,13 +78,22 @@ namespace ResourceServer.Controllers
                 );
             }
 
+            //Get number of all elements
+            int totalSize = await filteredStatuses.CountAsync();
+
             //Pagination
             filteredStatuses = filteredStatuses.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
             //Database filtering and pagination executes
-            var statusList = await filteredStatuses.ToListAsync();
+            var filteredStatusList = await filteredStatuses.ToListAsync();
 
-            return Ok(statusList);
+            FilterReturnDTO returnDTO = new FilterReturnDTO
+            {
+                StatusList = filteredStatusList,
+                TotalNumberOfElements = totalSize,
+            };
+
+            return Ok(returnDTO);
         }
 
         [HttpPost]
