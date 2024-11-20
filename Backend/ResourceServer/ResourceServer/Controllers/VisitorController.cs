@@ -24,38 +24,6 @@ namespace ResourceServer.Controllers
             _visitorRepository = visitorRepository;
         }
 
-
-   
-    [HttpPost]
-    public async Task<ActionResult<Visitor>> CreateVisitor([FromBody] VisitorDTO dto)
-    {
-
-        var createdVisitor = await _visitorRepository.CreateVisitor(dto);
-
-        if (createdVisitor == null)
-        {
-            return BadRequest("Country not found");
-        }
-
-        var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(dto.VisitorAccountId);
-
-        if (visitorAccount == null)
-        {
-            return NotFound();
-        }
-
-        var updatedVisitorAccountDto = new VisitorAccountDto
-        {
-            AccountTypeId = visitorAccount.AccountTypeId,
-             PurposeTypeId = visitorAccount.PurposeTypeId,
-            StartDate = visitorAccount.StartDate,
-            EndDate = visitorAccount.EndDate,
-            UserName = visitorAccount.Username,
-            Password = visitorAccount.Password,
-            VisitorId = createdVisitor.Id,
-            NodeId = visitorAccount.NodeId
-        };
-
         [Authorize(Roles = "MasterAdmin, Visitor")]
         [HttpPost]
         public async Task<ActionResult<Visitor>> CreateVisitor([FromBody] VisitorDTOPost visitorDto)
