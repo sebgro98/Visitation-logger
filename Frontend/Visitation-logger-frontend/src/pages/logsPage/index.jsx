@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import LogEntry from "./logEntry";
-import LogsPageButton from "./logsPage-button";
 import "./logsPage.css";
 import Table from "../../components/table";
 import dummyLogs from "./dummylogs";
