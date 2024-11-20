@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 
 
-
 namespace ResourceServer.Controllers
 {
     [Route("[controller]")]
@@ -15,7 +14,6 @@ namespace ResourceServer.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminRepository _adminRepository;
-        private static readonly Regex usernameRegex = new Regex("^[a-zA-Z0-9.@]{4,50}$");
 
         public AdminController(IAdminRepository adminRepository)
         {
@@ -26,12 +24,6 @@ namespace ResourceServer.Controllers
         [HttpPost]
         public async Task<ActionResult<Admin>> PostAdmin([FromBody] AdminDTO dto)
         {
-            ActionResult adminValidationResult = ValidateAdminData(dto);
-            if(adminValidationResult is BadRequestObjectResult)
-            {
-                return adminValidationResult;
-            }
-
             var admin = await _adminRepository.Create(dto);
 
             return Ok(admin);
@@ -61,12 +53,6 @@ namespace ResourceServer.Controllers
         [HttpPut("{id}")] //The ID of the admin to be updated
         public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
         {
-            ActionResult adminValidationResult = ValidateAdminData(dto);
-            if (adminValidationResult is BadRequestObjectResult)
-            {
-                return adminValidationResult;
-            }
-
             var admin = await _adminRepository.Update(id, dto);
 
             if (admin == null)
@@ -118,5 +104,6 @@ namespace ResourceServer.Controllers
             var admins = await _adminRepository.GetAdminsByPage(pageNumber, pageSize);
             return Ok(admins);
         }
+
     }
 }

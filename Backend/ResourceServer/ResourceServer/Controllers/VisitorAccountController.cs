@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 
 
+
 namespace ResourceServer.Controller
 {
     [Route("[controller]")]
@@ -15,7 +16,7 @@ namespace ResourceServer.Controller
     public class VisitorAccountController : ControllerBase
     {
         private readonly IVisitorAccountRepository _visitorAccountRepository;
-        private static readonly Regex usernameRegex = new Regex("^[a-zA-Z0-9.@]{4,50}$");
+
 
         public VisitorAccountController(IVisitorAccountRepository visitorAccountRepository)
         {
@@ -26,12 +27,6 @@ namespace ResourceServer.Controller
         [HttpPost]
         public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDto dto)
         {
-            ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(dto);
-            if(visitorAccountValidationResult is BadRequestObjectResult)
-            {
-                return visitorAccountValidationResult;
-            }
-
             if (dto == null)
             {
                 return BadRequest("Invalid data.");
@@ -54,12 +49,6 @@ namespace ResourceServer.Controller
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateVisitorAccount(Guid id, [FromBody] VisitorAccountDto visitorAccountDto)
         {
-            ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(visitorAccountDto);
-            if (visitorAccountValidationResult is BadRequestObjectResult)
-            {
-                return visitorAccountValidationResult;
-            }
-
             VisitorAccount updateVisitorAccount =
                 await _visitorAccountRepository.UpdateVisitorAccount(id, visitorAccountDto);
 
@@ -70,6 +59,7 @@ namespace ResourceServer.Controller
 
             return Ok(updateVisitorAccount);
         }
+
 
         private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
         {
@@ -85,6 +75,7 @@ namespace ResourceServer.Controller
         }
 
         [Authorize(Roles = "MasterAdmin")]
+
         [HttpGet("byPage")]
         public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
