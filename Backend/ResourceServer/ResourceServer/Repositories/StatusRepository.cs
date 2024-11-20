@@ -72,7 +72,7 @@ namespace ResourceServer.Repositories
             var newStatus = new Status
             {
                 Id = Guid.NewGuid(),
-                VisitorId = statusCheckInDto.VisitorId,
+                VisitorAccountId = statusCheckInDto.VisitorAccountId,
                 CheckInSign = statusCheckInDto.CheckInSign,
                 CheckInTime = statusCheckInDto.CheckInTime,
                 NodeId = statusCheckInDto.NodeId,
@@ -83,10 +83,10 @@ namespace ResourceServer.Repositories
             return newStatus;
         }
 
-        public async Task<Status> GetCheckInStatus(Guid visitorId)
+        public async Task<Status> GetCheckInStatus(Guid VisitorAccountId)
         {
             var latestStatus = await _context.Status
-            .Where(s => s.VisitorId == visitorId)
+            .Where(s => s.VisitorAccountId == VisitorAccountId)
             .OrderByDescending(s => s.CheckInTime)
             .FirstOrDefaultAsync();
 
