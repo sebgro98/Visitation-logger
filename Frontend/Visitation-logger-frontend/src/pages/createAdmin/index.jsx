@@ -77,7 +77,7 @@ const CreateAdmin = () => {
     }
     if (!validateFullName(account.fullName)) {
       newErrors.fullName =
-        "Fullständigt namn måste vara mellan 4 och 50 tecken";
+        "Fullständigt namn måste vara mellan 4 och 50 tecken och får endast innehålla bokstäver och mellanslag";
       valid = false;
     }
     if (!account.accountTypeId) {
