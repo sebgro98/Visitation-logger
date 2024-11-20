@@ -12,6 +12,18 @@ async function getAllAdminAccounts() {
   return await get("Admin");
 }
 
+async function getAllNodes() {
+  return await get("Node");
+}
+
+async function getAllAccountTypes() {
+  return await get("AccountType");
+}
+
+async function createAdminAccount(account) {
+  return await post("Admin", account);
+}
+
 async function post(endpoint, data, auth = true) {
   return await request("POST", endpoint, data, auth);
 }
@@ -45,4 +57,11 @@ async function request(method, endpoint, data, auth = true) {
   return response.json();
 }
 
-export { login, getAllVisitorAccounts, getAllAdminAccounts };
+export {
+  login,
+  getAllVisitorAccounts,
+  getAllAdminAccounts,
+  getAllNodes,
+  getAllAccountTypes,
+  createAdminAccount,
+};

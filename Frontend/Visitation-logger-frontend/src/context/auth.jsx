@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
     const storedToken = localStorage.getItem("token");
 
     if (storedToken) {
-      navigate(location.pathname || "/dashboard"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
+      navigate(location.pathname || "/dashboard");
       setIsLoggedIn(true);
     } /* else {
       setIsLoggedIn(false);
@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("token", res.token);
     setIsLoggedIn(true);
 
-    navigate("/dashboard"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
+    navigate("/dashboard");
   };
 
   const handleLogout = () => {
