@@ -85,12 +85,25 @@ namespace ResourceServer.Repositories
             return visitorAccount;
         }
 
-        public async Task<IEnumerable<VisitorAccount>> GetVisitorAccountByPage(int pageNumber, int pageSize)
-        {
-            return await _context.VisitorAccounts
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+        public async Task<ByPageVisitorAccountDTO> GetVisitorAccountByPage(int pageNumber, int pageSize) {
+            {
+               var visitorAccounts = await _context.VisitorAccounts
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                int totalSize = await _context.VisitorAccounts.CountAsync();
+                int totalPages = (int)Math.Ceiling((double)totalSize / pageSize);
+
+                ByPageVisitorAccountDTO byPageVisitorAccountDTO = new ByPageVisitorAccountDTO
+                {
+                    VisitorAccounts = visitorAccounts,
+                    totalAmountOfItems = totalSize,
+                    totalPages = totalPages,
+                };
+
+                return byPageVisitorAccountDTO;
+            }                
         }
     }
 }

@@ -84,12 +84,23 @@ namespace ResourceServer.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Admin>> GetAdminsByPage(int pageNumber, int pageSize)
+        public async Task<ByPageAdminDTO> GetAdminsByPage(int pageNumber, int pageSize)
         {
-            return await _context.Admins
+            var admins =  await _context.Admins
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+            
+            int totalSize = await _context.Admins.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalSize / pageSize);
+
+            ByPageAdminDTO byPageAdminDto = new ByPageAdminDTO
+            {
+                Admins = admins,
+                totalAmountOfItems = totalSize,
+                totalPages = totalPages,
+            };
+            return byPageAdminDto;
         }
     }
 }
