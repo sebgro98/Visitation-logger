@@ -23,3 +23,21 @@ export const extractValueFromRow = (row, header) => {
       return row[header] || "";
   }
 };
+
+// Funktion för att validera användarnamn
+export const validateUsername = (username) => {
+  return username.length >= 4;
+};
+
+// Funktion för att validera lösenord
+export const validatePassword = (password) => {
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return passwordRegex.test(password);
+};
+
+// Funktion för att validera fullständigt namn
+export const validateFullName = (fullName) => {
+  const nameRegex = /^[a-zA-Z\s]{4,50}$/;
+  return nameRegex.test(fullName);
+};

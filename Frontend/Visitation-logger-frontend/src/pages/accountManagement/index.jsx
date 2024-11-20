@@ -10,6 +10,7 @@ import "./accountManagement.css";
 import SearchBox from "../../components/searchBox";
 import { extractValueFromRow } from "../../utils/utils";
 import LoadingCircle from "../../components/loadingCircle";
+import { useNavigate } from "react-router-dom";
 
 const getHeaders = (isVisitor) => {
   if (isVisitor) {
@@ -24,8 +25,11 @@ const AccountManagement = ({ isVisitor }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(10);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,9 +92,9 @@ const AccountManagement = ({ isVisitor }) => {
           <div className="management-button-add">
             <Button
               label={"Lägg till +"}
-              onClick={() => {
-                console.log("Klickat på lägg till");
-              }}
+              onClick={() =>
+                navigate(isVisitor ? "/manage-visitors" : "/create-admin")
+              }
             />
           </div>
           <SearchBox
