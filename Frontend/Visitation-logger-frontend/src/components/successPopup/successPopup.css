@@ -14,9 +14,15 @@
 .success-popup {
   display: flex;
   flex-direction: column;
+  text-align: left;
   gap: 20px;
   padding: 20px;
   border-radius: 8px;
   border: 2px solid #ccc;
   background-color: #f5f5f5;
+}
+
+.success-popup p {
+  padding: 10px;
+  white-space: pre-wrap; /* Bevarar radbrytningar och mellanslag */
 }
