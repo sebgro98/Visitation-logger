@@ -97,7 +97,7 @@ namespace ResourceServer.Repositories
 
                 ByPageVisitorAccountDTO byPageVisitorAccountDTO = new ByPageVisitorAccountDTO
                 {
-                    VisitorAccounts = visitorAccounts,
+                    Data = visitorAccounts,
                     totalAmountOfItems = totalSize,
                     totalPages = totalPages,
                 };

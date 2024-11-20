@@ -96,7 +96,7 @@ namespace ResourceServer.Repositories
 
             ByPageAdminDTO byPageAdminDto = new ByPageAdminDTO
             {
-                Admins = admins,
+                Data = admins,
                 totalAmountOfItems = totalSize,
                 totalPages = totalPages,
             };
