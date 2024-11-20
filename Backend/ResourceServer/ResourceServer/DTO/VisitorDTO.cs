@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace ResourceServer.DTO
 {
-    public class VisitorDTOPut : IVisitorDTO
+    public class VisitorDTO
     {
         [Required]
         public string FullName { get; set; }
-
+        
         [Required]
         public string SSN { get; set; }
 
@@ -21,5 +21,8 @@ namespace ResourceServer.DTO
 
         [Required]
         public string City { get; set; }
+
+        [Required]
+        public Guid VisitorAccountId { get; set; }
     }
 }
