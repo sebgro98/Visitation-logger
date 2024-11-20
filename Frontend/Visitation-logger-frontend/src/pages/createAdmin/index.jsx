@@ -96,7 +96,21 @@ const CreateAdmin = () => {
         const response = await createAdminAccount(account);
         console.log("Admin account created:", response);
 
-        setSuccessMessage(`Konto för ${account.username} har skapats.`);
+        const accountTypeName =
+          accountTypes.find((type) => type.id === account.accountTypeId)
+            ?.name || "";
+
+        const nodeName =
+          nodes.find((node) => node.id === account.nodeId)?.nodeName || "";
+
+        const accountInfo = [
+          `Användarnamn:\n${account.username}\n`,
+          `Fullständigt namn:\n${account.fullName}\n`,
+          `Kontotyp:\n${accountTypeName}\n`,
+          `Nod:\n${nodeName}`,
+        ];
+
+        setSuccessMessage("Kontot har skapats\n\n" + accountInfo.join("\n"));
         setShowSuccess(true);
         // Återställ formuläret
         setAccount({
@@ -113,6 +127,54 @@ const CreateAdmin = () => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+
+    // Rensa felmeddelande om fältet validerar korrekt
+    if (errors[id]) {
+      let isValid = true;
+      switch (id) {
+        case "username":
+          isValid = validateUsername(value);
+          break;
+        case "password":
+          isValid = validatePassword(value);
+          break;
+        case "fullName":
+          isValid = validateFullName(value);
+          break;
+        case "accountTypeId":
+        case "nodeId":
+          isValid = value !== "";
+          break;
+        default:
+          break;
+      }
+      if (isValid) {
+        setErrors({ ...errors, [id]: "" });
+      }
+    }
+
+    setAccount({ ...account, [id]: value });
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+
+    if (value.length >= account.password.length && value !== account.password) {
+      setErrors({
+        ...errors,
+        confirmPassword: "Lösenorden matchar inte",
+      });
+    } else {
+      setErrors({
+        ...errors,
+        confirmPassword: "",
+      });
+    }
+  };
+
   return (
     <main className="create-admin-main">
       <div className="create-admin-container">
@@ -123,28 +185,19 @@ const CreateAdmin = () => {
             type="text"
             id="username"
             value={account.username}
-            onChange={(e) => {
-              if (errors.username && validateUsername(e.target.value)) {
-                setErrors({ ...errors, username: "" });
-              }
-              setAccount({ ...account, username: e.target.value });
-            }}
+            onChange={handleInputChange}
           />
           <div className="error-container">
             {errors.username && <p className="error">{errors.username}</p>}
           </div>
 
           <label htmlFor="password">Lösenord</label>
+
           <input
             type="password"
             id="password"
             value={account.password}
-            onChange={(e) => {
-              if (errors.password && validatePassword(e.target.value)) {
-                setErrors({ ...errors, password: "" });
-              }
-              setAccount({ ...account, password: e.target.value });
-            }}
+            onChange={handleInputChange}
           />
           <div className="error-container">
             {errors.password && <p className="error">{errors.password}</p>}
@@ -155,23 +208,7 @@ const CreateAdmin = () => {
             type="password"
             id="confirmPassword"
             value={confirmPassword}
-            onChange={(e) => {
-              if (
-                e.target.value.length >= account.password.length &&
-                e.target.value !== account.password
-              ) {
-                setErrors({
-                  ...errors,
-                  confirmPassword: "Lösenorden matchar inte",
-                });
-              } else {
-                setErrors({
-                  ...errors,
-                  confirmPassword: "",
-                });
-              }
-              setConfirmPassword(e.target.value);
-            }}
+            onChange={handleConfirmPasswordChange}
           />
           <div className="error-container">
             {errors.confirmPassword && (
@@ -184,13 +221,9 @@ const CreateAdmin = () => {
             type="text"
             id="fullName"
             value={account.fullName}
-            onChange={(e) => {
-              if (errors.fullName && validateFullName(e.target.value)) {
-                setErrors({ ...errors, fullName: "" });
-              }
-              setAccount({ ...account, fullName: e.target.value });
-            }}
+            onChange={handleInputChange}
           />
+
           <div className="error-container">
             {errors.fullName && <p className="error">{errors.fullName}</p>}
           </div>
@@ -199,13 +232,7 @@ const CreateAdmin = () => {
           <select
             id="accountTypeId"
             value={account.accountTypeId}
-            onChange={(e) => {
-              if (errors.accountTypeId) {
-                setErrors({ ...errors, accountTypeId: "" });
-              }
-
-              setAccount({ ...account, accountTypeId: e.target.value });
-            }}
+            onChange={handleInputChange}
           >
             <option value="" disabled hidden>
               -- Välj kontotyp --
@@ -226,12 +253,7 @@ const CreateAdmin = () => {
           <select
             id="nodeId"
             value={account.nodeId}
-            onChange={(e) => {
-              if (errors.nodeId) {
-                setErrors({ ...errors, nodeId: "" });
-              }
-              setAccount({ ...account, nodeId: e.target.value });
-            }}
+            onChange={handleInputChange}
           >
             <option value="" disabled hidden>
               -- Välj nod --
