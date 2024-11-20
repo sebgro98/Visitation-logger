@@ -8,6 +8,23 @@ async function getAllVisitorAccounts() {
   return await get("VisitorAccount");
 }
 
+function paramaterParser(params) {
+  let url = "";
+  for (const key in params) {
+    url += `${key}=${params[key]}&`;
+  }
+
+  // Remove the trailing '&' from the URL
+  return url.slice(0, -1);
+}
+
+async function getPage(page, size) {
+  let endpoint = "filter?";
+  const params = paramaterParser({ pageNumber: page, pageSize: size });
+  endpoint += params;
+  return await request("GET", endpoint, null, false);
+}
+
 async function getAllAdminAccounts() {
   return await get("Admin");
 }
@@ -45,4 +62,4 @@ async function request(method, endpoint, data, auth = true) {
   return response.json();
 }
 
-export { login, getAllVisitorAccounts, getAllAdminAccounts };
+export { login, getAllVisitorAccounts, getAllAdminAccounts, getPage};
