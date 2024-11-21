@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ResourceServer.DTO;
 using ResourceServer.Repositories;
 using SharedModels.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace ResourceServer.Controllers
 {
@@ -17,6 +19,7 @@ namespace ResourceServer.Controllers
             _statusRepository = statusRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Status>>> GetAllStatuses()
         {
@@ -25,6 +28,7 @@ namespace ResourceServer.Controllers
             return Ok(status);
         }
 
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet("/filter")]
         public async Task<ActionResult<FilterReturnDTO>> GetFilteredStatuses(
             [FromQuery] int pageNumber,
@@ -103,6 +107,7 @@ namespace ResourceServer.Controllers
             return Ok(returnDTO);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpPost]
         public async Task<IActionResult> CreateStatus([FromBody] StatusCheckInDTO statusCheckInDto)
         {
@@ -115,6 +120,7 @@ namespace ResourceServer.Controllers
             return Ok(status);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateStatus(
             Guid id,
@@ -131,6 +137,7 @@ namespace ResourceServer.Controllers
             return Ok(updateStatus);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpGet("{visitorId}/checkin-status")]
         public async Task<IActionResult> GetCheckInStatus(Guid VisitorAccountId)
         {

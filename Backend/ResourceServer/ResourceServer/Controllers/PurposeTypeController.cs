@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
 using SharedModels.Models;
 
@@ -15,6 +16,7 @@ namespace ResourceServer.Controllers
             _purposeTypesRepository = purposeTypesRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PurposeType>>> GetPurposeTypes()
         {

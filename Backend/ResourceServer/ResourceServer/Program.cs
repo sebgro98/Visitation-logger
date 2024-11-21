@@ -2,6 +2,10 @@ using ResourceServer.Data;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repositories;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,10 +28,35 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         .UseLazyLoadingProxies());
 
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    var key = builder.Configuration["JwtSettings:Secret"];
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        RoleClaimType = ClaimTypes.Role,
+        ValidateLifetime = true
+    };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireMasterAdminRole", policy => policy.RequireRole("MasterAdmin"));
+    options.AddPolicy("RequireVisitorRole", policy => policy.RequireRole("Visitor"));
+    options.AddPolicy("RequireLogAdminRole", policy => policy.RequireRole("LogAdmin"));
+});
+
+
 builder.Services.AddScoped<IPurposeTypesRepository, PurposeTypesRepository>();
 builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepsoitory>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
-
 builder.Services.AddScoped<INodeRepository, NodeRepository>();
 builder.Services.AddScoped<IStatusRepository, StatusRepository>();
 builder.Services.AddScoped<IVisitorRepository, VisitorRepository>();

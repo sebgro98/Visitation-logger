@@ -2,7 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+
+
 
 namespace ResourceServer.Controllers
 {
@@ -24,6 +28,7 @@ namespace ResourceServer.Controllers
             _visitorRepository = visitorRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin, Visitor")]
         [HttpPost]
         public async Task<ActionResult<Visitor>> CreateVisitor([FromBody] VisitorDTOPost visitorDto)
         {
@@ -36,20 +41,22 @@ namespace ResourceServer.Controllers
             var createdVisitor = await _visitorRepository.CreateVisitor(visitorDto);
             var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(visitorDto.VisitorAccountId);
 
+
+            if (createdVisitor == null)
+            {
+              return BadRequest("Country not found");
+             }
+             
             if (visitorAccount == null)
             {
                 return NotFound("Account ID must match an existing acccount ID.");
             }
+            
             else if (visitorAccount.VisitorId != null)
             {
                 return NotFound("That account ID is already connected to another user.");
             }
-
-            if (createdVisitor == null)
-            {
-                return BadRequest("Country not found");
-            }
-
+            
             await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, new VisitorAccountDto
             {
                 AccountTypeId = visitorAccount.AccountTypeId,
@@ -65,6 +72,7 @@ namespace ResourceServer.Controllers
             return Ok(createdVisitor);
         }
 
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Visitor>> GetVisitorById(Guid id)
         {
@@ -78,6 +86,7 @@ namespace ResourceServer.Controllers
             return Ok(visitor);
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Visitor>> UpdateVisitor(Guid id, [FromBody] VisitorDTOPut visitorPutDTO)
         {

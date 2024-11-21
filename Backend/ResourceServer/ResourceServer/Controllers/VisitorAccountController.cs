@@ -4,7 +4,10 @@ using SharedModels.Hasher;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+
+
 
 namespace ResourceServer.Controller
 {
@@ -20,6 +23,7 @@ namespace ResourceServer.Controller
             _visitorAccountRepository = visitorAccountRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPost]
         public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDto dto)
         {
@@ -52,6 +56,7 @@ namespace ResourceServer.Controller
             
         }
 
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetVisitorAccounts()
         {
@@ -60,6 +65,7 @@ namespace ResourceServer.Controller
             return Ok(visitorAccounts);
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateVisitorAccount(Guid id, [FromBody] VisitorAccountDto visitorAccountDto)
         {
@@ -108,6 +114,7 @@ namespace ResourceServer.Controller
             return Ok();
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet("byPage")]
         public async Task<ActionResult<ByPageVisitorAccountDTO>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {

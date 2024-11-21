@@ -2,8 +2,10 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
+using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace ResourceServer.Controllers
 {
@@ -20,6 +22,7 @@ namespace ResourceServer.Controllers
             _adminRepository = adminRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPost]
         public async Task<ActionResult> CreateAdmin([FromBody] AdminDTO dto)
         {
@@ -47,6 +50,7 @@ namespace ResourceServer.Controllers
             }
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Admin>> GetAdminById(Guid id)
         {
@@ -57,7 +61,8 @@ namespace ResourceServer.Controllers
             }
             return Ok(admin);
         }
-
+        
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Admin>>> GetAllAdmins()
         {
@@ -65,7 +70,8 @@ namespace ResourceServer.Controllers
 
             return Ok(admins);
         }
-
+        
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
         {
@@ -100,6 +106,7 @@ namespace ResourceServer.Controllers
         }
             
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAdmin(Guid id)
         {
@@ -119,7 +126,8 @@ namespace ResourceServer.Controllers
 
             return Ok();
         }
-
+        
+        [Authorize(Roles = "MasterAdmin")]
         private ActionResult ValidateAdminData(AdminDTO adminDto)
         {
             if (!UsernameRegex.IsMatch(adminDto.Username))
@@ -131,6 +139,7 @@ namespace ResourceServer.Controllers
             }
             return Ok();
         }
+
 
         [HttpGet("byPage")]
         public async Task<ActionResult<ByPageAdminDTO>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
