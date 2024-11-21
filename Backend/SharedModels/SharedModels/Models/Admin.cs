@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using SharedModels.Interface;
 
 namespace SharedModels.Models
 {
     [Table("admins")]
-    public class Admin
+    public class Admin : IAccountLockout
     {
         [Column("id")]
         public Guid Id { get; set; }

@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-
+using SharedModels.Interface;
 
 namespace SharedModels.Models
 {
     [Table("visitorAccounts")]
-    public class VisitorAccount
+    public class VisitorAccount : IAccountLockout
     {
         
         [Column("id")]
