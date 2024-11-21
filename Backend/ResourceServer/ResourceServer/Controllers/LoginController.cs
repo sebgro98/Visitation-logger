@@ -17,7 +17,7 @@ namespace ResourceServer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<string>> Login([FromBody] LoginDTO dto)
+        public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
             // Define the URL of the authentication server
             var authServerUrl = "http://localhost:5247/login";
@@ -33,17 +33,19 @@ namespace ResourceServer.Controllers
             {
                 var token = await response.Content.ReadAsStringAsync();
 
-                // Create a JSON object with the token
-                var jsonResponse = JsonSerializer.Serialize(new { token });
-
-                return Content(jsonResponse, "application/json");
+                // Forward the token to the client
+                return Ok(new { token });
             }
             else
             {
-                // Handle unsuccessful response
-                var errorData = await response.Content.ReadAsStringAsync();
-                return Content(errorData, "application/json");
+                // Retrieve the status code and error message from the authentication server
+                var statusCode = (int)response.StatusCode; // Forward the original status code
+                var errorMessage = await response.Content.ReadAsStringAsync();
+
+                // Return the error response with the correct status code and message
+                return StatusCode(statusCode, new { Message = errorMessage });
             }
         }
+
     }
 }

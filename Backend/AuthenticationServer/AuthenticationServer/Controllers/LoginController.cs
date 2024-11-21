@@ -27,9 +27,16 @@ namespace AuthenticationServer.Controllers
             var token = await _authService.AuthenticateAsync(dto);
             if (token == null)
             {
-                return Unauthorized();
+                return Unauthorized("Password or Username incorrect" );
             }
+
+            if (token == "Account has expired")
+            {
+                return Unauthorized("Account has expired" );
+            }
+
             return Ok(token);
+
         }
 
 

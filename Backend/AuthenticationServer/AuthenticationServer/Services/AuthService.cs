@@ -53,6 +53,10 @@ namespace AuthenticationServer.Services
                     return null;
                 }
 
+                if (visitorAccount.EndDate.Date < DateTime.UtcNow.Date) {
+                    return "Account has expiered";
+                }
+
                 accountTypeId = visitorAccount.AccountTypeId;
                 userId = visitorAccount.Id;
             }
