@@ -38,7 +38,6 @@ namespace ResourceServer.Data
                 PassportNo = "A1234567",
                 Company = "TechCorp",
                 City = "Stockholm",
-                Status = new List<Status>()
             };
             var visitor2 = new Visitor
             {
@@ -49,7 +48,6 @@ namespace ResourceServer.Data
                 PassportNo = "B7654321",
                 Company = "InnovateInc",
                 City = "Oslo",
-                Status = new List<Status>()
             };
             modelBuilder.Entity<Visitor>().HasData(visitor1, visitor2);
 
