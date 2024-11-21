@@ -17,6 +17,7 @@ const Table = ({ headers, data, onRowClick = () => {} }) => {
     checkInTime: "Incheckning",
     checkOutTime: "Utcheckning",
     adminName: "Namn",
+    fullName: "Namn",
   };
 
   console.log(data);
