@@ -28,6 +28,7 @@ const AccountManagement = ({ isVisitor }) => {
 
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,7 +40,8 @@ const AccountManagement = ({ isVisitor }) => {
         } else {
           result = await getAdminsByPage(pageNumber, pageSize);
         }
-        setData(result);
+        setData(result.data);
+        setTotalPages(result.totalPages);
       } catch (error) {
         console.error("Error fetching accounts:", error);
       } finally {
@@ -78,7 +80,7 @@ const AccountManagement = ({ isVisitor }) => {
 
   const isPrevDisabled = pageNumber === 1;
 
-  const isNextDisabled = filteredData.length === 0;
+  const isNextDisabled = pageNumber === totalPages;
 
   if (loading) {
     return <LoadingCircle />; // Använd LoadingCircle-komponenten
