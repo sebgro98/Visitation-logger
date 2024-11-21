@@ -29,6 +29,7 @@ namespace ResourceServer.Controllers
             return Ok(admin);
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Admin>> GetAdminById(Guid id)
         {

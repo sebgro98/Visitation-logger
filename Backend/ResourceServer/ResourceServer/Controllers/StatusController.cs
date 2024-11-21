@@ -18,6 +18,7 @@ namespace ResourceServer.Controllers
         {
             _statusRepository = statusRepository;
         }
+
         [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Status>>> GetAllStatuses()
