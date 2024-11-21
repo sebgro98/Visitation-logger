@@ -6,6 +6,8 @@ using AuthenticationServer.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SharedModels.Hasher;
+using SharedModels.Models;
+using SharedModels.Interface;
 
 namespace AuthenticationServer.Services
 {
@@ -24,44 +26,74 @@ namespace AuthenticationServer.Services
         {
             Guid? accountTypeId = null;
             Guid? userId = null;
+            object user = null;
 
-            //Hash provided DTO password
-            var hashedPassword = Hasher.HashPassword(loginDto.Password);
-
+            // Retrieve the user (either Admin or VisitorAccount)
             if (loginDto.IsAdmin)
             {
-                var admin = await _context.Admins.FirstOrDefaultAsync(a =>
-                    a.Username == loginDto.Username.ToLower() && a.Password == hashedPassword
-                );
+                user = await _context.Admins.FirstOrDefaultAsync(a => a.Username == loginDto.Username.ToLower());
+            }
+            else
+            {
+                user = await _context.VisitorAccounts.FirstOrDefaultAsync(v => v.Username == loginDto.Username.ToLower());
+            }
 
-                if (admin == null)
+            if (user == null)
+            {
+                return "Invalid credentials";
+            }
+
+            
+            if (user is IAccountLockout lockoutUser)
+            {
+                if (lockoutUser.LockoutEnd.HasValue && lockoutUser.LockoutEnd > DateTime.UtcNow)
                 {
-                    return null;
+                    return "AccountLocked";
+                }
+            }
+
+            var hashedPassword = Hasher.HashPassword(loginDto.Password);
+
+            if (user is Admin admin)
+            {
+                if (admin.Password != hashedPassword)
+                {
+                    return await HandleFailedLoginAttempt(admin);
                 }
 
                 accountTypeId = admin.AccountTypeId;
                 userId = admin.Id;
             }
-            else
+            else if (user is VisitorAccount visitorAccount)
             {
-                var visitorAccount = await _context.VisitorAccounts.FirstOrDefaultAsync(v =>
-                    v.Username == loginDto.Username.ToLower() && v.Password == hashedPassword
-                );
-
-                if (visitorAccount == null)
+                if (visitorAccount.Password != hashedPassword)
                 {
-                    return null;
+                    return await HandleFailedLoginAttempt(visitorAccount);
+                }
+
+                // Check if account has expired
+                if (visitorAccount.EndDate.Date < DateTime.UtcNow.Date)
+                {
+                    return "Account has expired";
                 }
 
                 accountTypeId = visitorAccount.AccountTypeId;
                 userId = visitorAccount.Id;
             }
 
-            // Retrieve the account role
+            
+            if (user is IAccountLockout resetLockoutUser)
+            {
+                resetLockoutUser.FailedLoginAttempts = 0;
+                resetLockoutUser.LockoutEnd = null;
+                await _context.SaveChangesAsync();
+            }
+
+            
             var role = await _context.AccountTypes.FindAsync(accountTypeId);
             if (role == null)
             {
-                return null;
+                return "Role not found";
             }
 
             var jwtSecret = _configuration["JwtSettings:Secret"];
@@ -74,8 +106,8 @@ namespace AuthenticationServer.Services
                 Subject = new ClaimsIdentity(
                     new[]
                     {
-                        new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                        new Claim(ClaimTypes.Role, role.Name)
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                new Claim(ClaimTypes.Role, role.Name)
                     }
                 ),
                 Expires = DateTime.UtcNow.AddDays(7),
@@ -86,7 +118,36 @@ namespace AuthenticationServer.Services
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return tokenHandler.WriteToken(token);  // Return the token
         }
+
+        private async Task<string> HandleFailedLoginAttempt(IAccountLockout user)
+        {
+            if (user.FailedLoginAttempts >= 5)
+            {
+                if (user.LockoutEnd.HasValue && user.LockoutEnd > DateTime.UtcNow)
+                {
+                    return "AccountLocked";
+                }
+                else
+                {
+                    
+                    user.FailedLoginAttempts = 0;
+                }
+            }
+
+            user.FailedLoginAttempts++;
+
+            if (user.FailedLoginAttempts >= 5)
+            {
+                user.LockoutEnd = DateTime.UtcNow.AddMinutes(5);
+            }
+
+            await _context.SaveChangesAsync();
+            return "Invalid credentials";
+        }
+
+
+
     }
 }

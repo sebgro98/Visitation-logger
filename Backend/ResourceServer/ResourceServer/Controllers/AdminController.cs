@@ -14,6 +14,8 @@ namespace ResourceServer.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminRepository _adminRepository;
+        private static readonly Regex UsernameRegex = new Regex("^[a-zA-Z0-9]{4,20}$");
+        private static readonly Regex FullnameRegex = new Regex("^[a-zA-Z]{4,50}( [a-zA-Z]{4,50})*$");
 
         public AdminController(IAdminRepository adminRepository)
         {
@@ -22,11 +24,30 @@ namespace ResourceServer.Controllers
 
         [Authorize(Roles = "MasterAdmin")]
         [HttpPost]
-        public async Task<ActionResult<Admin>> PostAdmin([FromBody] AdminDTO dto)
+        public async Task<ActionResult> CreateAdmin([FromBody] AdminDTO dto)
         {
-            var admin = await _adminRepository.Create(dto);
+            ActionResult adminValidationResult = ValidateAdminData(dto);
+            if(adminValidationResult is BadRequestObjectResult)
+            {
+                return adminValidationResult;
+            }
 
-            return Ok(admin);
+            try
+            {
+                var createdAdmin = await _adminRepository.Create(dto);
+
+                return Ok(createdAdmin);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Username is already taken")
+                {
+                    return Conflict(new { message = ex.Message });
+                }
+
+                
+                return StatusCode(500, new { message = "An error occurred while creating the admin.", details = ex.Message });
+            }
         }
 
         [Authorize(Roles = "MasterAdmin")]
@@ -51,18 +72,39 @@ namespace ResourceServer.Controllers
         }
         
         [Authorize(Roles = "MasterAdmin")]
-        [HttpPut("{id}")] //The ID of the admin to be updated
+        [HttpPut("{id}")]
         public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
         {
-            var admin = await _adminRepository.Update(id, dto);
-
-            if (admin == null)
+            ActionResult adminValidationResult = ValidateAdminData(dto);
+            if (adminValidationResult is BadRequestObjectResult)
             {
-                return NotFound();
+                return adminValidationResult;
             }
 
-            return Ok(admin);
+            try
+            {
+                var admin = await _adminRepository.Update(id, dto);
+
+                if (admin == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(admin);
+
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Username is already taken")
+                {
+                    return Conflict(new { message = ex.Message });
+                }
+
+                return StatusCode(500, new { message = "An error occurred while creating the admin.", details = ex.Message });
+
+            }
         }
+            
 
         [Authorize(Roles = "MasterAdmin")]
         [HttpDelete("{id}")]
@@ -84,8 +126,21 @@ namespace ResourceServer.Controllers
 
             return Ok();
         }
-
+        
         [Authorize(Roles = "MasterAdmin")]
+        private ActionResult ValidateAdminData(AdminDTO adminDto)
+        {
+            if (!UsernameRegex.IsMatch(adminDto.Username))
+            {
+                return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
+            }
+            if (!FullnameRegex.IsMatch(adminDto.FullName)){
+                return BadRequest("Full name can only contain letters.");
+            }
+            return Ok();
+        }
+
+
         [HttpGet("byPage")]
         public async Task<ActionResult<ByPageAdminDTO>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {

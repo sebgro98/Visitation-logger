@@ -19,6 +19,10 @@ export const extractValueFromRow = (row, header) => {
       return formatDate(row.startDate);
     case "endDate":
       return formatDate(row.endDate);
+    case "checkInTime":
+      return row.checkInTime ? new Date(row.checkInTime).toLocaleString() : "";
+    case "checkOutTime":
+      return row.checkOutTime ? new Date(row.checkOutTime).toLocaleString() : "";
     default:
       return row[header] || "";
   }
@@ -26,7 +30,8 @@ export const extractValueFromRow = (row, header) => {
 
 // Funktion för att validera användarnamn
 export const validateUsername = (username) => {
-  return username.length >= 4;
+  const usernameRegex = /^[a-zA-Z0-9]{4,20}$/;
+  return usernameRegex.test(username);
 };
 
 // Funktion för att validera lösenord
@@ -40,4 +45,147 @@ export const validatePassword = (password) => {
 export const validateFullName = (fullName) => {
   const nameRegex = /^[a-zA-Z\s]{4,50}$/;
   return nameRegex.test(fullName);
+};
+
+// Funktion för att trimma onödiga mellanslag från ett objekt
+export const trimObjectStrings = (obj) => {
+  const trimmedObj = { ...obj };
+  Object.keys(trimmedObj).forEach((key) => {
+    if (typeof trimmedObj[key] === "string") {
+      trimmedObj[key] = trimmedObj[key].trim();
+    }
+  });
+  return trimmedObj;
+};
+
+export const prepareAdminAccount = (account) => {
+  const trimmedAccount = trimObjectStrings(account);
+
+  return trimmedAccount;
+};
+
+// Funktion för att förbereda besökarkonto för att skicka till backend
+export const prepareVisitorAccount = (account, accountTypes) => {
+  const trimmedAccount = trimObjectStrings(account);
+  // Konvertera datum till UTC när du skickar dem till backend
+  const startDateUTC = new Date(trimmedAccount.startDate).toISOString();
+  // Justera endDate till 23:59:59
+  const endDate = new Date(trimmedAccount.endDate);
+  endDate.setHours(23, 59, 59, 999);
+  const endDateUTC = endDate.toISOString();
+
+  const updatedAccount = {
+    ...trimmedAccount,
+    startDate: startDateUTC,
+    endDate: endDateUTC,
+  };
+
+  updatedAccount.accountTypeId = accountTypes.find(
+    (type) => type.name === "Visitor"
+  )?.id;
+
+  return updatedAccount;
+};
+
+// Funktion för att generera kontoinformation för att visa i success-popup
+export const generateAccountInfo = (
+  account,
+  accountType,
+  nodes,
+  accountTypes,
+  purposeTypes
+) => {
+  const nodeName =
+    nodes.find((node) => node.id === account.nodeId)?.nodeName || "";
+  const accountTypeName =
+    accountTypes.find((type) => type.id === account.accountTypeId)?.name || "";
+  const purposeName =
+    purposeTypes.find((purpose) => purpose.id === account.purposeTypeId)
+      ?.name || "";
+
+  const accountInfo =
+    accountType === "visitor"
+      ? [
+          `Användarnamn:\n${account.username}\n`,
+          `Startdatum:\n${account.startDate}\n`,
+          `Slutdatum:\n${account.endDate}\n`,
+          `Syfte:\n${purposeName}\n`,
+          `Nod:\n${nodeName}`,
+        ]
+      : [
+          `Användarnamn:\n${account.username}\n`,
+          `Fullständigt namn:\n${account.fullName}\n`,
+          `Kontotyp:\n${accountTypeName}\n`,
+          `Nod:\n${nodeName}`,
+        ];
+
+  return accountInfo;
+};
+
+// Används för att validera kontouppgifter vid skapande av konto
+export const validateAccount = (account, confirmPassword, accountType) => {
+  const newErrors = {};
+  let valid = true;
+
+  if (!validateUsername(account.username)) {
+    newErrors.username =
+      "Användarnamnet måste vara minst 4 och max 20 tecken får endast innehålla bokstäver och siffror, inga mellanslag.";
+    valid = false;
+  }
+  if (!validatePassword(account.password)) {
+    newErrors.password =
+      "Lösenordet måste vara minst 8 tecken, innehålla en versal, en gemen, en siffra och ett specialtecken";
+    valid = false;
+  }
+  if (account.password !== confirmPassword) {
+    newErrors.confirmPassword = "Lösenorden matchar inte";
+    valid = false;
+  }
+  if (accountType === "visitor") {
+    if (!account.startDate) {
+      newErrors.startDate = "Vänligen välj ett startdatum.";
+      valid = false;
+    } else {
+      if (account.startDate < new Date().toISOString().split("T")[0]) {
+        newErrors.startDate =
+          "Startdatumet kan inte vara tidigare än dagens datum.";
+        valid = false;
+      }
+    }
+
+    if (!account.endDate) {
+      newErrors.endDate = "Vänligen välj ett slutdatum.";
+      valid = false;
+    } else {
+      if (account.endDate < account.startDate) {
+        newErrors.endDate =
+          "Slutdatumet kan inte vara tidigare än startdatumet."; // ta bort fixa
+        valid = false;
+      } else if (account.endDate < new Date().toISOString().split("T")[0]) {
+        newErrors.endDate =
+          "Slutdatumet kan inte vara tidigare än dagens datum.";
+        valid = false;
+      }
+    }
+    if (!account.purposeTypeId) {
+      newErrors.purposeTypeId = "Vänligen ange syftet med kontot.";
+      valid = false;
+    }
+  } else {
+    if (!validateFullName(account.fullName)) {
+      newErrors.fullName =
+        "Fullständigt namn måste vara mellan 4 och 50 tecken och får endast innehålla bokstäver och mellanslag";
+      valid = false;
+    }
+    if (!account.accountTypeId) {
+      newErrors.accountTypeId = "Vänligen välj en kontotyp.";
+      valid = false;
+    }
+  }
+  if (!account.nodeId) {
+    newErrors.nodeId = "Vänligen välj en nod.";
+    valid = false;
+  }
+
+  return { valid, newErrors };
 };

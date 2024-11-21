@@ -8,6 +8,10 @@ async function getAllVisitorAccounts() {
   return await get("VisitorAccount");
 }
 
+async function getPage(filter) {
+  return await request("GET", "filter", filter, false);
+}
+
 async function getAllAdminAccounts() {
   return await get("Admin");
 }
@@ -28,8 +32,16 @@ async function getAllAccountTypes() {
   return await get("AccountType");
 }
 
+async function getAllPurposeTypes() {
+  return await get("PurposeType");
+}
+
 async function createAdminAccount(account) {
   return await post("Admin", account);
+}
+
+async function createVisitorAccount(account) {
+  return await post("VisitorAccount", account);
 }
 
 async function post(endpoint, data, auth = true) {
@@ -72,11 +84,13 @@ async function request(method, endpoint, data, auth = true) {
 export {
   login,
   getAllVisitorAccounts,
+  getPage,
   getAllAdminAccounts,
   getAdminsByPage,
   getVisitorAccountByPage,
   getAllNodes,
   getAllAccountTypes,
   createAdminAccount,
-
+  getAllPurposeTypes,
+  createVisitorAccount,
 };

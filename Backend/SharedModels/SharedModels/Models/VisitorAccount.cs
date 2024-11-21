@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-
+using SharedModels.Interface;
 
 namespace SharedModels.Models
 {
     [Table("visitorAccounts")]
-    public class VisitorAccount
+    public class VisitorAccount : IAccountLockout
     {
         
         [Column("id")]
@@ -53,5 +53,11 @@ namespace SharedModels.Models
         public Guid NodeId { get; set; }
 
         public virtual Node Node { get; set; }
+
+        [Column("failed_login_attempts")]
+        public int FailedLoginAttempts { get; set; } = 0;
+
+        [Column("lockout_end")]
+        public DateTime? LockoutEnd { get; set; }
     }
 }

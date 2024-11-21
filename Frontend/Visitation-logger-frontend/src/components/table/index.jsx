@@ -6,12 +6,22 @@ const Table = ({ headers, data, onRowClick = () => {} }) => {
   // Mappning mellan engelska nycklar och svenska rubriker
   const headerMapping = {
     username: "Användarnamn",
+    visitorName: "Besökare",
+    visitorId: "Besökar ID",
     name: "Namn",
     node: "Nod",
+    purposeName: "Besöksbeskrivning",
+    date: "Datum",
     startDate: "Start datum",
     endDate: "Slut datum",
+    checkInTime: "Incheckning",
+    checkOutTime: "Utcheckning",
     adminName: "Namn",
+    fullName: "Namn",
   };
+
+  console.log(data);
+  
 
   return (
     <div className="table-wrapper">
