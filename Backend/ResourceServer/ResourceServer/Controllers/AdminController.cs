@@ -29,8 +29,6 @@ namespace ResourceServer.Controllers
                 return adminValidationResult;
             }
 
-            var admin = await _adminRepository.Create(dto);
-
             try
             {
                 var createdAdmin = await _adminRepository.Create(dto);
