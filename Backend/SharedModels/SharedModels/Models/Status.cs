@@ -11,14 +11,11 @@ namespace SharedModels.Models
         [Column("id")]
         public Guid Id { get; set; }
 
-        // Foreign key for Visitor
-        
-        [Column("visitor_id")]
-        public Guid VisitorId { get; set; }
+        [Column("visitor_account_id")]
+        public Guid VisitorAccountId { get; set; }
 
-        // Navigation property for Visitor
         [JsonIgnore]
-        public virtual Visitor Visitor { get; set; }
+        public virtual VisitorAccount VisitorAccount { get; set; }
 
         [Column("check_in_time")]
         public DateTime CheckInTime { get; set; }

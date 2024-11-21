@@ -5,7 +5,7 @@ namespace ResourceServer.DTO
     public class StatusCheckInDTO
     {
         [Required]
-        public Guid VisitorId { get; set; }
+        public Guid VisitorAccountId { get; set; }
 
         [Required]
         public DateTime CheckInTime { get; set; }
@@ -15,6 +15,5 @@ namespace ResourceServer.DTO
 
         [Required]
         public Guid NodeId { get; set; }
-
     }
 }

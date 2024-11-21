@@ -12,6 +12,6 @@ namespace ResourceServer.Repositories
         Task<Status> CreateStatus(StatusCheckInDTO statusCheckInDto);
         Task DeleteStatus(Guid id);
 
-        Task<Status> GetCheckInStatus(Guid visitorId);
+        Task<Status> GetCheckInStatus(Guid VisitorAccountId);
     }
 }

@@ -4,7 +4,7 @@ namespace ResourceServer.DTO
 {
     public class FilterReturnDTO
     {
-        public List<Status> StatusList { get; set; }
+        public List<StatusDTO> StatusList { get; set; }
         public int TotalNumberOfElements { get; set; }
         public int TotalNumberOfPages { get; set; }
     }
