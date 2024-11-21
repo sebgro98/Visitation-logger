@@ -7,6 +7,7 @@ import Header from "./components/header";
 import { AuthProvider, ProtectedRoute } from "./context/auth";
 import Dashboard from "./pages/dashboard";
 import AccountManagement from "./pages/accountManagement";
+import CreateAdmin from "./pages/createAdmin";
 
 function App() {
   return (
@@ -48,6 +49,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <AccountManagement isVisitor={false} />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/create-admin"
+            element={
+              <ProtectedRoute>
+                <CreateAdmin />
               </ProtectedRoute>
             }
           />

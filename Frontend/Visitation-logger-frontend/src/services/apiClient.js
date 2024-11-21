@@ -12,15 +12,39 @@ async function getAllAdminAccounts() {
   return await get("Admin");
 }
 
+async function getAdminsByPage(pageNumber, pageSize) {
+  return await get("Admin/byPage", { pageNumber, pageSize });
+}
+
+async function getVisitorAccountByPage(pageNumber, pageSize) {
+  return await get("VisitorAccount/byPage", { pageNumber, pageSize });
+}
+
+async function getAllNodes() {
+  return await get("Node");
+}
+
+async function getAllAccountTypes() {
+  return await get("AccountType");
+}
+
+async function createAdminAccount(account) {
+  return await post("Admin", account);
+}
+
 async function post(endpoint, data, auth = true) {
   return await request("POST", endpoint, data, auth);
 }
 
-async function get(endpoint, auth = true) {
-  return await request("GET", endpoint, null, auth);
+async function get(endpoint, params = {}, auth = true) {
+  return await request("GET", endpoint, params, auth);
 }
 
 async function request(method, endpoint, data, auth = true) {
+  if (method.toUpperCase() === "GET" && data) {
+    const queryParams = new URLSearchParams(data).toString();
+    endpoint = `${endpoint}?${queryParams}`;
+  }
   const opts = {
     headers: {
       "Content-Type": "application/json",
@@ -45,4 +69,14 @@ async function request(method, endpoint, data, auth = true) {
   return response.json();
 }
 
-export { login, getAllVisitorAccounts, getAllAdminAccounts };
+export {
+  login,
+  getAllVisitorAccounts,
+  getAllAdminAccounts,
+  getAdminsByPage,
+  getVisitorAccountByPage,
+  getAllNodes,
+  getAllAccountTypes,
+  createAdminAccount,
+
+};

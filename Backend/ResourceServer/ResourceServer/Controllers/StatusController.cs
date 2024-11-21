@@ -91,9 +91,14 @@ namespace ResourceServer.Controllers
             //Database filtering and pagination executes
             var filteredStatusList = await filteredStatuses.ToListAsync();
 
+            //Convert status objects into status return dtos
+            List<StatusDTO> filteredStatusDtoList = filteredStatusList
+                .Select(status => new StatusDTO(status))
+                .ToList();
+
             FilterReturnDTO returnDTO = new FilterReturnDTO
             {
-                StatusList = filteredStatusList,
+                StatusList = filteredStatusDtoList,
                 TotalNumberOfElements = totalSize,
                 TotalNumberOfPages = totalPages
             };
@@ -133,9 +138,9 @@ namespace ResourceServer.Controllers
 
         [Authorize(Roles = "Visitor")]
         [HttpGet("{visitorId}/checkin-status")]
-        public async Task<IActionResult> GetCheckInStatus(Guid visitorId)
+        public async Task<IActionResult> GetCheckInStatus(Guid VisitorAccountId)
         {
-            Status latestStatus = await _statusRepository.GetCheckInStatus(visitorId);
+            Status latestStatus = await _statusRepository.GetCheckInStatus(VisitorAccountId);
 
             if (latestStatus == null)
             {
