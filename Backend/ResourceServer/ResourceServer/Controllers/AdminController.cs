@@ -21,7 +21,7 @@ namespace ResourceServer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Admin>> PostAdmin([FromBody] AdminDTO dto)
+        public async Task<ActionResult> CreateAdmin([FromBody] AdminDTO dto)
         {
             ActionResult adminValidationResult = ValidateAdminData(dto);
             if(adminValidationResult is BadRequestObjectResult)
@@ -31,7 +31,22 @@ namespace ResourceServer.Controllers
 
             var admin = await _adminRepository.Create(dto);
 
-            return Ok(admin);
+            try
+            {
+                var createdAdmin = await _adminRepository.Create(dto);
+
+                return Ok(createdAdmin);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Username is already taken")
+                {
+                    return Conflict(new { message = ex.Message });
+                }
+
+                
+                return StatusCode(500, new { message = "An error occurred while creating the admin.", details = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
@@ -53,7 +68,7 @@ namespace ResourceServer.Controllers
             return Ok(admins);
         }
 
-        [HttpPut("{id}")] //The ID of the admin to be updated
+        [HttpPut("{id}")]
         public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
         {
             ActionResult adminValidationResult = ValidateAdminData(dto);
@@ -64,13 +79,30 @@ namespace ResourceServer.Controllers
 
             var admin = await _adminRepository.Update(id, dto);
 
-            if (admin == null)
+            try
             {
-                return NotFound();
-            }
+                var admin = await _adminRepository.Update(id, dto);
 
-            return Ok(admin);
+                if (admin == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(admin);
+
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Username is already taken")
+                {
+                    return Conflict(new { message = ex.Message });
+                }
+
+                return StatusCode(500, new { message = "An error occurred while creating the admin.", details = ex.Message });
+
+            }
         }
+            
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAdmin(Guid id)

@@ -28,14 +28,28 @@ namespace ResourceServer.Controller
             {
                 return visitorAccountValidationResult;
             }
-
-            if (dto == null)
+            
+            try
             {
-                return BadRequest("Invalid data.");
-            }
+                if (dto == null)
+                {
+                    return BadRequest("Invalid data.");
+                }
 
-            var visitorAccount = await _visitorAccountRepository.CreateVisitorAccount(dto);
-            return Ok(visitorAccount);
+                var visitorAccount = await _visitorAccountRepository.CreateVisitorAccount(dto);
+                return Ok(visitorAccount);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Username is already taken")
+                {
+                    return Conflict(new { message = ex.Message });
+                }
+
+
+                return StatusCode(500, new { message = "An error occurred while creating the admin.", details = ex.Message });
+            }
+            
         }
 
         [HttpGet]
@@ -55,15 +69,30 @@ namespace ResourceServer.Controller
                 return visitorAccountValidationResult;
             }
 
-            VisitorAccount updateVisitorAccount =
+            try
+            {
+                VisitorAccount updateVisitorAccount =
                 await _visitorAccountRepository.UpdateVisitorAccount(id, visitorAccountDto);
 
-            if (updateVisitorAccount == null)
-            {
-                return NotFound();
-            } 
+                if (updateVisitorAccount == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(updateVisitorAccount);
+                return Ok(updateVisitorAccount);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Username is already taken")
+                {
+                    return Conflict(new { message = ex.Message });
+                }
+
+
+                return StatusCode(500, new { message = "An error occurred while creating the visitor account.", details = ex.Message });
+            }
+
+
         }
 
         private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
