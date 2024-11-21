@@ -34,5 +34,11 @@ namespace SharedModels.Models
         public virtual Node Node { get; set; }
 
         public string FullName { get; set; }
+
+        [Column("failed_login_attempts")]
+        public int FailedLoginAttempts { get; set; } = 0;
+
+        [Column("lockout_end")]
+        public DateTime? LockoutEnd { get; set; }
     }
 }
