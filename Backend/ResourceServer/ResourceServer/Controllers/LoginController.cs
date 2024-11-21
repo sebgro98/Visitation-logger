@@ -43,7 +43,7 @@ namespace ResourceServer.Controllers
                 var errorMessage = await response.Content.ReadAsStringAsync();
 
                 // Return the error response with the correct status code and message
-                return StatusCode(statusCode, new { Message = errorMessage });
+                return StatusCode(statusCode, new { Error = errorMessage });
             }
         }
 

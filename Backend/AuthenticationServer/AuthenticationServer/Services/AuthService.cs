@@ -40,7 +40,7 @@ namespace AuthenticationServer.Services
 
             if (user == null)
             {
-                return "Invalid credentials.";
+                return "Invalid credentials";
             }
 
             
@@ -48,7 +48,7 @@ namespace AuthenticationServer.Services
             {
                 if (lockoutUser.LockoutEnd.HasValue && lockoutUser.LockoutEnd > DateTime.UtcNow)
                 {
-                    return "Account is locked. Please try again later.";
+                    return "AccountLocked";
                 }
             }
 
@@ -74,7 +74,7 @@ namespace AuthenticationServer.Services
                 // Check if account has expired
                 if (visitorAccount.EndDate.Date < DateTime.UtcNow.Date)
                 {
-                    return "Account has expired.";
+                    return "Account has expired";
                 }
 
                 accountTypeId = visitorAccount.AccountTypeId;
@@ -93,7 +93,7 @@ namespace AuthenticationServer.Services
             var role = await _context.AccountTypes.FindAsync(accountTypeId);
             if (role == null)
             {
-                return "Role not found.";
+                return "Role not found";
             }
 
             var jwtSecret = _configuration["JwtSettings:Secret"];
@@ -127,7 +127,7 @@ namespace AuthenticationServer.Services
             {
                 if (user.LockoutEnd.HasValue && user.LockoutEnd > DateTime.UtcNow)
                 {
-                    return "Account is locked. Please try again later.";
+                    return "AccountLocked";
                 }
                 else
                 {
@@ -144,7 +144,7 @@ namespace AuthenticationServer.Services
             }
 
             await _context.SaveChangesAsync();
-            return "Invalid credentials.";
+            return "Invalid credentials";
         }
 
 
