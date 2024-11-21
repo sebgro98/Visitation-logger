@@ -14,7 +14,8 @@
 .success-popup {
   display: flex;
   flex-direction: column;
-  text-align: left;
+  justify-content: center;
+  min-width: 300px;
   gap: 20px;
   padding: 20px;
   border-radius: 8px;
@@ -23,6 +24,10 @@
 }
 
 .success-popup p {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 10px;
+  align-items: center;
   white-space: pre-wrap; /* Bevarar radbrytningar och mellanslag */
 }

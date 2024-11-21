@@ -16,7 +16,7 @@ const getHeaders = (isVisitor) => {
   if (isVisitor) {
     return ["username", "name", "node", "startDate", "endDate"];
   } else {
-    return ["username", "adminName", "node"];
+    return ["username", "fullName", "node"];
   }
 };
 
@@ -94,7 +94,7 @@ const AccountManagement = ({ isVisitor }) => {
             <Button
               label={"Lägg till +"}
               onClick={() =>
-                navigate(isVisitor ? "/manage-visitors" : "/create-admin")
+                navigate(isVisitor ? "/create-visitor" : "/create-admin")
               }
             />
           </div>
