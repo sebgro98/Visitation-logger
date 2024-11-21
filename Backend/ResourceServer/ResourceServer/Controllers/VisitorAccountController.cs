@@ -1,8 +1,6 @@
 using ResourceServer.DTO;
 using SharedModels.Models;
-using SharedModels.Hasher;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repositories;
 using System.Text.RegularExpressions;
 
@@ -13,7 +11,7 @@ namespace ResourceServer.Controller
     public class VisitorAccountController : ControllerBase
     {
         private readonly IVisitorAccountRepository _visitorAccountRepository;
-        private static readonly Regex usernameRegex = new Regex("^[a-zA-Z0-9.@]{4,50}$");
+        private static readonly Regex UsernameRegex = new Regex("^[a-zA-Z0-9]{4,20}$");
 
         public VisitorAccountController(IVisitorAccountRepository visitorAccountRepository)
         {
@@ -65,39 +63,26 @@ namespace ResourceServer.Controller
 
             return Ok(updateVisitorAccount);
         }
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-=======
-        
->>>>>>> 3fce37e87dcd80e95ed52cc08b8c09bd145c229b
         private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
         {
-            if (!usernameRegex.IsMatch(visitorAccountDto.UserName))
+            if (!UsernameRegex.IsMatch(visitorAccountDto.UserName))
             {
                 return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
             }
-            if (visitorAccountDto.StartDate > visitorAccountDto.EndDate)
+            if (DateTime.Compare(visitorAccountDto.StartDate, visitorAccountDto.EndDate) > 0 && DateTime.Compare(visitorAccountDto.StartDate, DateTime.Today) <= 0)
             {
                 return BadRequest("Start date must be earlier or the same date as end date.");
             }
             return Ok();
         }
-<<<<<<< HEAD
-=======
-=======
 
->>>>>>> 3fce37e87dcd80e95ed52cc08b8c09bd145c229b
         [HttpGet("byPage")]
         public async Task<ActionResult<IEnumerable<VisitorAccount>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             var visitorAccounts = await _visitorAccountRepository.GetVisitorAccountByPage(pageNumber, pageSize);
             return Ok(visitorAccounts);
         }
-<<<<<<< HEAD
 
->>>>>>> 0200bf13569543be7b7d2c5d2a50ec6801c81c47
-=======
->>>>>>> 3fce37e87dcd80e95ed52cc08b8c09bd145c229b
     }
 }

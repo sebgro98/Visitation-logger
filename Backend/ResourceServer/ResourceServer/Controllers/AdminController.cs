@@ -2,16 +2,7 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
-<<<<<<< HEAD
-<<<<<<< HEAD
 using System.Text.RegularExpressions;
-=======
-using Microsoft.EntityFrameworkCore;
->>>>>>> 0200bf13569543be7b7d2c5d2a50ec6801c81c47
-=======
-using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore;
->>>>>>> 3fce37e87dcd80e95ed52cc08b8c09bd145c229b
 
 namespace ResourceServer.Controllers
 {
@@ -20,7 +11,8 @@ namespace ResourceServer.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminRepository _adminRepository;
-        private static readonly Regex usernameRegex = new Regex("^[a-zA-Z0-9.@]{4,50}$");
+        private static readonly Regex UsernameRegex = new Regex("^[a-zA-Z0-9]{4,20}$");
+        private static readonly Regex FullnameRegex = new Regex("^[a-zA-Z]{4,50}( [a-zA-Z]{4,50})*$");
 
         public AdminController(IAdminRepository adminRepository)
         {
@@ -101,11 +93,11 @@ namespace ResourceServer.Controllers
 
         private ActionResult ValidateAdminData(AdminDTO adminDto)
         {
-            if (!usernameRegex.IsMatch(adminDto.Username))
+            if (!UsernameRegex.IsMatch(adminDto.Username))
             {
                 return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
             }
-            if (!adminDto.FullName.All(char.IsLetter)){
+            if (!FullnameRegex.IsMatch(adminDto.FullName)){
                 return BadRequest("Full name can only contain letters.");
             }
             return Ok();

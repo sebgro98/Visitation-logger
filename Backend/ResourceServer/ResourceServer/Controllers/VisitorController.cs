@@ -11,9 +11,12 @@ namespace ResourceServer.Controllers
     public class VisitorController : ControllerBase
     {
         private readonly IVisitorRepository _visitorRepository;
-        private readonly IVisitorAccountRepository _visitorAccountRepository;
+        private readonly IVisitorAccountRepository _visitorAccountRepository; 
+        private static readonly Regex FullnameRegex = new Regex("^[a-zA-Z]{4,50}( [a-zA-Z]{4,50})*$");
         private static readonly Regex SsnRegex = new Regex("^\\d{8}-\\d{4}$");
-        private static readonly Regex OnlyLettersAndNumbersRegex = new Regex(@"^[a-zA-Z0-9]+$");
+        private static readonly Regex PassportNoRegex = new Regex("^[A-Z0-9]{8,9}$");
+        private static readonly Regex CompanyNameRegex = new Regex("^[a-zA-Z0-9@&\\-_ ]{1,50}$");
+        private static readonly Regex CityRegex = new Regex("^[a-zA-Z ]{1,50}$");
 
         public VisitorController(IVisitorRepository visitorRepository, IVisitorAccountRepository visitorAccountRepository)
         {
@@ -93,10 +96,9 @@ namespace ResourceServer.Controllers
             return Ok(visitorPutDTO);
         }
 
-        //Add whitespace check
         private ActionResult ValidateVisitorData(IVisitorDTO iVisitorDto)
         {
-            if (iVisitorDto.FullName.Length < 4 || iVisitorDto.FullName.Length > 50 || !iVisitorDto.FullName.All(char.IsLetter))
+            if (!FullnameRegex.IsMatch(iVisitorDto.FullName))
             {
                 return BadRequest("Name must be at least 4 and at most 50 characters long, and can only contain letters.");
             }
@@ -104,15 +106,15 @@ namespace ResourceServer.Controllers
             {
                 return BadRequest("SSN/Personal number must have this format: YYYYMMDD-XXXX.");
             }
-            if (iVisitorDto.PassportNo.Length > 9 || !OnlyLettersAndNumbersRegex.IsMatch(iVisitorDto.PassportNo))
+            if (!PassportNoRegex.IsMatch(iVisitorDto.PassportNo))
             {
-                return BadRequest("Passport number cannot be longer than 9 characters and can only contain letters and numbers.");
+                return BadRequest("Passport number cannot be shorter than 8 or longer than 9 characters and can only contain letters and numbers.");
             }
-            if (iVisitorDto.Company.Length > 50 || !OnlyLettersAndNumbersRegex.IsMatch(iVisitorDto.Company))
+            if (!CompanyNameRegex.IsMatch(iVisitorDto.Company))
             {
-                return BadRequest("Company name cannot be longer than 50 characters and can only contain letters and numbers." + _visitorRepository.GetCountry(iVisitorDto.CountryName));
+                return BadRequest("Company name cannot be longer than 50 characters and can only contain letters, numbers, at signs, ampersands, hyphens and underscores.");
             }
-            if (iVisitorDto.City.Length > 50 || !iVisitorDto.City.All(char.IsLetter))
+            if (!CityRegex.IsMatch(iVisitorDto.City))
             {
                 return BadRequest("City name cannot be longer than 50 characters and can only contain letters.");
             }
