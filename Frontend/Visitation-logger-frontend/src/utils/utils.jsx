@@ -103,7 +103,6 @@ export const generateAccountInfo = (
     accountType === "visitor"
       ? [
           `Användarnamn:\n${account.username}\n`,
-          `Fullständigt namn:\n${account.fullName}\n`,
           `Startdatum:\n${account.startDate}\n`,
           `Slutdatum:\n${account.endDate}\n`,
           `Syfte:\n${purposeName}\n`,
