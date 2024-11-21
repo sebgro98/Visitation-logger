@@ -53,7 +53,7 @@ const Logs = () => {
 
   const exportToCSV = async () => {
     try {
-      const data = await getPage({
+      const data = await getStatusByPage({
         ...filter,
         pageNumber: 1,
         pageSize: numberOfElements,
