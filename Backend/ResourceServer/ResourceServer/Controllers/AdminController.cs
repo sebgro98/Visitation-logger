@@ -78,7 +78,7 @@ namespace ResourceServer.Controllers
         }
 
         [HttpGet("byPage")]
-        public async Task<ActionResult<IEnumerable<Admin>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<ActionResult<ByPageAdminDTO>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             var admins = await _adminRepository.GetAdminsByPage(pageNumber, pageSize);
             return Ok(admins);
