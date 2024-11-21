@@ -19,6 +19,10 @@ export const extractValueFromRow = (row, header) => {
       return formatDate(row.startDate);
     case "endDate":
       return formatDate(row.endDate);
+    case "checkInTime":
+      return row.checkInTime ? new Date(row.checkInTime).toLocaleString() : "";
+    case "checkOutTime":
+      return row.checkOutTime ? new Date(row.checkOutTime).toLocaleString() : "";
     default:
       return row[header] || "";
   }

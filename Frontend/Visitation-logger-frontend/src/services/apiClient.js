@@ -8,21 +8,8 @@ async function getAllVisitorAccounts() {
   return await get("VisitorAccount");
 }
 
-function paramaterParser(params) {
-  let url = "";
-  for (const key in params) {
-    url += `${key}=${params[key]}&`;
-  }
-
-  // Remove the trailing '&' from the URL
-  return url.slice(0, -1);
-}
-
-async function getPage(page, size) {
-  let endpoint = "filter?";
-  const params = paramaterParser({ pageNumber: page, pageSize: size });
-  endpoint += params;
-  return await request("GET", endpoint, null, false);
+async function getPage(filter) {
+  return await request("GET", "filter", filter, false);
 }
 
 async function getAllAdminAccounts() {

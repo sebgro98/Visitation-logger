@@ -1,52 +1,64 @@
 import { useEffect, useState } from "react";
 import "./logsPage.css";
 import Table from "../../components/table";
-import dummyLogs from "./dummylogs";
 import Button from "../../components/button";
+import "../../services/apiClient";
+import { getPage } from "../../services/apiClient";
 
 const Logs = () => {
   const [logs, setLogs] = useState([]);
-  const [filteredLogs, setFilteredLogs] = useState([]);
-  const [displayedLogs, setDisplayedLogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [numberOfPages, setNumberOfPages] = useState(1);
+  const [filter, setFilter] = useState(
+    {
+      pageSize: 10,
+      pageNumber: currentPage,
+      visitorName: "",
+      visitorId: "",
+      purposeName: "",
+      node: "",
+      checkInTime: "",
+      checkOutTime: ""
+    });
 
   useEffect(() => {
-    setLogs(dummyLogs);
-    setFilteredLogs(dummyLogs);
-  }, []);
+    const fetchData = async () => {
+        try {
+            const data = await getPage(filter);
+            setLogs(data.statusList);
+            setFilter({...filter, data});
+            setNumberOfPages(data.totalNumberOfPages);     
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
-  useEffect(() => {
-    paginate();
-  }, [filteredLogs, currentPage]);
-
-  const paginate = () => {
-    const logsPerPage = 10;
-    const lastLogIndex = Math.min(currentPage * logsPerPage, filteredLogs.length);
-    const firstLogIndex = lastLogIndex - logsPerPage;
-
-    const currentLogs = filteredLogs.slice(firstLogIndex, lastLogIndex);
-    setDisplayedLogs(currentLogs);
-  };
+    fetchData();
+  }, [currentPage]);
 
   const previousLogPage = () => {
-    if (currentPage > 1) {
+    if (currentPage !== 1) {
       setCurrentPage(currentPage - 1);
+      setFilter({ ...filter, pageNumber: filter.pageNumber - 1 });
     }
   };
 
   const nextLogPage = () => {
-    if (currentPage < Math.ceil(filteredLogs.length / 10)) {
+    if (currentPage !== numberOfPages) {
       setCurrentPage(currentPage + 1);
+      setFilter({ ...filter, pageNumber: filter.pageNumber + 1 });
     }
   };
 
   const exportToCSV = () => {
-    const header = ["Besökare", "Besöksbeskrivning", "Nod", "Datum"];
+    const header = ["Besökare", "Besökar ID", "Besöksbeskrivning", "Nod", "Checka in", "Checka ut"];
     const rows = logs.map(log => [
-      log.visitor,
+      log.visitorName,
+      log.visitorId,
       log.purpose,
       log.node,
-      log.date
+      log.checkInTime,
+      log.checkOutTime
     ]);
 
     const csvContent = [
@@ -63,7 +75,7 @@ const Logs = () => {
     link.click();
   };
 
-  const filter = () => {
+  const applyFilter = () => {
     console.log("Filter logs");
   };
 
@@ -72,12 +84,12 @@ const Logs = () => {
 
       <div className="logsPage-results">
       <div className="logsPage-header">
-        <Button label={"Filtrera"} onClick={filter} />
+        <Button label={"Filtrera"} onClick={applyFilter} />
         <Button label={"Exportera"} onClick={exportToCSV} />
       </div>
         <Table
-          headers={["visitor", "purpose", "node", "date"]}
-          data={displayedLogs}
+          headers={["visitorName", "visitorId", "purposeName", "node", "checkInTime", "checkOutTime"]}
+          data={logs}
           onRowClick={log => console.log(log)}
         />
       </div>
@@ -91,7 +103,7 @@ const Logs = () => {
           <Button
             label={"Nästa"}
             onClick={nextLogPage}
-            disabled={currentPage === Math.ceil(filteredLogs.length / 10)}
+            disabled={currentPage === numberOfPages}
           />
       </div>
     </>
