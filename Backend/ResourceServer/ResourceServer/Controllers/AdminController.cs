@@ -77,8 +77,6 @@ namespace ResourceServer.Controllers
                 return adminValidationResult;
             }
 
-            var admin = await _adminRepository.Update(id, dto);
-
             try
             {
                 var admin = await _adminRepository.Update(id, dto);
