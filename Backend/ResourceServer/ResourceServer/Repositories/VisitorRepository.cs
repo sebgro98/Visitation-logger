@@ -24,9 +24,10 @@ namespace ResourceServer.Repositories
             return await _context.Visitors.FindAsync(id);
         }
 
-        public async Task<Visitor> UpdateVisitor(Guid id, VisitorPutDTO visitorPutDTO)
+        public async Task<Visitor> UpdateVisitor(Guid id, VisitorDTOPut visitorPutDTO)
         {
             var visitorToUpdate = await _context.Visitors.FindAsync(id);
+            var foundCountry = await GetCountry(visitorPutDTO.CountryName);
 
             if (visitorToUpdate == null)
             {
@@ -35,8 +36,8 @@ namespace ResourceServer.Repositories
 
             visitorToUpdate.FullName = visitorPutDTO.FullName;
             visitorToUpdate.SSN = visitorPutDTO.SSN;
-            visitorToUpdate.City = visitorPutDTO.City;
-            visitorToUpdate.CountryId = visitorPutDTO.CountryId;
+            visitorToUpdate.City = visitorPutDTO.City;    
+            visitorToUpdate.Country = foundCountry;
             visitorToUpdate.PassportNo = visitorPutDTO.PassportNo;
             visitorToUpdate.Company = visitorPutDTO.Company;
             _context.Visitors.Update(visitorToUpdate);
@@ -55,12 +56,11 @@ namespace ResourceServer.Repositories
             }
         }
 
-        public async Task<Visitor> CreateVisitor(VisitorDTO dto)
+        public async Task<Visitor> CreateVisitor(VisitorDTOPost dto)
         {
-            
             var foundCountry = await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == dto.CountryName);
 
-            if (foundCountry == null)
+            if (foundCountry == default)
             {
                 return null;
             }
@@ -79,6 +79,12 @@ namespace ResourceServer.Repositories
             _context.Visitors.Add(newVisitor);
             await _context.SaveChangesAsync();
             return newVisitor;
+        }
+
+        //Find country by name. Can be replaced with AutoMapper
+        public async Task<Country> GetCountry(string countryName)
+        {
+            return await _context.Countries.FirstOrDefaultAsync(c => c.CountryName == countryName);
         }
     }
 }

@@ -2,6 +2,7 @@
 using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
+using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Controllers
@@ -11,6 +12,8 @@ namespace ResourceServer.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminRepository _adminRepository;
+        private static readonly Regex UsernameRegex = new Regex("^[a-zA-Z0-9]{4,20}$");
+        private static readonly Regex FullnameRegex = new Regex("^[a-zA-Z]{4,50}( [a-zA-Z]{4,50})*$");
 
         public AdminController(IAdminRepository adminRepository)
         {
@@ -20,6 +23,12 @@ namespace ResourceServer.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateAdmin([FromBody] AdminDTO dto)
         {
+            ActionResult adminValidationResult = ValidateAdminData(dto);
+            if(adminValidationResult is BadRequestObjectResult)
+            {
+                return adminValidationResult;
+            }
+
             try
             {
                 var createdAdmin = await _adminRepository.Create(dto);
@@ -60,6 +69,12 @@ namespace ResourceServer.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
         {
+            ActionResult adminValidationResult = ValidateAdminData(dto);
+            if (adminValidationResult is BadRequestObjectResult)
+            {
+                return adminValidationResult;
+            }
+
             try
             {
                 var admin = await _adminRepository.Update(id, dto);
@@ -102,6 +117,18 @@ namespace ResourceServer.Controllers
                 return BadRequest();
             }
 
+            return Ok();
+        }
+
+        private ActionResult ValidateAdminData(AdminDTO adminDto)
+        {
+            if (!UsernameRegex.IsMatch(adminDto.Username))
+            {
+                return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
+            }
+            if (!FullnameRegex.IsMatch(adminDto.FullName)){
+                return BadRequest("Full name can only contain letters.");
+            }
             return Ok();
         }
 

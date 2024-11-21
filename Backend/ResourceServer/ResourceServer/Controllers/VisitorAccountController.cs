@@ -4,6 +4,7 @@ using SharedModels.Hasher;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.Repositories;
+using System.Text.RegularExpressions;
 
 namespace ResourceServer.Controller
 {
@@ -12,7 +13,7 @@ namespace ResourceServer.Controller
     public class VisitorAccountController : ControllerBase
     {
         private readonly IVisitorAccountRepository _visitorAccountRepository;
-
+        private static readonly Regex UsernameRegex = new Regex("^[a-zA-Z0-9]{4,20}$");
 
         public VisitorAccountController(IVisitorAccountRepository visitorAccountRepository)
         {
@@ -22,6 +23,12 @@ namespace ResourceServer.Controller
         [HttpPost]
         public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDto dto)
         {
+            ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(dto);
+            if(visitorAccountValidationResult is BadRequestObjectResult)
+            {
+                return visitorAccountValidationResult;
+            }
+            
             try
             {
                 if (dto == null)
@@ -56,6 +63,12 @@ namespace ResourceServer.Controller
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateVisitorAccount(Guid id, [FromBody] VisitorAccountDto visitorAccountDto)
         {
+            ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(visitorAccountDto);
+            if (visitorAccountValidationResult is BadRequestObjectResult)
+            {
+                return visitorAccountValidationResult;
+            }
+
             try
             {
                 VisitorAccount updateVisitorAccount =
@@ -80,6 +93,19 @@ namespace ResourceServer.Controller
             }
 
 
+        }
+
+        private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
+        {
+            if (!UsernameRegex.IsMatch(visitorAccountDto.UserName))
+            {
+                return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
+            }
+            if (DateTime.Compare(visitorAccountDto.StartDate, visitorAccountDto.EndDate) > 0 && DateTime.Compare(visitorAccountDto.StartDate, DateTime.Today) <= 0)
+            {
+                return BadRequest("Start date must be earlier or the same date as end date.");
+            }
+            return Ok();
         }
 
         [HttpGet("byPage")]

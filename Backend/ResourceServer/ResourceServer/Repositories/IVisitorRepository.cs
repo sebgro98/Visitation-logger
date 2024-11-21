@@ -7,8 +7,9 @@ namespace ResourceServer.Repositories
     {
         Task<IEnumerable<Visitor>> GetAllVisitors();
         Task<Visitor> GetVisitorById(Guid id);
-        Task<Visitor> UpdateVisitor(Guid id, VisitorPutDTO dto);
-        Task<Visitor> CreateVisitor(VisitorDTO dto);
+        Task<Visitor> UpdateVisitor(Guid id, VisitorDTOPut dto);
+        Task<Visitor> CreateVisitor(VisitorDTOPost dto);
         Task DeleteVisitor(int id);
+        Task<Country> GetCountry(string countryName);
     }
 }
