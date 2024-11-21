@@ -9,6 +9,7 @@ const Logs = () => {
   const [logs, setLogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(1);
+  const [numberOfElements, setNumberOfElements] = useState(0);
   const [filter, setFilter] = useState(
     {
       pageSize: 10,
@@ -27,7 +28,8 @@ const Logs = () => {
             const data = await getPage(filter);
             setLogs(data.statusList);
             setFilter({...filter, data});
-            setNumberOfPages(data.totalNumberOfPages);     
+            setNumberOfPages(data.totalNumberOfPages);   
+            setNumberOfElements(data.totalNumberOfElements);  
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -50,29 +52,39 @@ const Logs = () => {
     }
   };
 
-  const exportToCSV = () => {
-    const header = ["Besökare", "Besökar ID", "Besöksbeskrivning", "Nod", "Checka in", "Checka ut"];
-    const rows = logs.map(log => [
-      log.visitorName,
-      log.visitorId,
-      log.purpose,
-      log.node,
-      log.checkInTime,
-      log.checkOutTime
-    ]);
+  const exportToCSV = async () => {
+    try {
+      const data = await getPage({ ...filter, pageNumber: 1, pageSize: numberOfElements });
+      const rows = data.statusList;
 
-    const csvContent = [
-      header.join(","),
-      ...rows.map(row => row.join(","))
-    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const currentdate = new Date();
-    const datetime = currentdate.toISOString();
-    link.href = URL.createObjectURL(blob);
-    link.download = `logs_${datetime}.csv`;
-    link.click();
+
+      const csvContent = [
+        ["Besökare", "BesökarId", "Besöksbeskrivning", "Nod", "Incheckning", "Utcheckning"],
+        ...rows.map(row => [
+          row.visitorName,
+          row.visitorId,
+          row.purposeName,
+          row.node.nodeName,
+          row.checkInTime,
+          row.checkOutTime
+        ])
+      ].map(e => e.join(",")).join("\n");
+
+      const timeSuffix = new Date().toISOString().replace(/:/g, "-").split(".")[0];
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "logs.csv" + timeSuffix);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log("Exporting logs to CSV", rows);
+    } catch (error) {
+      console.error("Error fetching data for exportation:", error);
+    }
   };
 
   const applyFilter = () => {
