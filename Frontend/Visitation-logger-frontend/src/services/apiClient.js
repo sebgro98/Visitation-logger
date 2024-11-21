@@ -8,6 +8,10 @@ async function getAllVisitorAccounts() {
   return await get("VisitorAccount");
 }
 
+async function getPage(filter) {
+  return await request("GET", "filter", filter, false);
+}
+
 async function getAllAdminAccounts() {
   return await get("Admin");
 }
@@ -80,6 +84,7 @@ async function request(method, endpoint, data, auth = true) {
 export {
   login,
   getAllVisitorAccounts,
+  getPage,
   getAllAdminAccounts,
   getAdminsByPage,
   getVisitorAccountByPage,

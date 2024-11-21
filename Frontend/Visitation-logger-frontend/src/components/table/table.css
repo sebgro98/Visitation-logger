@@ -1,8 +1,10 @@
 .table-wrapper {
-  display: flex;
+  display: block;
   justify-content: center;
+  overflow-x: auto;
   overflow-y: auto;
   margin: 30px 60px;
+  border-radius: 5px;
 }
 
 .table {
