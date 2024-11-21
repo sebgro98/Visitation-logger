@@ -20,10 +20,6 @@ namespace SharedModels.Models
         [Required]
         public string SSN { get; set; }
 
-        // One-to-Many relationship with Status (adjust based on actual relationship)
-        [JsonIgnore]
-        public virtual ICollection<Status> Status { get; set; }
-
         // Foreign Key for Country
         [Column("country_id")]
         [Required]

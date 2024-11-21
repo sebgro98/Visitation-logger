@@ -31,6 +31,7 @@ namespace SharedModels.Models
         public DateTime EndDate { get; set; }
 
         [JsonIgnore]
+        [Column("visitor_id")]
         public Guid? VisitorId { get; set; }
 
         public virtual Visitor Visitor { get; set; }
@@ -39,16 +40,13 @@ namespace SharedModels.Models
         [JsonIgnore]
         public Guid AccountTypeId { get; set; }
 
-        [ForeignKey("AccountTypeId")]
         public virtual AccountType AccountType { get; set; }
 
-        // Foreign Key to PurposeType
+       
         [Column("purpose_type_id")]
         [JsonIgnore]
         public Guid PurposeTypeId { get; set; }
 
-        // Navigation property to PurposeType
-        [ForeignKey("PurposeTypeId")]
         public virtual PurposeType PurposeType { get; set; }
 
         [Column("node_id")]
