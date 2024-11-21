@@ -60,7 +60,7 @@ namespace ResourceServer.Controllers
                 Password = visitorAccount.Password,
                 VisitorId = createdVisitor.Id
             });
-            
+
             return Ok(createdVisitor);
         }
 

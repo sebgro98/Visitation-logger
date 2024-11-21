@@ -3,6 +3,7 @@ using ResourceServer.Repositories;
 using SharedModels.Models;
 using ResourceServer.DTO;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace ResourceServer.Controllers
 {
@@ -104,10 +105,11 @@ namespace ResourceServer.Controllers
         }
 
         [HttpGet("byPage")]
-        public async Task<ActionResult<IEnumerable<Admin>>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<ActionResult<ByPageAdminDTO>> GetAdminsByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             var admins = await _adminRepository.GetAdminsByPage(pageNumber, pageSize);
             return Ok(admins);
         }
+
     }
 }

@@ -26,7 +26,7 @@ namespace ResourceServer.Controllers
         }
 
         [HttpGet("/filter")]
-        public async Task<ActionResult<IEnumerable<Status>>> GetFilteredStatuses(
+        public async Task<ActionResult<FilterReturnDTO>> GetFilteredStatuses(
             [FromQuery] int pageNumber,
             [FromQuery] int pageSize,
             [FromQuery] FilterDTO dto
@@ -78,13 +78,29 @@ namespace ResourceServer.Controllers
                 );
             }
 
+            //Get number of all elements
+            int totalSize = await filteredStatuses.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalSize / pageSize); //Round up if it's a decimal number
+
             //Pagination
             filteredStatuses = filteredStatuses.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
             //Database filtering and pagination executes
-            var statusList = await filteredStatuses.ToListAsync();
+            var filteredStatusList = await filteredStatuses.ToListAsync();
 
-            return Ok(statusList);
+            //Convert status objects into status return dtos
+            List<StatusDTO> filteredStatusDtoList = filteredStatusList
+                .Select(status => new StatusDTO(status))
+                .ToList();
+
+            FilterReturnDTO returnDTO = new FilterReturnDTO
+            {
+                StatusList = filteredStatusDtoList,
+                TotalNumberOfElements = totalSize,
+                TotalNumberOfPages = totalPages
+            };
+
+            return Ok(returnDTO);
         }
 
         [HttpPost]
@@ -116,9 +132,9 @@ namespace ResourceServer.Controllers
         }
 
         [HttpGet("{visitorId}/checkin-status")]
-        public async Task<IActionResult> GetCheckInStatus(Guid visitorId)
+        public async Task<IActionResult> GetCheckInStatus(Guid VisitorAccountId)
         {
-            Status latestStatus = await _statusRepository.GetCheckInStatus(visitorId);
+            Status latestStatus = await _statusRepository.GetCheckInStatus(VisitorAccountId);
 
             if (latestStatus == null)
             {
