@@ -26,7 +26,8 @@ export const extractValueFromRow = (row, header) => {
 
 // Funktion för att validera användarnamn
 export const validateUsername = (username) => {
-  return username.length >= 4;
+  const usernameRegex = /^[a-zA-Z0-9]{4,20}$/;
+  return usernameRegex.test(username);
 };
 
 // Funktion för att validera lösenord
@@ -42,17 +43,35 @@ export const validateFullName = (fullName) => {
   return nameRegex.test(fullName);
 };
 
+// Funktion för att trimma onödiga mellanslag från ett objekt
+export const trimObjectStrings = (obj) => {
+  const trimmedObj = { ...obj };
+  Object.keys(trimmedObj).forEach((key) => {
+    if (typeof trimmedObj[key] === "string") {
+      trimmedObj[key] = trimmedObj[key].trim();
+    }
+  });
+  return trimmedObj;
+};
+
+export const prepareAdminAccount = (account) => {
+  const trimmedAccount = trimObjectStrings(account);
+
+  return trimmedAccount;
+};
+
 // Funktion för att förbereda besökarkonto för att skicka till backend
 export const prepareVisitorAccount = (account, accountTypes) => {
+  const trimmedAccount = trimObjectStrings(account);
   // Konvertera datum till UTC när du skickar dem till backend
-  const startDateUTC = new Date(account.startDate).toISOString();
+  const startDateUTC = new Date(trimmedAccount.startDate).toISOString();
   // Justera endDate till 23:59:59
-  const endDate = new Date(account.endDate);
+  const endDate = new Date(trimmedAccount.endDate);
   endDate.setHours(23, 59, 59, 999);
   const endDateUTC = endDate.toISOString();
 
   const updatedAccount = {
-    ...account,
+    ...trimmedAccount,
     startDate: startDateUTC,
     endDate: endDateUTC,
   };
@@ -107,7 +126,7 @@ export const validateAccount = (account, confirmPassword, accountType) => {
 
   if (!validateUsername(account.username)) {
     newErrors.username =
-      "Användarnamnet måste vara minst 4 tecken och får endast innehålla bokstäver";
+      "Användarnamnet måste vara minst 4 och max 20 tecken får endast innehålla bokstäver och siffror, inga mellanslag.";
     valid = false;
   }
   if (!validatePassword(account.password)) {
@@ -137,7 +156,7 @@ export const validateAccount = (account, confirmPassword, accountType) => {
     } else {
       if (account.endDate < account.startDate) {
         newErrors.endDate =
-          "Slutdatumet kan inte vara tidigare än startdatumet.";
+          "Slutdatumet kan inte vara tidigare än startdatumet."; // ta bort fixa
         valid = false;
       } else if (account.endDate < new Date().toISOString().split("T")[0]) {
         newErrors.endDate =

@@ -4,6 +4,7 @@ import "./createAccount.css";
 import Button from "../../components/button";
 import {
   generateAccountInfo,
+  prepareAdminAccount,
   prepareVisitorAccount,
   validateAccount,
   validateFullName,
@@ -84,10 +85,12 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
     setErrors(newErrors);
 
     if (valid) {
-      let accountData = { ...account };
+      let accountData;
 
       if (accountType === "visitor") {
         accountData = prepareVisitorAccount(account, accountTypes);
+      } else {
+        accountData = prepareAdminAccount(account);
       }
 
       try {
