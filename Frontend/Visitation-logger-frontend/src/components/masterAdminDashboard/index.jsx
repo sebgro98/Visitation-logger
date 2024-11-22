@@ -16,7 +16,7 @@ const MasterAdminDashboard = () => {
       />
       <div className="dashboard-actions">
         <DashboardAction
-          to="/dashboard"
+          to="/logs"
           icons={[faDownload]}
           title="Visa/Exportera besöksloggningar"
           info="Klicka på ikonen ovan för att visa/exportera besöksloggningar"

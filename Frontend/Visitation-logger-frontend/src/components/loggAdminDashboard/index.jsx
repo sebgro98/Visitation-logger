@@ -11,8 +11,7 @@ const LoggAdminDashboard = () => {
       />
       <div className="dashboard-actions">
         <DashboardAction
-          to="/dashboard"
-          onClick={() => console.log("Länken till loggsidan har klickats!")}
+          to="/logs"
           icons={[faDownload]}
           title="Visa/Exportera besöksloggningar"
           info="Klicka på ikonen ovan för att visa/exportera besöksloggningar"
