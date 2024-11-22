@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./logsPage.css";
+import Modal from "../../components/modal";
 import Table from "../../components/table";
 import Button from "../../components/button";
 import "../../services/apiClient";
@@ -9,29 +10,31 @@ const Logs = () => {
   const [logs, setLogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [numberOfPages, setNumberOfPages] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [numberOfElements, setNumberOfElements] = useState(0);
-  const [filter, setFilter] = useState({
-    pageSize: 10,
-    pageNumber: currentPage,
-    visitorName: "",
-    visitorId: "",
-    purposeName: "",
-    node: "",
-    checkInTime: "",
-    checkOutTime: "",
-  });
+  const [filter, setFilter] = useState(
+    {
+      pageSize: 10,
+      pageNumber: currentPage,
+      visitorName: "",
+      visitorId: "",
+      purposeName: "",
+      node: "",
+      checkInTime: "",
+      checkOutTime: ""
+    });
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const data = await getStatusByPage(filter);
-        setLogs(data.statusList);
-        setFilter({ ...filter, data });
-        setNumberOfPages(data.totalNumberOfPages);
-        setNumberOfElements(data.totalNumberOfElements);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+        try {
+            const data = await getStatusByPage(filter);
+            setLogs(data.statusList);
+            setFilter({...filter, data});
+            setNumberOfPages(data.totalNumberOfPages);   
+            setNumberOfElements(data.totalNumberOfElements);  
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     };
 
     fetchData();
@@ -53,38 +56,24 @@ const Logs = () => {
 
   const exportToCSV = async () => {
     try {
-      const data = await getStatusByPage({
-        ...filter,
-        pageNumber: 1,
-        pageSize: numberOfElements,
-      });
+      const data = await getStatusByPage({ ...filter, pageNumber: 1, pageSize: numberOfElements });
       const rows = data.statusList;
 
+
+
       const csvContent = [
-        [
-          "Besökare",
-          "BesökarId",
-          "Besöksbeskrivning",
-          "Nod",
-          "Incheckning",
-          "Utcheckning",
-        ],
-        ...rows.map((row) => [
+        ["Besökare", "BesökarId", "Besöksbeskrivning", "Nod", "Incheckning", "Utcheckning"],
+        ...rows.map(row => [
           row.visitorName,
           row.visitorId,
           row.purposeName,
           row.node.nodeName,
           row.checkInTime,
-          row.checkOutTime,
-        ]),
-      ]
-        .map((e) => e.join(","))
-        .join("\n");
+          row.checkOutTime
+        ])
+      ].map(e => e.join(",")).join("\n");
 
-      const timeSuffix = new Date()
-        .toISOString()
-        .replace(/:/g, "-")
-        .split(".")[0];
+      const timeSuffix = new Date().toISOString().replace(/:/g, "-").split(".")[0];
 
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
@@ -100,45 +89,44 @@ const Logs = () => {
     }
   };
 
-  const applyFilter = () => {
-    console.log("Filter logs");
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
     <>
+
       <div className="logsPage-results">
-        <div className="logsPage-header">
-          <Button label={"Filtrera"} onClick={applyFilter} />
-          <Button label={"Exportera"} onClick={exportToCSV} />
-        </div>
+      <div className="logsPage-header">
+        <Button label={"Filtrera"} onClick={toggleModal} />
+        <Button label={"Exportera"} onClick={exportToCSV} />
+      </div>
         <Table
-          headers={[
-            "visitorName",
-            "visitorId",
-            "purposeName",
-            "node",
-            "checkInTime",
-            "checkOutTime",
-          ]}
+          headers={["visitorName", "visitorId", "purposeName", "node", "checkInTime", "checkOutTime"]}
           data={logs}
-          onRowClick={(log) => console.log(log)}
+          onRowClick={log => console.log(log)}
         />
       </div>
-      <div className="logsPage-footer">
-        <br></br>
-        <Button
-          label={"Föregående"}
-          onClick={previousLogPage}
-          disabled={currentPage === 1}
-        />
-        <Button
-          label={"Nästa"}
-          onClick={nextLogPage}
-          disabled={currentPage === numberOfPages}
-        />
+        <div className="logsPage-footer">
+          <br></br>
+          <Button
+            label={"Föregående"}
+            onClick={previousLogPage}
+            disabled={currentPage === 1}
+          />
+          <Button
+            label={"Nästa"}
+            onClick={nextLogPage}
+            disabled={currentPage === numberOfPages}
+          />
       </div>
+      <Modal isOpen={isModalOpen} onClose={toggleModal}>
+          <h2>Filterera Loggarna</h2>
+          <p>This is where you can add text fields or date pickers.</p>
+        </Modal>
     </>
   );
 };
 
 export default Logs;
+
