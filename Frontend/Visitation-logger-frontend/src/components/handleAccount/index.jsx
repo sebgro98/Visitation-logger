@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import "./createAccount.css";
-import Button from "../../components/button";
+import "./handleAccount.css";
+import Button from "../button";
 import {
   generateAccountInfo,
   prepareAdminAccount,
@@ -11,16 +11,22 @@ import {
   validatePassword,
   validateUsername,
 } from "../../utils/utils";
-import SuccessPopup from "../../components/successPopup";
-import { useNavigate } from "react-router-dom";
+import SuccessPopup from "../successPopup";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getAllAccountTypes,
   getAllNodes,
   getAllPurposeTypes,
 } from "../../services/apiClient";
 
-const CreateAccount = ({ accountType, createAccount, fields }) => {
+const HandleAccount = ({
+  accountType,
+  handleAccountAction,
+  fields,
+  isEditMode = false,
+}) => {
   const navigate = useNavigate();
+  const { id = "" } = useParams();
   const [nodes, setNodes] = useState([]);
   const [accountTypes, setAccountTypes] = useState([]);
   const [purposeTypes, setPurposeTypes] = useState([]);
@@ -28,51 +34,57 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
   const [errors, setErrors] = useState({});
   const [showSuccess, setShowSuccess] = useState(false); // För att visa popup
   const [successMessage, setSuccessMessage] = useState("");
-  const [account, setAccount] = useState(fields);
+  const [account, setAccount] = useState({});
+
+  console.log(id);
+  const fetchNodes = useCallback(async () => {
+    try {
+      const response = await getAllNodes();
+      setNodes(response);
+    } catch (error) {
+      console.error("Error fetching nodes:", error);
+    }
+  }, []);
+
+  const fetchAccountTypes = useCallback(async () => {
+    try {
+      const response = await getAllAccountTypes();
+      if (accountType !== "visitor") {
+        const filteredResponse = response.filter(
+          (type) => type.name !== "Visitor"
+        );
+        setAccountTypes(filteredResponse);
+      } else {
+        setAccountTypes(response);
+      }
+    } catch (error) {
+      console.error("Error fetching account types:", error);
+    }
+  }, [accountType]);
+
+  const fetchPurposeTypes = useCallback(async () => {
+    try {
+      const response = await getAllPurposeTypes();
+      setPurposeTypes(response);
+    } catch (error) {
+      console.error("Error fetching purpose types:", error);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchNodes = async () => {
-      try {
-        const response = await getAllNodes();
-        setNodes(response);
-      } catch (error) {
-        console.error("Error fetching nodes:", error);
-      }
-    };
-
-    const fetchAccountTypes = async () => {
-      try {
-        const response = await getAllAccountTypes();
-        if (accountType !== "visitor") {
-          const filteredResponse = response.filter(
-            (type) => type.name !== "Visitor"
-          );
-          setAccountTypes(filteredResponse);
-        } else {
-          setAccountTypes(response);
-        }
-        console.log("Account types:", accountTypes);
-      } catch (error) {
-        console.error("Error fetching account types:", error);
-      }
-    };
-
-    const fetchPurposeTypes = async () => {
-      try {
-        const response = await getAllPurposeTypes();
-        setPurposeTypes(response);
-      } catch (error) {
-        console.error("Error fetching purpose types:", error);
-      }
-    };
-
+    if (isEditMode) {
+      // eslint-disable-next-line no-unused-vars
+      const { password, ...rest } = fields;
+      setAccount(rest);
+    } else {
+      setAccount(fields);
+    }
     fetchNodes();
     fetchAccountTypes();
-    console.log(accountTypes);
     if (accountType === "visitor") {
       fetchPurposeTypes();
     }
-  }, []);
+  }, [fetchNodes, fetchAccountTypes, fetchPurposeTypes, accountType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,7 +92,8 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
     const { valid, newErrors } = validateAccount(
       account,
       confirmPassword,
-      accountType
+      accountType,
+      isEditMode
     );
     setErrors(newErrors);
 
@@ -94,8 +107,13 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
       }
 
       try {
-        const response = await createAccount(accountData);
-        console.log(`${accountType} account created:`, response);
+        let response;
+        if (isEditMode) {
+          response = await handleAccountAction(id, accountData);
+        } else {
+          response = await handleAccountAction(accountData);
+          console.log(`${accountType} account created:`, response);
+        }
 
         const accountInfo = generateAccountInfo(
           account,
@@ -109,7 +127,7 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
         setShowSuccess(true);
 
         // Återställ formuläret
-        setAccount(fields);
+        setAccount({});
         setConfirmPassword("");
       } catch (error) {
         console.error(`Error creating ${accountType} account:`, error);
@@ -168,13 +186,18 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
     }
   };
 
+  console.log(account);
   return (
     <main className="create-account-main">
       <div className="create-account-container">
         <h1>
           {accountType === "visitor"
-            ? "Skapa besökarkonto"
-            : "Skapa adminkonto"}
+            ? isEditMode
+              ? "Redigera besökare"
+              : "Skapa besökare"
+            : isEditMode
+            ? "Redigera administratör"
+            : "Skapa administratör"}
         </h1>
         <form className="create-account-form" onSubmit={handleSubmit}>
           <label htmlFor="username">Användarnamn</label>
@@ -190,10 +213,11 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
 
           <label htmlFor="password">Lösenord</label>
           <input
-            type="password"
+            type="text"
             id="password"
             value={account.password}
             onChange={handleInputChange}
+            disabled={isEditMode}
           />
           <div className="error-container">
             {errors.password && <p className="error">{errors.password}</p>}
@@ -201,10 +225,11 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
 
           <label htmlFor="confirmPassword">Bekräfta lösenord</label>
           <input
-            type="password"
+            type="text"
             id="confirmPassword"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
+            disabled={isEditMode}
           />
           <div className="error-container">
             {errors.confirmPassword && (
@@ -244,9 +269,11 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
                 value={account.purposeTypeId}
                 onChange={handleInputChange}
               >
-                <option value="" disabled hidden>
-                  -- Välj syfte --
-                </option>
+                {isEditMode ? null : (
+                  <option value="" disabled hidden>
+                    -- Välj syfte --
+                  </option>
+                )}
                 {purposeTypes.map((purpose) => (
                   <option key={purpose.id} value={purpose.id}>
                     {purpose.name}
@@ -314,7 +341,10 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
           </div>
 
           <div className="create-account-button">
-            <Button label={"Skapa konto"} type="submit" />
+            <Button
+              label={isEditMode ? "Updatera konto" : "Skapa konto"}
+              type="submit"
+            />
           </div>
         </form>
         {showSuccess && (
@@ -335,10 +365,11 @@ const CreateAccount = ({ accountType, createAccount, fields }) => {
     </main>
   );
 };
-CreateAccount.propTypes = {
+HandleAccount.propTypes = {
   accountType: PropTypes.string.isRequired,
-  createAccount: PropTypes.func.isRequired,
+  handleAccountAction: PropTypes.func.isRequired,
   fields: PropTypes.object.isRequired,
+  isEditMode: PropTypes.bool,
 };
 
-export default CreateAccount;
+export default HandleAccount;
