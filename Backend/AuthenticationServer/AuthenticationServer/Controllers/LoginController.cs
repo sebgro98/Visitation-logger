@@ -20,17 +20,17 @@ namespace AuthenticationServer.Controllers
             var token = await _authService.AuthenticateAsync(dto);
             if (token == "Invalid credentials")
             {
-                return Unauthorized("Password or Username incorrect" );
+                return Unauthorized("Lösenordet eller användarnamnet är felaktigt");
             }
 
             if (token == "Account has expired")
             {
-                return Unauthorized("Account has expired" );
+                return Unauthorized("Kontot har löpt ut" );
             }
 
             if(token == "AccountLocked")
             {
-                return Unauthorized("Account is locked. Please try again later");
+                return Unauthorized("Kontot är låst. Försök igen senare");
             }
 
             return Ok(token);

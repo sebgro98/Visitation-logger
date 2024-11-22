@@ -16,7 +16,7 @@ const Login = ({ isAdminMode }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.username || !formData.password) {
@@ -24,7 +24,20 @@ const Login = ({ isAdminMode }) => {
       return;
     }
 
-    onLogin(formData.username, formData.password, isAdminMode);
+    if (formData.username.includes(" ") || formData.password.includes(" ")) {
+      setError("Kontrollera input, inga mellanslag är tillåtna.");
+      return;
+    }
+
+    const result = await onLogin(
+      formData.username,
+      formData.password,
+      isAdminMode
+    );
+
+    if (result && result.error) {
+      setError(result.error);
+    }
   };
 
   return (

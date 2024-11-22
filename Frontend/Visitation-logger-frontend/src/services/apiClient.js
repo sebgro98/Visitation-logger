@@ -74,10 +74,6 @@ async function request(method, endpoint, data, auth = true) {
 
   const response = await fetch(`${API_URL}/${endpoint}`, opts);
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
   return response.json();
 }
 

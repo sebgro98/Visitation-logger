@@ -26,9 +26,8 @@ const AuthProvider = ({ children }) => {
     const res = await login(username, password, isAdminMode);
 
     if (!res.token) {
-      return navigate("/");
+      return { token: null, error: res.error || "Login failed." };
     }
-
     localStorage.setItem("token", res.token);
     setIsLoggedIn(true);
 
