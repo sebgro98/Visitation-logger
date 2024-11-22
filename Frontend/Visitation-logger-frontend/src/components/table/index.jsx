@@ -20,9 +20,6 @@ const Table = ({ headers, data, onRowClick = () => {} }) => {
     fullName: "Namn",
   };
 
-  console.log(data);
-  
-
   return (
     <div className="table-wrapper">
       <table className="table">
