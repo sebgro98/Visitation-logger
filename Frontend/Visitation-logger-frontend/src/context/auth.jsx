@@ -24,7 +24,6 @@ const AuthProvider = ({ children }) => {
 
   const handleLogin = async (username, password, isAdminMode) => {
     const res = await login(username, password, isAdminMode);
-    console.log(res.token);
 
     if (!res.token) {
       return navigate("/");
