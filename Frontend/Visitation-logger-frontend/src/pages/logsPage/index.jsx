@@ -1,109 +1,124 @@
 import { useEffect, useState } from "react";
-import LogEntry from "./logEntry";
-import LogsPageButton from "./logsPage-button";
 import "./logsPage.css";
-import dummyLogs from "./dummylogs";
+import Table from "../../components/table";
+import Button from "../../components/button";
+import "../../services/apiClient";
+import { getPage } from "../../services/apiClient";
 
 const Logs = () => {
   const [logs, setLogs] = useState([]);
-  const [filteredLogs, setFilteredLogs] = useState([]);
-  const [displayedLogs, setDisplayedLogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [numberOfPages, setNumberOfPages] = useState(1);
+  const [numberOfElements, setNumberOfElements] = useState(0);
+  const [filter, setFilter] = useState(
+    {
+      pageSize: 10,
+      pageNumber: currentPage,
+      visitorName: "",
+      visitorId: "",
+      purposeName: "",
+      node: "",
+      checkInTime: "",
+      checkOutTime: ""
+    });
 
   useEffect(() => {
-    setLogs(dummyLogs);
-    setFilteredLogs(dummyLogs);
-  }, []);
+    const fetchData = async () => {
+        try {
+            const data = await getPage(filter);
+            setLogs(data.statusList);
+            setFilter({...filter, data});
+            setNumberOfPages(data.totalNumberOfPages);   
+            setNumberOfElements(data.totalNumberOfElements);  
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
-  useEffect(() => {
-    paginate();
-  }, [filteredLogs, currentPage]);
-
-  const paginate = () => {
-    const logsPerPage = 10;
-    const lastLogIndex = Math.min(currentPage * logsPerPage, filteredLogs.length);
-    const firstLogIndex = lastLogIndex - logsPerPage;
-
-    const currentLogs = filteredLogs.slice(firstLogIndex, lastLogIndex);
-    setDisplayedLogs(currentLogs);
-  };
+    fetchData();
+  }, [currentPage]);
 
   const previousLogPage = () => {
-    if (currentPage > 1) {
+    if (currentPage !== 1) {
       setCurrentPage(currentPage - 1);
+      setFilter({ ...filter, pageNumber: filter.pageNumber - 1 });
     }
   };
 
   const nextLogPage = () => {
-    if (currentPage < Math.ceil(filteredLogs.length / 10)) {
+    if (currentPage !== numberOfPages) {
       setCurrentPage(currentPage + 1);
+      setFilter({ ...filter, pageNumber: filter.pageNumber + 1 });
     }
   };
 
-  const exportToCSV = () => {
-    const header = ["Besökare", "Besöksbeskrivning", "Nod", "Datum"];
-    const rows = logs.map(log => [
-      log.visitor,
-      log.description,
-      log.node,
-      log.date
-    ]);
+  const exportToCSV = async () => {
+    try {
+      const data = await getPage({ ...filter, pageNumber: 1, pageSize: numberOfElements });
+      const rows = data.statusList;
 
-    const csvContent = [
-      header.join(","),
-      ...rows.map(row => row.join(","))
-    ].join("\n");
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const currentdate = new Date();
-    const datetime = currentdate.toISOString();
-    link.href = URL.createObjectURL(blob);
-    link.download = `logs_${datetime}.csv`;
-    link.click();
+
+      const csvContent = [
+        ["Besökare", "BesökarId", "Besöksbeskrivning", "Nod", "Incheckning", "Utcheckning"],
+        ...rows.map(row => [
+          row.visitorName,
+          row.visitorId,
+          row.purposeName,
+          row.node.nodeName,
+          row.checkInTime,
+          row.checkOutTime
+        ])
+      ].map(e => e.join(",")).join("\n");
+
+      const timeSuffix = new Date().toISOString().replace(/:/g, "-").split(".")[0];
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "logs.csv" + timeSuffix);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log("Exporting logs to CSV", rows);
+    } catch (error) {
+      console.error("Error fetching data for exportation:", error);
+    }
   };
 
-  const filter = () => {
+  const applyFilter = () => {
     console.log("Filter logs");
   };
 
   return (
-    <div className="logsPage">
-      <div className="logsPage-header">
-        <LogsPageButton name={"Filtrera"} onClick={filter} />
-        <LogsPageButton name={"Exportera"} onClick={exportToCSV} />
-      </div>
+    <>
+
       <div className="logsPage-results">
-        <table className="logsPage-table">
-          <thead>
-            <tr>
-              <th>Besökare</th>
-              <th>Besöksbeskrivning</th>
-              <th>Nod</th>
-              <th>Datum</th>
-            </tr>
-          </thead>
-          <tbody>
-            {displayedLogs.map((log, index) => (
-              <LogEntry log={log} key={index} index={index} />
-            ))}
-          </tbody>
-        </table>
+      <div className="logsPage-header">
+        <Button label={"Filtrera"} onClick={applyFilter} />
+        <Button label={"Exportera"} onClick={exportToCSV} />
+      </div>
+        <Table
+          headers={["visitorName", "visitorId", "purposeName", "node", "checkInTime", "checkOutTime"]}
+          data={logs}
+          onRowClick={log => console.log(log)}
+        />
       </div>
         <div className="logsPage-footer">
           <br></br>
-          <LogsPageButton
-            name={"Föregående"}
+          <Button
+            label={"Föregående"}
             onClick={previousLogPage}
             disabled={currentPage === 1}
           />
-          <LogsPageButton
-            name={"Nästa"}
+          <Button
+            label={"Nästa"}
             onClick={nextLogPage}
-            disabled={currentPage === Math.ceil(filteredLogs.length / 10)}
+            disabled={currentPage === numberOfPages}
           />
       </div>
-    </div>
+    </>
   );
 };
 

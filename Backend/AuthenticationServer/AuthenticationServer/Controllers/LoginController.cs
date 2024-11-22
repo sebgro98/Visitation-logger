@@ -14,22 +14,27 @@ namespace AuthenticationServer.Controllers
             _authService = authService;
         }
 
-        [HttpGet]
-        public string Get()
-        {
-
-            return "LoginController test get";
-        }
-
         [HttpPost]
         public async Task<IActionResult> Get([FromBody] LoginDto dto)
         {
             var token = await _authService.AuthenticateAsync(dto);
-            if (token == null)
+            if (token == "Invalid credentials")
             {
-                return Unauthorized();
+                return Unauthorized("Password or Username incorrect" );
             }
+
+            if (token == "Account has expired")
+            {
+                return Unauthorized("Account has expired" );
+            }
+
+            if(token == "AccountLocked")
+            {
+                return Unauthorized("Account is locked. Please try again later");
+            }
+
             return Ok(token);
+
         }
 
 

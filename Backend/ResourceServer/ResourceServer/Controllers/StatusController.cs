@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using ResourceServer.DTO;
 using ResourceServer.Repositories;
 using SharedModels.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace ResourceServer.Controllers
 {
@@ -17,6 +19,7 @@ namespace ResourceServer.Controllers
             _statusRepository = statusRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Status>>> GetAllStatuses()
         {
@@ -25,8 +28,9 @@ namespace ResourceServer.Controllers
             return Ok(status);
         }
 
+        [Authorize(Roles = "MasterAdmin, LoggAdmin")]
         [HttpGet("/filter")]
-        public async Task<ActionResult<IEnumerable<Status>>> GetFilteredStatuses(
+        public async Task<ActionResult<FilterReturnDTO>> GetFilteredStatuses(
             [FromQuery] int pageNumber,
             [FromQuery] int pageSize,
             [FromQuery] FilterDTO dto
@@ -78,15 +82,32 @@ namespace ResourceServer.Controllers
                 );
             }
 
+            //Get number of all elements
+            int totalSize = await filteredStatuses.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalSize / pageSize); //Round up if it's a decimal number
+
             //Pagination
             filteredStatuses = filteredStatuses.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
             //Database filtering and pagination executes
-            var statusList = await filteredStatuses.ToListAsync();
+            var filteredStatusList = await filteredStatuses.ToListAsync();
 
-            return Ok(statusList);
+            //Convert status objects into status return dtos
+            List<StatusDTO> filteredStatusDtoList = filteredStatusList
+                .Select(status => new StatusDTO(status))
+                .ToList();
+
+            FilterReturnDTO returnDTO = new FilterReturnDTO
+            {
+                StatusList = filteredStatusDtoList,
+                TotalNumberOfElements = totalSize,
+                TotalNumberOfPages = totalPages
+            };
+
+            return Ok(returnDTO);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpPost]
         public async Task<IActionResult> CreateStatus([FromBody] StatusCheckInDTO statusCheckInDto)
         {
@@ -99,6 +120,7 @@ namespace ResourceServer.Controllers
             return Ok(status);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateStatus(
             Guid id,
@@ -115,10 +137,11 @@ namespace ResourceServer.Controllers
             return Ok(updateStatus);
         }
 
+        [Authorize(Roles = "Visitor")]
         [HttpGet("{visitorId}/checkin-status")]
-        public async Task<IActionResult> GetCheckInStatus(Guid visitorId)
+        public async Task<IActionResult> GetCheckInStatus(Guid VisitorAccountId)
         {
-            Status latestStatus = await _statusRepository.GetCheckInStatus(visitorId);
+            Status latestStatus = await _statusRepository.GetCheckInStatus(VisitorAccountId);
 
             if (latestStatus == null)
             {

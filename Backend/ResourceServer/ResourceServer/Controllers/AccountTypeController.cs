@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
 using SharedModels.Models;
 
@@ -15,6 +16,7 @@ namespace ResourceServer.Controllers
             _accountTypesRepository = accountTypesRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AccountType>>> GetAllAccountTypes()
         {

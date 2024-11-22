@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
 using SharedModels.Models;
@@ -15,6 +16,7 @@ namespace ResourceServer.Controllers
             _nodeRepository = nodeRepository;
         
         }
+        [Authorize(Roles = "MasterAdmin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Node>>> GetAllAdmins()
         {

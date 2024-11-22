@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ResourceServer.Repositories;
 using SharedModels.Models;
 
@@ -16,6 +17,7 @@ namespace ResourceServer.Controllers
             _countryRepository = countryRepository;
         }
 
+        [Authorize(Roles = "MasterAdmin, Visitor")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Country>>> GetAllCountries()
         {
