@@ -22,7 +22,9 @@ export const extractValueFromRow = (row, header) => {
     case "checkInTime":
       return row.checkInTime ? new Date(row.checkInTime).toLocaleString() : "";
     case "checkOutTime":
-      return row.checkOutTime ? new Date(row.checkOutTime).toLocaleString() : "";
+      return row.checkOutTime
+        ? new Date(row.checkOutTime).toLocaleString()
+        : "";
     default:
       return row[header] || "";
   }
@@ -123,7 +125,12 @@ export const generateAccountInfo = (
 };
 
 // Används för att validera kontouppgifter vid skapande av konto
-export const validateAccount = (account, confirmPassword, accountType) => {
+export const validateAccount = (
+  account,
+  confirmPassword,
+  accountType,
+  isEditMode
+) => {
   const newErrors = {};
   let valid = true;
 
@@ -132,12 +139,12 @@ export const validateAccount = (account, confirmPassword, accountType) => {
       "Användarnamnet måste vara minst 4 och max 20 tecken får endast innehålla bokstäver och siffror, inga mellanslag.";
     valid = false;
   }
-  if (!validatePassword(account.password)) {
+  if (!isEditMode && !validatePassword(account.password)) {
     newErrors.password =
       "Lösenordet måste vara minst 8 tecken, innehålla en versal, en gemen, en siffra och ett specialtecken";
     valid = false;
   }
-  if (account.password !== confirmPassword) {
+  if (!isEditMode && account.password !== confirmPassword) {
     newErrors.confirmPassword = "Lösenorden matchar inte";
     valid = false;
   }
