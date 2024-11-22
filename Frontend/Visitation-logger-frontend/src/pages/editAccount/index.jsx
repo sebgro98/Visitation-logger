@@ -20,11 +20,15 @@ const EditAccount = ({ isEditVisitorMode }) => {
       try {
         if (isEditVisitorMode) {
           const visitorAccount = await getVisitorAccountById(id);
-          setFields(visitorAccount);
+          setFields({
+            username: visitorAccount.username,
+            startDate: visitorAccount.startDate,
+            endDate: visitorAccount.endDate,
+            nodeId: visitorAccount.node.id,
+          });
         } else {
           const adminAccount = await getAdminAccountById(id);
           setFields({
-            id: adminAccount.id,
             username: adminAccount.username,
             fullName: adminAccount.fullName,
             accountTypeId: adminAccount.accountType.id,
