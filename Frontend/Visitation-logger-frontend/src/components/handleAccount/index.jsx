@@ -36,7 +36,6 @@ const HandleAccount = ({
   const [successMessage, setSuccessMessage] = useState("");
   const [account, setAccount] = useState({});
 
-  console.log(id);
   const fetchNodes = useCallback(async () => {
     try {
       const response = await getAllNodes();
@@ -107,12 +106,10 @@ const HandleAccount = ({
       }
 
       try {
-        let response;
         if (isEditMode) {
-          response = await handleAccountAction(id, accountData);
+          await handleAccountAction(id, accountData);
         } else {
-          response = await handleAccountAction(accountData);
-          console.log(`${accountType} account created:`, response);
+          await handleAccountAction(accountData);
         }
 
         const accountInfo = generateAccountInfo(
@@ -186,7 +183,6 @@ const HandleAccount = ({
     }
   };
 
-  console.log(account);
   return (
     <main className="create-account-main">
       <div className="create-account-container">
