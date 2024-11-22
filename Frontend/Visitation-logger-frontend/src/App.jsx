@@ -9,6 +9,7 @@ import Dashboard from "./pages/dashboard";
 import AccountManagement from "./pages/accountManagement";
 import CreateAdmin from "./pages/createAdmin";
 import CreateVisitor from "./pages/createVisitor";
+import EditAccount from "./pages/editAccount";
 
 function App() {
   return (
@@ -75,6 +76,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateVisitor />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/edit-admin/:id"
+            element={
+              <ProtectedRoute>
+                <EditAccount isEditVisitorMode={false} />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/edit-visitor/:id"
+            element={
+              <ProtectedRoute>
+                <EditAccount isEditVisitorMode={true} />
               </ProtectedRoute>
             }
           />
