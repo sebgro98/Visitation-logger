@@ -27,13 +27,15 @@ const AuthProvider = ({ children }) => {
     console.log(res.token);
 
     if (!res.token) {
-      return navigate("/");
-    }
+      console.log(res.error);
+      return { token: null, error: res.error || "Login failed." };
+    } 
+      localStorage.setItem("token", res.token);
+      setIsLoggedIn(true);
 
-    localStorage.setItem("token", res.token);
-    setIsLoggedIn(true);
+      navigate("/dashboard");
+    
 
-    navigate("/dashboard"); // This is a placeholder for the actual dashboard path "/dashboard" that will be implemented later
   };
 
   const handleLogout = () => {
