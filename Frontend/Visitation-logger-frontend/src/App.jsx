@@ -10,6 +10,7 @@ import AccountManagement from "./pages/accountManagement";
 import CreateAdmin from "./pages/createAdmin";
 import CreateVisitor from "./pages/createVisitor";
 import EditAccount from "./pages/editAccount";
+import VisitorForm from "./components/visitorForm";
 
 function App() {
   return (
@@ -94,6 +95,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <EditAccount isEditVisitorMode={true} />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/visitor-form"
+            element={
+              <ProtectedRoute>
+                <VisitorForm />
               </ProtectedRoute>
             }
           />
