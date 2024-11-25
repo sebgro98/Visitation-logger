@@ -66,6 +66,15 @@ namespace ResourceServer.Controller
         }
 
         [Authorize(Roles = "MasterAdmin")]
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetVisitorAccountsById(Guid id)
+        {
+           var visitorAccount = await _visitorAccountRepository.GetVisitorAccountById(id);
+            return Ok(visitorAccount);
+        }
+
+
+        [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateVisitorAccount(Guid id, [FromBody] VisitorAccountPutDTO visitorAccountDto)
         {
