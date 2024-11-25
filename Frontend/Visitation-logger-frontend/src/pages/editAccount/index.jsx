@@ -21,7 +21,6 @@ const EditAccount = ({ isEditVisitorMode }) => {
       try {
         if (isEditVisitorMode) {
           const visitorAccount = await getVisitorAccountById(id);
-          console.log("Visitor account:", visitorAccount);
           setFields({
             username: visitorAccount.username,
             startDate: formatDate(visitorAccount.startDate),
@@ -31,7 +30,6 @@ const EditAccount = ({ isEditVisitorMode }) => {
           });
         } else {
           const adminAccount = await getAdminAccountById(id);
-          console.log("Admin account:", adminAccount);
           setFields({
             username: adminAccount.username,
             fullName: adminAccount.fullName,
