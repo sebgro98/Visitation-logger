@@ -73,7 +73,7 @@ namespace ResourceServer.Controllers
         
         [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
+        public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminPutDTO dto)
         {
             ActionResult adminValidationResult = ValidateAdminData(dto);
             if (adminValidationResult is BadRequestObjectResult)
@@ -100,7 +100,7 @@ namespace ResourceServer.Controllers
                     return Conflict(new { message = ex.Message });
                 }
 
-                return StatusCode(500, new { message = "An error occurred while creating the admin.", details = ex.Message });
+                return StatusCode(500, new { message = "An error occurred while updating the admin.", details = ex.Message });
 
             }
         }
@@ -127,8 +127,7 @@ namespace ResourceServer.Controllers
             return Ok();
         }
         
-        [Authorize(Roles = "MasterAdmin")]
-        private ActionResult ValidateAdminData(AdminDTO adminDto)
+        private ActionResult ValidateAdminData(IAdminDTO adminDto)
         {
             if (!UsernameRegex.IsMatch(adminDto.Username))
             {

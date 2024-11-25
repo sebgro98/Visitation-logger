@@ -57,13 +57,13 @@ namespace ResourceServer.Controllers
                 return NotFound("That account ID is already connected to another user.");
             }
             
-            await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, new VisitorAccountDto
+            await _visitorAccountRepository.UpdateVisitorAccount(visitorAccount.Id, new VisitorAccountPutDTO
             {
                 AccountTypeId = visitorAccount.AccountTypeId,
                 PurposeTypeId = visitorAccount.PurposeTypeId,
                 StartDate = visitorAccount.StartDate,
                 EndDate = visitorAccount.EndDate,
-                UserName = visitorAccount.Username,
+                Username = visitorAccount.Username,
                 Password = visitorAccount.Password,
                 VisitorId = createdVisitor.Id,
                 NodeId = visitorAccount.NodeId
