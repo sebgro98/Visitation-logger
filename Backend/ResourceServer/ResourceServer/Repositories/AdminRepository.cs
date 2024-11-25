@@ -4,13 +4,14 @@ using ResourceServer.DTO;
 using SharedModels.Models;
 using SharedModels.Hasher;
 using Npgsql;
+using System.Text.RegularExpressions;
 
 namespace ResourceServer.Repositories
 {
     public class AdminRepository : IAdminRepository
     {
         private ApplicationDbContext _context;
-        
+        private static readonly Regex PasswordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$");
 
         public AdminRepository(ApplicationDbContext context)
         {
@@ -30,6 +31,11 @@ namespace ResourceServer.Repositories
 
         public async Task<Admin> Create(AdminDTO dto)
         {
+            if (!PasswordRegex.IsMatch(dto.Password))
+            {
+                return null;
+            }
+
             try
             {
                 var hashedPassword = Hasher.HashPassword(dto.Password);
