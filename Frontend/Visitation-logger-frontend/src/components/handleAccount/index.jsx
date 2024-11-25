@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import "./handleAccount.css";
 import Button from "../button";
 import {
-  generateAccountInfo,
   prepareAdminAccount,
   prepareVisitorAccount,
   validateAccount,
