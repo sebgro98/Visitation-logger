@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using ResourceServer.Data;
@@ -75,14 +76,17 @@ namespace ResourceServer.Repositories
             }
         }
 
-        public async Task DeleteVisitorAccount(int id)
+        public async Task<bool> DeleteVisitorAccount(Guid id)
         {
             var visitorAccount = await _context.VisitorAccounts.FindAsync(id);
             if (visitorAccount != null)
             {
                 _context.VisitorAccounts.Remove(visitorAccount);
                 await _context.SaveChangesAsync();
+                return true;
             }
+            return false;
+
         }
 
         public async Task<VisitorAccount> CreateVisitorAccount(VisitorAccountDTO dto)
