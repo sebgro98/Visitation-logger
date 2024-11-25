@@ -153,7 +153,10 @@ export const validateAccount = (
       newErrors.startDate = "Vänligen välj ett startdatum.";
       valid = false;
     } else {
-      if (account.startDate < new Date().toISOString().split("T")[0]) {
+      if (
+        !isEditMode &&
+        account.startDate < new Date().toISOString().split("T")[0]
+      ) {
         newErrors.startDate =
           "Startdatumet kan inte vara tidigare än dagens datum.";
         valid = false;
