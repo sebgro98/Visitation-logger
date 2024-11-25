@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Button from "../button";
 import SuccessPopup from "../successPopup";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import "./visitorForm.css";
+import {
+  validateCompanyName,
+  validateFullName,
+  validatePassportNumber,
+  validateSSN,
+  validateTextField,
+} from "../../utils/utils";
+import { createVisitor } from "../../services/apiClient";
 
 const VisitorForm = () => {
   const navigate = useNavigate();
+  const [hasVisitorId, setHasVisitorId] = useState(false);
+  const [userId, setUserId] = useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     ssn: "",
@@ -18,8 +30,49 @@ const VisitorForm = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const decryptedToken = jwt_decode(storedToken);
+    const hasVisitorId = decryptedToken.HasVisitorId === "True";
+    setHasVisitorId(hasVisitorId);
+
+    if (hasVisitorId) {
+      setUserId(decryptedToken.userId);
+    }
+  }, []);
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
+
+    // Rensa felmeddelande om fältet validerar korrekt
+    if (errors[id]) {
+      let isValid = true;
+      switch (id) {
+        case "fullName":
+          isValid = validateFullName(value);
+          break;
+        case "ssn":
+          isValid = validateSSN(value);
+          break;
+        case "nationality":
+          isValid = validateTextField(value);
+          break;
+        case "passportNumber":
+          isValid = validatePassportNumber(value);
+          break;
+        case "company":
+          isValid = validateCompanyName(value);
+          break;
+        case "city":
+          isValid = validateTextField(value);
+          break;
+        default:
+          break;
+      }
+      if (isValid) {
+        setErrors({ ...errors, [id]: null });
+      }
+    }
     setFormData({ ...formData, [id]: value });
   };
 
@@ -28,20 +81,44 @@ const VisitorForm = () => {
 
     // Validering
     const newErrors = {};
-    if (!formData.fullName) newErrors.fullName = "Full Name is required";
-    if (!formData.ssn) newErrors.ssn = "SSN/Personnummer is required";
-    if (!formData.nationality)
-      newErrors.nationality = "Nationality is required";
-    if (!formData.passportNumber)
-      newErrors.passportNumber = "Passport Number is required";
-    if (!formData.company) newErrors.company = "Company is required";
-    if (!formData.city) newErrors.city = "City is required";
+    let isValid = true;
+    if (!validateFullName(formData.fullName)) {
+      newErrors.fullName =
+        "Användarnamnet måste vara minst 4 och max 20 tecken får endast innehålla bokstäver och siffror, inga mellanslag.";
+      isValid = false;
+    }
+    if (!validateSSN(formData.ssn)) {
+      newErrors.ssn = "Personnumret måste vara i formatet ÅÅÅÅMMDD-XXXX";
+      isValid = false;
+    }
+    if (!validateTextField(formData.nationality)) {
+      newErrors.nationality =
+        "Nationalitet får endast innehålla bokstäver och vara max 50 tecken långt";
+      isValid = false;
+    }
+    if (!validatePassportNumber(formData.passportNumber)) {
+      newErrors.passportNumber =
+        "Passnummer måste vara 8-9 tecken långt och får endast innehålla bokstäver och siffror";
+      isValid = false;
+    }
+    if (!validateCompanyName(formData.company)) {
+      newErrors.company =
+        "Företagsnamnet får endast innehålla bokstäver och siffror och vara max 50 tecken långt";
+      isValid = false;
+    }
+    if (!validateTextField(formData.city)) {
+      newErrors.city =
+        "Stad får endast innehålla bokstäver och vara max 50 tecken långt";
+      isValid = false;
+    }
 
     setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
+    if (isValid) {
       try {
         // Skicka formulärdata till API eller hantera det på något sätt
+        const visitor = await createVisitor(formData);
+        console.log("Visitor created:", visitor);
         setSuccessMessage("Formuläret har skickats");
         setShowSuccess(true);
 
@@ -60,12 +137,22 @@ const VisitorForm = () => {
     }
   };
 
+  if (hasVisitorId) {
+    return (
+      <div className="visitor-form-container">
+        <h1>Visitor Form</h1>
+        <p>Welcome</p>
+      </div>
+    );
+  }
+
   return (
     <main className="visitor-form-main">
       <div className="visitor-form-container">
-        <h1>Visitor Form</h1>
+        <h1>Besöks Formulär</h1>
+        <p style={{ marginTop: "0" }}>Vänligen fyll i formuläret nedan</p>
         <form className="form" onSubmit={handleSubmit}>
-          <label htmlFor="fullName">Full Name</label>
+          <label htmlFor="fullName">Fullständigtnamn</label>
           <input
             type="text"
             id="fullName"
@@ -76,7 +163,7 @@ const VisitorForm = () => {
             {errors.fullName && <p className="error">{errors.fullName}</p>}
           </div>
 
-          <label htmlFor="ssn">SSN/Personnummer</label>
+          <label htmlFor="ssn">Personnummer</label>
           <input
             type="text"
             id="ssn"
@@ -87,28 +174,20 @@ const VisitorForm = () => {
             {errors.ssn && <p className="error">{errors.ssn}</p>}
           </div>
 
-          <label htmlFor="nationality">Nationality</label>
-          <select
+          <label htmlFor="nationality">Nationalitet</label>
+          <input
+            type="text"
             id="nationality"
-            value={formData.nationality}
+            value={formData.national}
             onChange={handleInputChange}
-          >
-            <option value="" disabled hidden>
-              -- Select Nationality --
-            </option>
-            <option value="Swedish">Swedish</option>
-            <option value="Norwegian">Norwegian</option>
-            <option value="Danish">Danish</option>
-            <option value="Finnish">Finnish</option>
-            {/* Lägg till fler nationaliteter här */}
-          </select>
+          />
           <div className="error-container">
             {errors.nationality && (
               <p className="error">{errors.nationality}</p>
             )}
           </div>
 
-          <label htmlFor="passportNumber">Passport Number</label>
+          <label htmlFor="passportNumber">Passnummer</label>
           <input
             type="text"
             id="passportNumber"
@@ -121,7 +200,7 @@ const VisitorForm = () => {
             )}
           </div>
 
-          <label htmlFor="company">Company</label>
+          <label htmlFor="company">Företag</label>
           <input
             type="text"
             id="company"
@@ -132,7 +211,7 @@ const VisitorForm = () => {
             {errors.company && <p className="error">{errors.company}</p>}
           </div>
 
-          <label htmlFor="city">City</label>
+          <label htmlFor="city">Stad</label>
           <input
             type="text"
             id="city"
@@ -144,7 +223,7 @@ const VisitorForm = () => {
           </div>
 
           <div className="visitor-form-button">
-            <Button label="Submit" type="submit" />
+            <Button label="Skicka" type="submit" />
           </div>
         </form>
         {showSuccess && (
