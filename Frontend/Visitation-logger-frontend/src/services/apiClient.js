@@ -60,6 +60,10 @@ async function updateAdminAccount(id, account) {
   return await put(`Admin/${id}`, account);
 }
 
+async function createVisitor(visitor) {
+  return await post("Visitor", visitor);
+}
+
 async function post(endpoint, data, auth = true) {
   return await request("POST", endpoint, data, auth);
 }
@@ -113,4 +117,5 @@ export {
   updateVisitorAccount,
   getAdminAccountById,
   updateAdminAccount,
+  createVisitor,
 };
