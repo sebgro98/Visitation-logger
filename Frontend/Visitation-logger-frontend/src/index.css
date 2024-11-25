@@ -1,3 +1,34 @@
 body {
   margin: auto;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 100px;
+  align-items: start;
+}
+
+.form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form input[type="date"] {
+  width: 96%;
+  padding: 0 10px;
+}
+
+.form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form label {
+  font-weight: bold;
+}
