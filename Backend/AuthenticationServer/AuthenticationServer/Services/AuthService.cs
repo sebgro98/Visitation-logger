@@ -28,7 +28,7 @@ namespace AuthenticationServer.Services
             Guid? userId = null;
             object user = null;
 
-            // Retrieve the user (either Admin or VisitorAccount)
+            
             if (loginDto.IsAdmin)
             {
                 user = await _context.Admins.FirstOrDefaultAsync(a => a.Username == loginDto.Username.ToLower());
@@ -96,6 +96,14 @@ namespace AuthenticationServer.Services
                 return "Role not found";
             }
 
+            var hasVisitorId = false;
+
+            if (user is VisitorAccount visitorAccount)
+            {
+              
+                hasVisitorId = (visitorAccount.VisitorId != null);
+            }
+
             var jwtSecret = _configuration["JwtSettings:Secret"];
             var key = Encoding.UTF8.GetBytes(jwtSecret);
 
@@ -105,10 +113,11 @@ namespace AuthenticationServer.Services
             {
                 Subject = new ClaimsIdentity(
                     new[]
-                    {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-                new Claim(ClaimTypes.Role, role.Name)
-                    }
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                    new Claim(ClaimTypes.Role, role.Name),
+                    new Claim("HasVisitorId", hasVisitorId.ToString())
+        }
                 ),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(
