@@ -25,7 +25,7 @@ namespace ResourceServer.Controller
 
         [Authorize(Roles = "MasterAdmin")]
         [HttpPost]
-        public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDto dto)
+        public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDTO dto)
         {
             ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(dto);
 
@@ -58,7 +58,7 @@ namespace ResourceServer.Controller
                 }
 
 
-                return StatusCode(500, new { message = "An error occurred while creating the admin.", details = ex.Message });
+                return StatusCode(500, new { message = "An error occurred while creating the visitor account.", details = ex.Message });
             }
             
         }
@@ -74,7 +74,7 @@ namespace ResourceServer.Controller
 
         [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateVisitorAccount(Guid id, [FromBody] VisitorAccountDto visitorAccountDto)
+        public async Task<ActionResult> UpdateVisitorAccount(Guid id, [FromBody] VisitorAccountPutDTO visitorAccountDto)
         {
             ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(visitorAccountDto);
             if (visitorAccountValidationResult is BadRequestObjectResult)
@@ -102,15 +102,16 @@ namespace ResourceServer.Controller
                 }
 
 
-                return StatusCode(500, new { message = "An error occurred while creating the visitor account.", details = ex.Message });
+                return StatusCode(500, new { message = "An error occurred while updating the visitor account.", details = ex.Message });
             }
 
 
         }
 
-        private ActionResult ValidateVisitorAccountData(VisitorAccountDto visitorAccountDto)
+        private ActionResult ValidateVisitorAccountData(IVisitorAccountDTO visitorAccountDto)
         {
-            if (!UsernameRegex.IsMatch(visitorAccountDto.UserName))
+
+            if (!UsernameRegex.IsMatch(visitorAccountDto.Username))
             {
                 return BadRequest("Username must be at least 4 and at most 20 characters, and can only contain letters and numbers.");
             }

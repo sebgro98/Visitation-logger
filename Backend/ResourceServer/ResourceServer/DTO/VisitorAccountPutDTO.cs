@@ -3,11 +3,12 @@ using System.ComponentModel;
 
 namespace ResourceServer.DTO
 {
-    public class VisitorAccountDTO : IVisitorAccountDTO
+    public class VisitorAccountPutDTO : IVisitorAccountDTO
     {
-        [Required]
+        
         [StringLength(100, MinimumLength = 4)]
         [DefaultValue("jane.smith")]
+        [Required]
         public string Username { get; set; }
 
         public string? Password { get; set; }
@@ -16,7 +17,7 @@ namespace ResourceServer.DTO
 
         public DateTime EndDate { get; set; }
 
-        [DefaultValue("edb56ab7-8a8c-4ba3-af01-8671a8648833")]
+        [DefaultValue("edb56ab7-8a8c-4ba3-af01-8671a8648833")] 
         public Guid PurposeTypeId { get; set; }
 
         [DefaultValue("6de88bd3-40a5-4153-bbd8-83e54a51d7f6")]

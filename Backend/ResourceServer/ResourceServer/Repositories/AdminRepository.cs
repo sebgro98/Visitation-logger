@@ -70,7 +70,7 @@ namespace ResourceServer.Repositories
         }
 
 
-        public async Task<Admin> Update(Guid id, AdminDTO dto)
+        public async Task<Admin> Update(Guid id, AdminPutDTO dto)
         {
             try
             {
@@ -81,10 +81,13 @@ namespace ResourceServer.Repositories
                     return null;
                 }
 
-                var hashedPassword = Hasher.HashPassword(dto.Password);
+                if(dto.Password != null && dto.Password != "")
+                {
+                    var hashedPassword = Hasher.HashPassword(dto.Password);
+                    adminToBeUpdated.Password = hashedPassword;
+                }
 
                 adminToBeUpdated.Username = dto.Username.ToLower();
-                adminToBeUpdated.Password = hashedPassword;
                 adminToBeUpdated.AccountTypeId = dto.AccountTypeId;
                 adminToBeUpdated.NodeId = dto.NodeId;
                 adminToBeUpdated.FullName = dto.FullName;

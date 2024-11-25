@@ -20,6 +20,7 @@ namespace SharedModels.Models
         [StringLength(50, MinimumLength = 8)]
         [Required]
         [Column("password")]
+        [JsonIgnore]
         public string Password { get; set; }
 
         [Column("start_date")]
@@ -55,9 +56,11 @@ namespace SharedModels.Models
         public virtual Node Node { get; set; }
 
         [Column("failed_login_attempts")]
+        [JsonIgnore]
         public int FailedLoginAttempts { get; set; } = 0;
 
         [Column("lockout_end")]
+        [JsonIgnore]
         public DateTime? LockoutEnd { get; set; }
     }
 }
