@@ -3,7 +3,7 @@ import { createVisitorAccount } from "../../services/apiClient";
 
 const CreateVisitor = () => {
   const fields = {
-    username: "hasse",
+    username: "",
     password: "",
     startDate: "",
     endDate: "",
@@ -14,8 +14,7 @@ const CreateVisitor = () => {
   return (
     <HandleAccount
       accountType="visitor"
-      createAcchandleAccountAction
-      ount={createVisitorAccount}
+      handleAccountAction={createVisitorAccount}
       fields={fields}
     />
   );
