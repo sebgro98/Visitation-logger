@@ -209,7 +209,7 @@ const HandleAccount = ({
 
           <label htmlFor="password">Lösenord</label>
           <input
-            type="text"
+            type="password"
             id="password"
             value={account.password}
             onChange={handleInputChange}
@@ -220,7 +220,7 @@ const HandleAccount = ({
 
           <label htmlFor="confirmPassword">Bekräfta lösenord</label>
           <input
-            type="text"
+            type="password"
             id="confirmPassword"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
