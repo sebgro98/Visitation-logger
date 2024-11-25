@@ -9,6 +9,7 @@ const RoleSelection = () => {
   const [isAdminMode, setIsAdminMode] = useState(false);
   const {isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/dashboard");
