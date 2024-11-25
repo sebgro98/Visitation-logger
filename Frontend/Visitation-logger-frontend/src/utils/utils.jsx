@@ -139,7 +139,10 @@ export const validateAccount = (
       "Användarnamnet måste vara minst 4 och max 20 tecken får endast innehålla bokstäver och siffror, inga mellanslag.";
     valid = false;
   }
-  if (!isEditMode && !validatePassword(account.password)) {
+  if (
+    (isEditMode && account.password && !validatePassword(account.password)) ||
+    (!isEditMode && !validatePassword(account.password))
+  ) {
     newErrors.password =
       "Lösenordet måste vara minst 8 tecken, innehålla en versal, en gemen, en siffra och ett specialtecken";
     valid = false;
