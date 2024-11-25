@@ -89,41 +89,6 @@ export const prepareVisitorAccount = (account, accountTypes) => {
   return updatedAccount;
 };
 
-// Funktion för att generera kontoinformation för att visa i success-popup
-export const generateAccountInfo = (
-  account,
-  accountType,
-  nodes,
-  accountTypes,
-  purposeTypes
-) => {
-  const nodeName =
-    nodes.find((node) => node.id === account.nodeId)?.nodeName || "";
-  const accountTypeName =
-    accountTypes.find((type) => type.id === account.accountTypeId)?.name || "";
-  const purposeName =
-    purposeTypes.find((purpose) => purpose.id === account.purposeTypeId)
-      ?.name || "";
-
-  const accountInfo =
-    accountType === "visitor"
-      ? [
-          `Användarnamn:\n${account.username}\n`,
-          `Startdatum:\n${account.startDate}\n`,
-          `Slutdatum:\n${account.endDate}\n`,
-          `Syfte:\n${purposeName}\n`,
-          `Nod:\n${nodeName}`,
-        ]
-      : [
-          `Användarnamn:\n${account.username}\n`,
-          `Fullständigt namn:\n${account.fullName}\n`,
-          `Kontotyp:\n${accountTypeName}\n`,
-          `Nod:\n${nodeName}`,
-        ];
-
-  return accountInfo;
-};
-
 // Används för att validera kontouppgifter vid skapande av konto
 export const validateAccount = (
   account,
