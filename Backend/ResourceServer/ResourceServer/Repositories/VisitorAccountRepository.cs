@@ -4,12 +4,14 @@ using ResourceServer.Data;
 using ResourceServer.DTO;
 using SharedModels.Hasher;
 using SharedModels.Models;
+using System.Text.RegularExpressions;
 
 namespace ResourceServer.Repositories
 {
     public class VisitorAccountRepository : IVisitorAccountRepository
     {
         private readonly ApplicationDbContext _context;
+        private static readonly Regex PasswordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$");
 
         public VisitorAccountRepository(ApplicationDbContext context)
         {
@@ -81,6 +83,11 @@ namespace ResourceServer.Repositories
 
         public async Task<VisitorAccount> CreateVisitorAccount(VisitorAccountDto dto)
         {
+            if (!PasswordRegex.IsMatch(dto.Password))
+            {
+                return null;
+            }
+
             try
             {
                 var hashedPassword = Hasher.HashPassword(dto.Password);
