@@ -49,6 +49,30 @@ export const validateFullName = (fullName) => {
   return nameRegex.test(fullName);
 };
 
+// Funktion för att validera SSN/Personnummer
+export const validateSSN = (ssn) => {
+  const ssnRegex = /^\d{8}-\d{4}$/;
+  return ssnRegex.test(ssn);
+};
+
+// Funktion för att validera passnummer
+export const validatePassportNumber = (passportNumber) => {
+  const passportRegex = /^[A-Z0-9]{8,9}$/;
+  return passportRegex.test(passportNumber);
+};
+
+// Funktion för att validera företagsnamn
+export const validateCompanyName = (companyName) => {
+  const companyRegex = /^[a-zA-Z0-9@&\-_ ]{1,50}$/;
+  return companyRegex.test(companyName);
+};
+
+// Funktion för att validera stad
+export const validateTextField = (city) => {
+  const cityRegex = /^[a-zA-Z\s]{1,50}$/;
+  return cityRegex.test(city);
+};
+
 // Funktion för att trimma onödiga mellanslag från ett objekt
 export const trimObjectStrings = (obj) => {
   const trimmedObj = { ...obj };
