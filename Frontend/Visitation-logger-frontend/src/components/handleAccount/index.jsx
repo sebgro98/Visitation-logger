@@ -112,15 +112,9 @@ const HandleAccount = ({
           await handleAccountAction(accountData);
         }
 
-        const accountInfo = generateAccountInfo(
-          account,
-          accountType,
-          nodes,
-          accountTypes,
-          purposeTypes
+        setSuccessMessage(
+          isEditMode ? "Kontot har uppdaterats" : "Kontot har skapats"
         );
-
-        setSuccessMessage("Kontot har skapats\n\n" + accountInfo.join("\n"));
         setShowSuccess(true);
 
         // Återställ formuläret
