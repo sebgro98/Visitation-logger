@@ -1,11 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAddressCard, faUsersCog } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./roleSelection.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const RoleSelection = () => {
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const {isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [isLoggedIn]);
 
   return (
     <main>
