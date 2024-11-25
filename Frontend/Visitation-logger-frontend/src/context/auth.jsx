@@ -31,6 +31,8 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("token", res.token);
     setIsLoggedIn(true);
 
+    console.log("Token:", res.token);
+
     navigate("/dashboard");
   };
 

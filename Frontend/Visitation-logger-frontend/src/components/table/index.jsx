@@ -32,10 +32,10 @@ const Table = ({ headers, data, onRowClick = () => {} }) => {
         </thead>
         <tbody>
           {data &&
-            data.map((visitor, rowIndex) => (
+            data.map((acccount, rowIndex) => (
               <tr
                 key={rowIndex}
-                onClick={() => onRowClick(visitor)}
+                onClick={() => onRowClick(acccount)}
                 className={
                   onRowClick !== Table.defaultProps.onRowClick
                     ? "clickable-row"
@@ -43,7 +43,9 @@ const Table = ({ headers, data, onRowClick = () => {} }) => {
                 }
               >
                 {headers.map((header, colIndex) => (
-                  <td key={colIndex}>{extractValueFromRow(visitor, header)}</td>
+                  <td key={colIndex}>
+                    {extractValueFromRow(acccount, header)}
+                  </td>
                 ))}
               </tr>
             ))}

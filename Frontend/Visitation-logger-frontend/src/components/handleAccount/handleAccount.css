@@ -54,12 +54,10 @@
   width: 100%;
 }
 
-/* createaccount.css */
 .error-container {
   height: 15px;
 }
 
-/* createAdmin.css */
 .error {
   color: red;
   font-size: small;
