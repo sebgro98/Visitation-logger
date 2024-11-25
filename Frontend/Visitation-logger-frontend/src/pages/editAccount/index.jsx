@@ -26,6 +26,7 @@ const EditAccount = ({ isEditVisitorMode }) => {
             username: visitorAccount.username,
             startDate: formatDate(visitorAccount.startDate),
             endDate: formatDate(visitorAccount.endDate),
+            purposeTypeId: visitorAccount.purposeType.id,
             nodeId: visitorAccount.node.id,
           });
         } else {
