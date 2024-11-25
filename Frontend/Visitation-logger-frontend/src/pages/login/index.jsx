@@ -3,13 +3,20 @@ import "./login.css";
 import { faLock, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAuth from "../../hooks/useAuth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ isAdminMode }) => {
-  const { onLogin } = useAuth();
+  const { onLogin, isLoggedIn } = useAuth();
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({ username: "", password: "" });
-
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [isLoggedIn]);
+ 
   const onChange = (e) => {
     setError("");
     const { name, value } = e.target;
