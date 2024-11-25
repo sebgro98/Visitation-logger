@@ -103,6 +103,7 @@ namespace ResourceServer.Controller
 
         private ActionResult ValidateVisitorAccountData(IVisitorAccountDTO visitorAccountDto)
         {
+
             if (!UsernameRegex.IsMatch(visitorAccountDto.Username))
             {
                 return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");

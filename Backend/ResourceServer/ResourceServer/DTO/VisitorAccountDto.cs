@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
 namespace ResourceServer.DTO
@@ -10,10 +10,7 @@ namespace ResourceServer.DTO
         [DefaultValue("jane.smith")]
         public string Username { get; set; }
 
-        [StringLength(100, MinimumLength = 8)]
-        [Required]
-        [DefaultValue("Testpassword1!")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         public DateTime StartDate { get; set; }
 

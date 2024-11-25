@@ -5,9 +5,10 @@ namespace ResourceServer.DTO
 {
     public class VisitorAccountPutDTO : IVisitorAccountDTO
     {
-        [Required]
+        
         [StringLength(100, MinimumLength = 4)]
         [DefaultValue("jane.smith")]
+        [Required]
         public string Username { get; set; }
 
         public string? Password { get; set; }
