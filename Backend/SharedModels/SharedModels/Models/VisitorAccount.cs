@@ -41,7 +41,6 @@ namespace SharedModels.Models
         public Guid AccountTypeId { get; set; }
 
         public virtual AccountType AccountType { get; set; }
-
        
         [Column("purpose_type_id")]
         [JsonIgnore]
