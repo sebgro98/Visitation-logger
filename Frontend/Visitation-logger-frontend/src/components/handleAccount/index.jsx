@@ -33,7 +33,7 @@ const HandleAccount = ({
   const [errors, setErrors] = useState({});
   const [showSuccess, setShowSuccess] = useState(false); // För att visa popup
   const [successMessage, setSuccessMessage] = useState("");
-  const [account, setAccount] = useState({});
+  const [account, setAccount] = useState(fields);
 
   const fetchNodes = useCallback(async () => {
     try {
@@ -70,13 +70,6 @@ const HandleAccount = ({
   }, []);
 
   useEffect(() => {
-    if (isEditMode) {
-      // eslint-disable-next-line no-unused-vars
-      const { password, ...rest } = fields;
-      setAccount(rest);
-    } else {
-      setAccount(fields);
-    }
     fetchNodes();
     fetchAccountTypes();
     if (accountType === "visitor") {
