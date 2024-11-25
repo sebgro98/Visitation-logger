@@ -4,12 +4,14 @@ using ResourceServer.Data;
 using ResourceServer.DTO;
 using SharedModels.Hasher;
 using SharedModels.Models;
+using System.Text.RegularExpressions;
 
 namespace ResourceServer.Repositories
 {
     public class VisitorAccountRepository : IVisitorAccountRepository
     {
         private readonly ApplicationDbContext _context;
+        private static readonly Regex PasswordRegex = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$");
 
         public VisitorAccountRepository(ApplicationDbContext context)
         {
@@ -19,7 +21,7 @@ namespace ResourceServer.Repositories
         public async Task<IEnumerable<VisitorAccount>> GetAllVisitorAccounts()
         {
             return await _context
-                .VisitorAccounts.Include(v => v.Visitor) // Eagerly load the Visitor related entity
+                .VisitorAccounts.Include(v => v.Visitor)
                 .ToListAsync();
         }
 
@@ -28,7 +30,7 @@ namespace ResourceServer.Repositories
             return await _context.VisitorAccounts.FindAsync(id);
         }
 
-        public async Task<VisitorAccount> UpdateVisitorAccount(Guid id, VisitorAccountDto dto)
+        public async Task<VisitorAccount> UpdateVisitorAccount(Guid id, VisitorAccountPutDTO dto)
         {
             try
             {
@@ -39,11 +41,15 @@ namespace ResourceServer.Repositories
                     return null;
                 }
 
-                var hashedPassword = Hasher.HashPassword(dto.Password);
+                if(dto.Password != null && dto.Password != "")
+                {
+                    var hashedPassword = Hasher.HashPassword(dto.Password);
+                    visitorAccountToUpdate.Password = hashedPassword;
+                }
+                
 
                 visitorAccountToUpdate.PurposeTypeId = dto.PurposeTypeId;
-                visitorAccountToUpdate.Username = dto.UserName.ToLower();
-                visitorAccountToUpdate.Password = hashedPassword;
+                visitorAccountToUpdate.Username = dto.Username.ToLower();
                 visitorAccountToUpdate.StartDate = dto.StartDate;
                 visitorAccountToUpdate.EndDate = dto.EndDate;
                 visitorAccountToUpdate.VisitorId = dto.VisitorId;
@@ -65,7 +71,7 @@ namespace ResourceServer.Repositories
                 }
 
 
-                throw new Exception("An error occurred while creating the admin.", ex);
+                throw new Exception("An error occurred while updating the visitor Account.", ex);
             }
         }
 
@@ -79,8 +85,13 @@ namespace ResourceServer.Repositories
             }
         }
 
-        public async Task<VisitorAccount> CreateVisitorAccount(VisitorAccountDto dto)
+        public async Task<VisitorAccount> CreateVisitorAccount(VisitorAccountDTO dto)
         {
+            if (!PasswordRegex.IsMatch(dto.Password))
+            {
+                return null;
+            }
+
             try
             {
                 var hashedPassword = Hasher.HashPassword(dto.Password);
@@ -88,7 +99,7 @@ namespace ResourceServer.Repositories
                 var visitorAccount = new VisitorAccount
                 {
                     Id = Guid.NewGuid(),
-                    Username = dto.UserName.ToLower(),
+                    Username = dto.Username.ToLower(),
                     Password = hashedPassword,
                     StartDate = dto.StartDate,
                     EndDate = dto.EndDate,
@@ -112,7 +123,7 @@ namespace ResourceServer.Repositories
                 }
 
 
-                throw new Exception("An error occurred while creating the admin.", ex);
+                throw new Exception("An error occurred while creating the visitor account.", ex);
             }
 
         }

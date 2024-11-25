@@ -22,7 +22,9 @@ export const extractValueFromRow = (row, header) => {
     case "checkInTime":
       return row.checkInTime ? new Date(row.checkInTime).toLocaleString() : "";
     case "checkOutTime":
-      return row.checkOutTime ? new Date(row.checkOutTime).toLocaleString() : "";
+      return row.checkOutTime
+        ? new Date(row.checkOutTime).toLocaleString()
+        : "";
     default:
       return row[header] || "";
   }
@@ -87,43 +89,13 @@ export const prepareVisitorAccount = (account, accountTypes) => {
   return updatedAccount;
 };
 
-// Funktion för att generera kontoinformation för att visa i success-popup
-export const generateAccountInfo = (
-  account,
-  accountType,
-  nodes,
-  accountTypes,
-  purposeTypes
-) => {
-  const nodeName =
-    nodes.find((node) => node.id === account.nodeId)?.nodeName || "";
-  const accountTypeName =
-    accountTypes.find((type) => type.id === account.accountTypeId)?.name || "";
-  const purposeName =
-    purposeTypes.find((purpose) => purpose.id === account.purposeTypeId)
-      ?.name || "";
-
-  const accountInfo =
-    accountType === "visitor"
-      ? [
-          `Användarnamn:\n${account.username}\n`,
-          `Startdatum:\n${account.startDate}\n`,
-          `Slutdatum:\n${account.endDate}\n`,
-          `Syfte:\n${purposeName}\n`,
-          `Nod:\n${nodeName}`,
-        ]
-      : [
-          `Användarnamn:\n${account.username}\n`,
-          `Fullständigt namn:\n${account.fullName}\n`,
-          `Kontotyp:\n${accountTypeName}\n`,
-          `Nod:\n${nodeName}`,
-        ];
-
-  return accountInfo;
-};
-
 // Används för att validera kontouppgifter vid skapande av konto
-export const validateAccount = (account, confirmPassword, accountType) => {
+export const validateAccount = (
+  account,
+  confirmPassword,
+  accountType,
+  isEditMode
+) => {
   const newErrors = {};
   let valid = true;
 
@@ -132,12 +104,15 @@ export const validateAccount = (account, confirmPassword, accountType) => {
       "Användarnamnet måste vara minst 4 och max 20 tecken får endast innehålla bokstäver och siffror, inga mellanslag.";
     valid = false;
   }
-  if (!validatePassword(account.password)) {
+  if (
+    (isEditMode && account.password && !validatePassword(account.password)) ||
+    (!isEditMode && !validatePassword(account.password))
+  ) {
     newErrors.password =
       "Lösenordet måste vara minst 8 tecken, innehålla en versal, en gemen, en siffra och ett specialtecken";
     valid = false;
   }
-  if (account.password !== confirmPassword) {
+  if (!isEditMode && account.password !== confirmPassword) {
     newErrors.confirmPassword = "Lösenorden matchar inte";
     valid = false;
   }
@@ -146,7 +121,10 @@ export const validateAccount = (account, confirmPassword, accountType) => {
       newErrors.startDate = "Vänligen välj ett startdatum.";
       valid = false;
     } else {
-      if (account.startDate < new Date().toISOString().split("T")[0]) {
+      if (
+        !isEditMode &&
+        account.startDate < new Date().toISOString().split("T")[0]
+      ) {
         newErrors.startDate =
           "Startdatumet kan inte vara tidigare än dagens datum.";
         valid = false;

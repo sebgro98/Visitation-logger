@@ -56,9 +56,10 @@ const AccountManagement = ({ isVisitor }) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleRowClick = (visitor) => {
-    console.log("Row clicked:", visitor);
-    // Här ska vi senare navigera till editera/radera sidan för det valda besökarkontot
+  const handleRowClick = (account) => {
+    navigate(
+      isVisitor ? `/edit-visitor/${account.id}` : `/edit-admin/${account.id}`
+    );
   };
 
   const filteredData = data.filter((item) =>

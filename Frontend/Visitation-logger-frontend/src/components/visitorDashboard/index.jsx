@@ -13,7 +13,7 @@ const VisitorDashboard = () => {
           to="/dashboard"
           onClick={() => console.log("Länken till checka in har klickats!")}
           icons={[faUserPlus]}
-          title="Check in besökare"
+          title="Checka in besökare"
           info="Klicka på ikonen ovan för att checka in. Är det första gången du checkar in var vänlig fyll i besöksformuläret"
         />
         <DashboardAction

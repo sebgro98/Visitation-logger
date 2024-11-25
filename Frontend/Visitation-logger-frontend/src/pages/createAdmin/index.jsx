@@ -1,4 +1,4 @@
-import CreateAccount from "../../components/createAccount";
+import HandleAccount from "../../components/handleAccount";
 import { createAdminAccount } from "../../services/apiClient";
 
 const CreateAdmin = () => {
@@ -11,9 +11,9 @@ const CreateAdmin = () => {
   };
 
   return (
-    <CreateAccount
+    <HandleAccount
       accountType="admin"
-      createAccount={createAdminAccount}
+      handleAccountAction={createAdminAccount}
       fields={fields}
     />
   );

@@ -26,6 +26,7 @@ namespace ResourceServer.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateAdmin([FromBody] AdminDTO dto)
         {
+            
             ActionResult adminValidationResult = ValidateAdminData(dto);
             if(adminValidationResult is BadRequestObjectResult)
             {
@@ -35,6 +36,11 @@ namespace ResourceServer.Controllers
             try
             {
                 var createdAdmin = await _adminRepository.Create(dto);
+
+                if(createdAdmin == null)
+                {
+                    return BadRequest("Password must contain at least one uppercase letter, one lowercase letter, one digit and one special character.");
+                }
 
                 return Ok(createdAdmin);
             }
@@ -73,7 +79,7 @@ namespace ResourceServer.Controllers
         
         [Authorize(Roles = "MasterAdmin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminDTO dto)
+        public async Task<ActionResult<Admin>> UpdateAdmin(Guid id, AdminPutDTO dto)
         {
             ActionResult adminValidationResult = ValidateAdminData(dto);
             if (adminValidationResult is BadRequestObjectResult)
@@ -100,7 +106,7 @@ namespace ResourceServer.Controllers
                     return Conflict(new { message = ex.Message });
                 }
 
-                return StatusCode(500, new { message = "An error occurred while creating the admin.", details = ex.Message });
+                return StatusCode(500, new { message = "An error occurred while updating the admin.", details = ex.Message });
 
             }
         }
@@ -127,12 +133,11 @@ namespace ResourceServer.Controllers
             return Ok();
         }
         
-        [Authorize(Roles = "MasterAdmin")]
-        private ActionResult ValidateAdminData(AdminDTO adminDto)
+        private ActionResult ValidateAdminData(IAdminDTO adminDto)
         {
             if (!UsernameRegex.IsMatch(adminDto.Username))
             {
-                return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
+                return BadRequest("Username must be at least 4 and at most 20 characters, and can only contain letters and numbers.");
             }
             if (!FullnameRegex.IsMatch(adminDto.FullName)){
                 return BadRequest("Full name can only contain letters.");
