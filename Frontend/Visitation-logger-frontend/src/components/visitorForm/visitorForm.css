@@ -1,0 +1,34 @@
+.visitor-form-main {
+  display: flex;
+  justify-content: center;
+  margin: 30px 60px; /* Ta bort standardmarginalen */
+}
+
+.visitor-form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  background-color: #f5f5f5;
+}
+
+.visitor-form-button {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  width: 100%;
+}
+
+.error-container {
+  height: 15px;
+}
+
+.error {
+  color: red;
+  font-size: small;
+  margin: 0;
+  height: 15px;
+}
