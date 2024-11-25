@@ -9,6 +9,7 @@ import {
 } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import LoadingCircle from "../../components/loadingCircle";
+import { formatDate } from "../../utils/utils";
 
 const EditAccount = ({ isEditVisitorMode }) => {
   const [fields, setFields] = useState({});
@@ -20,14 +21,16 @@ const EditAccount = ({ isEditVisitorMode }) => {
       try {
         if (isEditVisitorMode) {
           const visitorAccount = await getVisitorAccountById(id);
+          console.log("Visitor account:", visitorAccount);
           setFields({
             username: visitorAccount.username,
-            startDate: visitorAccount.startDate,
-            endDate: visitorAccount.endDate,
+            startDate: formatDate(visitorAccount.startDate),
+            endDate: formatDate(visitorAccount.endDate),
             nodeId: visitorAccount.node.id,
           });
         } else {
           const adminAccount = await getAdminAccountById(id);
+          console.log("Admin account:", adminAccount);
           setFields({
             username: adminAccount.username,
             fullName: adminAccount.fullName,
