@@ -93,6 +93,18 @@ const Logs = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const applyFilter = async () => {
+    try {
+      const data = await getStatusByPage(filter);
+      setLogs(data.statusList);
+      setNumberOfPages(data.totalNumberOfPages);
+      setNumberOfElements(data.totalNumberOfElements);
+      toggleModal();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
   return (
     <>
 
@@ -120,9 +132,51 @@ const Logs = () => {
             disabled={currentPage === numberOfPages}
           />
       </div>
-      <Modal isOpen={isModalOpen} onClose={toggleModal}>
-          <h2>Filterera Loggarna</h2>
-          <p>This is where you can add text fields or date pickers.</p>
+        <Modal isOpen={isModalOpen} onClose={toggleModal}>
+          <div className="logsPage-filter-body">
+            <h2>Filterera loggarna</h2>
+            <input
+              className="logsPage-filter-visitorName"
+              type="text"
+              placeholder="Besökare"
+              onChange={e => setFilter({ ...filter, visitorName: e.target.value })}
+              />
+            <input
+              className="logsPage-filter-visitorId"
+              type="text"
+              placeholder="BesökarId"
+              onChange={e => setFilter({ ...filter, visitorId: e.target.value })}
+              />
+            <input
+              className="logsPage-filter-purpose"
+              type="text"
+              placeholder="Besöksbeskrivning"
+              onChange={e => setFilter({ ...filter, purposeName: e.target.value })}
+              />
+            <input
+              className="logsPage-filter-node"
+              type="text"
+              placeholder="Nod"
+              onChange={e => setFilter({ ...filter, node: e.target.value })}
+              />
+            <div className="logsPage-filter-dates">
+                <input
+                  type="date"
+                  placeholder="Incheckning"
+                  onChange={e => setFilter({ ...filter, checkInTime: e.target.value })}
+                  />
+                <input
+                  type="date"
+                  placeholder="Utcheckning"
+                  onChange={e => setFilter({ ...filter, checkOutTime: e.target.value })}
+                  />
+              </div>
+            </div>
+          <br></br>
+          <div className="logsPage-filter-footer">
+            <Button label={"Filtrera"} onClick={applyFilter} />
+            <Button label={"Rensa"} onClick={() => setFilter({ ...filter, visitorName: "", visitorId: "", purposeName: "", node: "", checkInTime: "", checkOutTime: "" })} /> 
+          </div>
         </Modal>
     </>
   );

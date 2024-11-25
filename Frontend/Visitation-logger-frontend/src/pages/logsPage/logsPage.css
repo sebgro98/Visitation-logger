@@ -11,3 +11,43 @@
   margin-top: 20px;
   gap: 20px;
 }
+
+.logsPage-filter-body input {
+  width: 100%;
+  margin: 10px;
+  max-width: 400px;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logsPage-filter-body input:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+  outline: none;
+}
+
+.logsPage-filter-body input::placeholder {
+  color: #aaa;
+}
+
+.logsPage-filter-dates input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  /* Add shared styles above to ensure consistency */
+}
+
+.logsPage-filter-dates input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.logsPage-filter-footer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
