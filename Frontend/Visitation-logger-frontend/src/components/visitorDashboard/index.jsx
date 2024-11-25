@@ -1,35 +1,8 @@
-import { useEffect } from "react";
 import DashboardAction from "../dashboardAction";
 import DashboardHeader from "../dashboardHeader";
 import { faUserPlus, faUserTimes } from "@fortawesome/free-solid-svg-icons";
 
-import jwt_decode from "jwt-decode";
-import { getVisitorAccountById } from "../../services/apiClient";
-import { useNavigate } from "react-router-dom";
 const VisitorDashboard = () => {
-  const { token } = localStorage;
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    /*     try {
-      const visitorProfile = getVisitorAccountById(nameid);
-      console.log("Visitor profile", visitorProfile);
-    } catch (error) {
-      console.error("Error parsing visitor data", error);
-    } */
-  }, []);
-
-  const handleClick = () => {
-    console.log("Token:", token);
-    if (token) {
-      console.log("Navigating to /visitor-form");
-      navigate("/visitor-form");
-    } else {
-      console.log("Navigating to /dashboard");
-      navigate("/dashboard");
-    }
-  };
-
   return (
     <>
       <DashboardHeader
