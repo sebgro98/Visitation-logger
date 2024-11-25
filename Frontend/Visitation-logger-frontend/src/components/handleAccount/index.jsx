@@ -265,11 +265,9 @@ const HandleAccount = ({
                 value={account.purposeTypeId}
                 onChange={handleInputChange}
               >
-                {isEditMode ? null : (
-                  <option value="" disabled hidden>
-                    -- Välj syfte --
-                  </option>
-                )}
+                <option value="" disabled hidden>
+                  -- Välj syfte --
+                </option>
                 {purposeTypes.map((purpose) => (
                   <option key={purpose.id} value={purpose.id}>
                     {purpose.name}
