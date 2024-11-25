@@ -213,7 +213,6 @@ const HandleAccount = ({
             id="password"
             value={account.password}
             onChange={handleInputChange}
-            disabled={isEditMode}
           />
           <div className="error-container">
             {errors.password && <p className="error">{errors.password}</p>}
@@ -225,7 +224,6 @@ const HandleAccount = ({
             id="confirmPassword"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
-            disabled={isEditMode}
           />
           <div className="error-container">
             {errors.confirmPassword && (
