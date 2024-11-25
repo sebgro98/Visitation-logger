@@ -1,10 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResourceServer.DTO;
 using ResourceServer.Repositories;
 using SharedModels.Models;
-using Microsoft.AspNetCore.Authorization;
-
 
 namespace ResourceServer.Controllers
 {
@@ -60,7 +59,7 @@ namespace ResourceServer.Controllers
 
                 filteredStatuses = filteredStatuses.Where(status =>
                     status.CheckInTime >= checkInTimeUtc
-                    && !string.IsNullOrEmpty(status.CheckInSign)
+                    // && !string.IsNullOrEmpty(status.CheckInSign)
                 );
             }
 
@@ -78,7 +77,28 @@ namespace ResourceServer.Controllers
 
                 filteredStatuses = filteredStatuses.Where(status =>
                     status.CheckOutTime >= checkOutTimeUtc
-                    && !string.IsNullOrEmpty(status.CheckInSign)
+                    // && !string.IsNullOrEmpty(status.CheckInSign)
+                );
+            }
+
+            if (!string.IsNullOrEmpty(dto.VisitorName))
+            {
+                filteredStatuses = filteredStatuses.Where(status =>
+                    status.VisitorAccount.Visitor.FullName == dto.VisitorName
+                );
+            }
+
+            if (dto.VisitorId != null)
+            {
+                filteredStatuses = filteredStatuses.Where(status =>
+                    status.VisitorAccount.Visitor.Id == dto.VisitorId
+                );
+            }
+
+            if (!string.IsNullOrEmpty(dto.PurposeName))
+            {
+                filteredStatuses = filteredStatuses.Where(status =>
+                    status.VisitorAccount.PurposeType.Name == dto.PurposeName
                 );
             }
 
