@@ -28,7 +28,8 @@ namespace ResourceServer.Controller
         public async Task<IActionResult> CreateVisitorAccount([FromBody] VisitorAccountDTO dto)
         {
             ActionResult visitorAccountValidationResult = ValidateVisitorAccountData(dto);
-            if(visitorAccountValidationResult is BadRequestObjectResult)
+
+            if (visitorAccountValidationResult is BadRequestObjectResult)
             {
                 return visitorAccountValidationResult;
             }
@@ -41,6 +42,12 @@ namespace ResourceServer.Controller
                 }
 
                 var visitorAccount = await _visitorAccountRepository.CreateVisitorAccount(dto);
+
+                if (visitorAccount == null)
+                {
+                    return BadRequest("Password must contain at least one uppercase letter, one lowercase letter, one digit and one special character.");
+                }
+
                 return Ok(visitorAccount);
             }
             catch (Exception ex)
@@ -106,7 +113,7 @@ namespace ResourceServer.Controller
 
             if (!UsernameRegex.IsMatch(visitorAccountDto.Username))
             {
-                return BadRequest("Username must be at least 4 and at most 50 characters, and can only contain letters, numbers, periods and at signs.");
+                return BadRequest("Username must be at least 4 and at most 20 characters, and can only contain letters and numbers.");
             }
             if (DateTime.Compare(visitorAccountDto.StartDate, visitorAccountDto.EndDate) > 0 && DateTime.Compare(visitorAccountDto.StartDate, DateTime.Today) <= 0)
             {
