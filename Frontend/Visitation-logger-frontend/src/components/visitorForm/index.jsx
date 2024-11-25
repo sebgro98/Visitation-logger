@@ -12,7 +12,7 @@ import {
   validateSSN,
   validateTextField,
 } from "../../utils/utils";
-import { createVisitor } from "../../services/apiClient";
+import { createVisitor, updateVisitorAccount } from "../../services/apiClient";
 
 const VisitorForm = () => {
   const navigate = useNavigate();
@@ -21,8 +21,8 @@ const VisitorForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     ssn: "",
-    nationality: "",
-    passportNumber: "",
+    countryName: "",
+    passportNo: "",
     company: "",
     city: "",
   });
@@ -91,12 +91,12 @@ const VisitorForm = () => {
       newErrors.ssn = "Personnumret måste vara i formatet ÅÅÅÅMMDD-XXXX";
       isValid = false;
     }
-    if (!validateTextField(formData.nationality)) {
+    if (!validateTextField(formData.countryName)) {
       newErrors.nationality =
         "Nationalitet får endast innehålla bokstäver och vara max 50 tecken långt";
       isValid = false;
     }
-    if (!validatePassportNumber(formData.passportNumber)) {
+    if (!validatePassportNumber(formData.passportNo)) {
       newErrors.passportNumber =
         "Passnummer måste vara 8-9 tecken långt och får endast innehålla bokstäver och siffror";
       isValid = false;
@@ -118,6 +118,12 @@ const VisitorForm = () => {
       try {
         // Skicka formulärdata till API eller hantera det på något sätt
         const visitor = await createVisitor(formData);
+        const visitorId = visitor.id;
+        if (visitorId) {
+          const visitorAccount = await updateVisitorAccount(userId, visitorId);
+          console.log("Visitor account updated:", visitorAccount);
+        }
+
         console.log("Visitor created:", visitor);
         setSuccessMessage("Formuläret har skickats");
         setShowSuccess(true);
@@ -126,8 +132,8 @@ const VisitorForm = () => {
         setFormData({
           fullName: "",
           ssn: "",
-          nationality: "",
-          passportNumber: "",
+          countryName: "",
+          passportNo: "",
           company: "",
           city: "",
         });
@@ -174,24 +180,24 @@ const VisitorForm = () => {
             {errors.ssn && <p className="error">{errors.ssn}</p>}
           </div>
 
-          <label htmlFor="nationality">Nationalitet</label>
+          <label htmlFor="countryName">Nationalitet</label>
           <input
             type="text"
-            id="nationality"
-            value={formData.national}
+            id="countryName"
+            value={formData.countryName}
             onChange={handleInputChange}
           />
           <div className="error-container">
-            {errors.nationality && (
-              <p className="error">{errors.nationality}</p>
+            {errors.countryName && (
+              <p className="error">{errors.countryName}</p>
             )}
           </div>
 
-          <label htmlFor="passportNumber">Passnummer</label>
+          <label htmlFor="passportNo">Passnummer</label>
           <input
             type="text"
-            id="passportNumber"
-            value={formData.passportNumber}
+            id="passportNo"
+            value={formData.passportNo}
             onChange={handleInputChange}
           />
           <div className="error-container">
