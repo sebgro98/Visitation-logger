@@ -98,10 +98,10 @@ namespace AuthenticationServer.Services
 
             var hasVisitorId = false;
 
-            if (user is VisitorAccount visitorAccount)
+            if (user is VisitorAccount visitorAccount1)
             {
               
-                hasVisitorId = (visitorAccount.VisitorId != null);
+                hasVisitorId = (visitorAccount1.VisitorId != null);
             }
 
             var jwtSecret = _configuration["JwtSettings:Secret"];

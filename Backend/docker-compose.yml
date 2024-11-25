@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  resource-server:
+    build:
+      context: ./ResourceServer/ResourceServer  # Directory where your ResourceServer Dockerfile is located
+      dockerfile: Dockerfile            # Use the Dockerfile in this directory
+    volumes:
+      - ./SharedModels:/app/SharedModels  # Ensure the SharedModels directory is available in the container
+    ports:
+      - "8080:80"  # Expose port 80 inside the container as port 8080 on your machine
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development  # Optional: Set environment variables for the container
+
+  # You can define other services here, such as a database or other backend services, if needed
