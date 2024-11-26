@@ -114,7 +114,17 @@ namespace ResourceServer.Controller
                 return StatusCode(500, new { message = "An error occurred while updating the visitor account.", details = ex.Message });
             }
 
+        }
 
+        [Authorize(Roles = "MasterAdmin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteVisitorAccount(Guid id)
+        {
+            if(await _visitorAccountRepository.DeleteVisitorAccount(id))
+            {
+                return Ok();
+            }
+            return NotFound("No such visitor account.");
         }
 
         private ActionResult ValidateVisitorAccountData(IVisitorAccountDTO visitorAccountDto)
