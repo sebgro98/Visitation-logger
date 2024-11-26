@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Button from "../button";
-import SuccessPopup from "../successPopup";
+import Button from "../../components/button";
+import SuccessPopup from "../../components/successPopup";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import "./visitorForm.css";
@@ -11,13 +11,13 @@ import {
   validatePassportNumber,
   validateSSN,
   validateTextField,
+  validateVisitor,
 } from "../../utils/utils";
-import { createVisitor, updateVisitorAccount } from "../../services/apiClient";
+import { createVisitor, getAllCountries } from "../../services/apiClient";
 
 const VisitorForm = () => {
   const navigate = useNavigate();
-  const [hasVisitorId, setHasVisitorId] = useState(false);
-  const [userId, setUserId] = useState("");
+  const [countries, setCountries] = useState([]);
   const [formData, setFormData] = useState({
     fullName: "",
     ssn: "",
@@ -30,15 +30,22 @@ const VisitorForm = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
+  const fetchCountries = async () => {
+    try {
+      const response = await getAllCountries();
+      setCountries(response);
+    } catch (error) {
+      console.error("Error fetching countries:", error);
+    }
+  };
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const decryptedToken = jwt_decode(storedToken);
-    const hasVisitorId = decryptedToken.HasVisitorId === "True";
-    setHasVisitorId(hasVisitorId);
+    const userId = decryptedToken.nameid;
+    formData.visitorAccountId = userId;
 
-    if (hasVisitorId) {
-      setUserId(decryptedToken.userId);
-    }
+    fetchCountries();
   }, []);
 
   const handleInputChange = (e) => {
@@ -79,54 +86,14 @@ const VisitorForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validering
-    const newErrors = {};
-    let isValid = true;
-    if (!validateFullName(formData.fullName)) {
-      newErrors.fullName =
-        "Användarnamnet måste vara minst 4 och max 20 tecken får endast innehålla bokstäver och siffror, inga mellanslag.";
-      isValid = false;
-    }
-    if (!validateSSN(formData.ssn)) {
-      newErrors.ssn = "Personnumret måste vara i formatet ÅÅÅÅMMDD-XXXX";
-      isValid = false;
-    }
-    if (!validateTextField(formData.countryName)) {
-      newErrors.nationality =
-        "Nationalitet får endast innehålla bokstäver och vara max 50 tecken långt";
-      isValid = false;
-    }
-    if (!validatePassportNumber(formData.passportNo)) {
-      newErrors.passportNumber =
-        "Passnummer måste vara 8-9 tecken långt och får endast innehålla bokstäver och siffror";
-      isValid = false;
-    }
-    if (!validateCompanyName(formData.company)) {
-      newErrors.company =
-        "Företagsnamnet får endast innehålla bokstäver och siffror och vara max 50 tecken långt";
-      isValid = false;
-    }
-    if (!validateTextField(formData.city)) {
-      newErrors.city =
-        "Stad får endast innehålla bokstäver och vara max 50 tecken långt";
-      isValid = false;
-    }
-
+    const { isValid, newErrors } = validateVisitor(formData);
     setErrors(newErrors);
 
     if (isValid) {
       try {
         // Skicka formulärdata till API eller hantera det på något sätt
         const visitor = await createVisitor(formData);
-        const visitorId = visitor.id;
-        if (visitorId) {
-          const visitorAccount = await updateVisitorAccount(userId, visitorId);
-          console.log("Visitor account updated:", visitorAccount);
-        }
-
         console.log("Visitor created:", visitor);
-        setSuccessMessage("Formuläret har skickats");
-        setShowSuccess(true);
 
         // Återställ formuläret
         setFormData({
@@ -137,20 +104,15 @@ const VisitorForm = () => {
           company: "",
           city: "",
         });
+
+        // Visa framgångsmeddelande
+        setSuccessMessage("Användare har checkats in!");
+        setShowSuccess(true);
       } catch (error) {
         console.error("Error submitting form:", error);
       }
     }
   };
-
-  if (hasVisitorId) {
-    return (
-      <div className="visitor-form-container">
-        <h1>Visitor Form</h1>
-        <p>Welcome</p>
-      </div>
-    );
-  }
 
   return (
     <main className="visitor-form-main">
@@ -181,12 +143,20 @@ const VisitorForm = () => {
           </div>
 
           <label htmlFor="countryName">Nationalitet</label>
-          <input
-            type="text"
+          <select
             id="countryName"
             value={formData.countryName}
             onChange={handleInputChange}
-          />
+          >
+            <option value="" hidden disabled>
+              --Välj land--
+            </option>
+            {countries.map((country) => (
+              <option key={country.id} value={country.countryName}>
+                {country.countryName}
+              </option>
+            ))}
+          </select>
           <div className="error-container">
             {errors.countryName && (
               <p className="error">{errors.countryName}</p>
