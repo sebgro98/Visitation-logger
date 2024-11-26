@@ -158,29 +158,55 @@ namespace ResourceServer.Controllers
         }
 
         [Authorize(Roles = "Visitor")]
-        [HttpGet("{visitorId}/checkin-status")]
-        public async Task<IActionResult> GetCheckInStatus(Guid VisitorAccountId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Visitor>> GetVisitorById(Guid id)
         {
-            Status latestStatus = await _statusRepository.GetCheckInStatus(VisitorAccountId);
+            var visitor = await _statusRepository.GetStatusById(id);
 
-            if (latestStatus == null)
+            if (visitor == null)
             {
                 return NotFound();
             }
 
-            if (latestStatus != null && latestStatus.CheckInTime.Date == DateTime.UtcNow.Date)
-            {
-                return Ok(
-                    new
-                    {
-                        CheckedInToday = true,
-                        StatusId = latestStatus.Id,
-                        CheckInTime = latestStatus.CheckInTime
-                    }
-                );
-            }
+            return Ok(visitor);
+        }
 
-            return Ok(new { CheckedInToday = false });
+
+        [Authorize(Roles = "Visitor")]
+        [HttpGet("{id}/checkin-status")]
+        public async Task<IActionResult> GetCheckInStatus(Guid id)
+        {
+           
+            try
+            {
+            Status latestStatus = await _statusRepository.GetCheckInStatus(id);
+                if (latestStatus == null)
+                {
+                    return Ok(
+                         new
+                         {
+                             CheckedInToday = false
+                         }
+                     );
+                }
+
+                if (latestStatus != null && latestStatus.CheckInTime.Date == DateTime.UtcNow.Date)
+                {
+                    return Ok(
+                        new
+                        {
+                            CheckedInToday = true,
+                            StatusId = latestStatus.Id,
+                            CheckInTime = latestStatus.CheckInTime
+                        }
+                    );
+                }
+                return Ok(new { CheckedInToday = false });
+            } catch (KeyNotFoundException e)
+            {
+                return NotFound(new { message = e.Message });
+            }
+           
         }
     }
 }
