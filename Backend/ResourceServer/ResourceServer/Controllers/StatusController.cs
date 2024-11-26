@@ -40,9 +40,11 @@ namespace ResourceServer.Controllers
             var filteredStatuses = _statusRepository.GetAllStatusesForFiltering();
 
             //Filtering
-            if (dto.NodeId != null)
+            if (!string.IsNullOrEmpty(dto.NodeId))
             {
-                filteredStatuses = filteredStatuses.Where(status => status.NodeId == dto.NodeId);
+                filteredStatuses = filteredStatuses.Where(status =>
+                    status.NodeId.ToString().Contains(dto.NodeId)
+                );
             }
 
             if (
@@ -59,7 +61,7 @@ namespace ResourceServer.Controllers
 
                 filteredStatuses = filteredStatuses.Where(status =>
                     status.CheckInTime >= checkInTimeUtc
-                    // && !string.IsNullOrEmpty(status.CheckInSign)
+                // && !string.IsNullOrEmpty(status.CheckInSign)
                 );
             }
 
@@ -77,28 +79,32 @@ namespace ResourceServer.Controllers
 
                 filteredStatuses = filteredStatuses.Where(status =>
                     status.CheckOutTime >= checkOutTimeUtc
-                    // && !string.IsNullOrEmpty(status.CheckInSign)
+                // && !string.IsNullOrEmpty(status.CheckInSign)
                 );
             }
 
             if (!string.IsNullOrEmpty(dto.VisitorName))
             {
                 filteredStatuses = filteredStatuses.Where(status =>
-                    status.VisitorAccount.Visitor.FullName == dto.VisitorName
+                    status
+                        .VisitorAccount.Visitor.FullName.ToLower()
+                        .Contains(dto.VisitorName.ToLower())
                 );
             }
 
-            if (dto.VisitorId != null)
+            if (!string.IsNullOrEmpty(dto.VisitorId))
             {
                 filteredStatuses = filteredStatuses.Where(status =>
-                    status.VisitorAccount.Visitor.Id == dto.VisitorId
+                    status.VisitorAccount.Visitor.Id.ToString().Contains(dto.VisitorId)
                 );
             }
 
             if (!string.IsNullOrEmpty(dto.PurposeName))
             {
                 filteredStatuses = filteredStatuses.Where(status =>
-                    status.VisitorAccount.PurposeType.Name == dto.PurposeName
+                    status
+                        .VisitorAccount.PurposeType.Name.ToLower()
+                        .Contains(dto.PurposeName.ToLower())
                 );
             }
 
