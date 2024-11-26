@@ -10,7 +10,7 @@ import {
   validatePassword,
   validateUsername,
 } from "../../utils/utils";
-import SuccessPopup from "../successPopup";
+import Popup from "../popup";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getAllAccountTypes,
@@ -326,7 +326,7 @@ const HandleAccount = ({
           </div>
         </form>
         {showSuccess && (
-          <SuccessPopup
+          <Popup
             message={successMessage}
             onClose={() => {
               setShowSuccess(false);
