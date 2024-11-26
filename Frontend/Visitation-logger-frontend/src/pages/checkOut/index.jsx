@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import VisitorForm from "../visitorForm";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import SuccessPopup from "../../components/successPopup";
+import Popup from "../../components/popup";
 import {
   createCheckOutStatus,
   getCheckInStatus,
@@ -84,19 +84,19 @@ const CheckOut = () => {
   return (
     <>
       {!hasCheckedInToday ? (
-        <SuccessPopup
+        <Popup
           message="Användare har inte checkat in idag!"
           onClose={() => {
             navigate("/dashboard");
           }}
         />
       ) : isAllreadyCheckedOut ? (
-        <SuccessPopup
+        <Popup
           message="Användare har redan checkats ut idag!"
           onClose={async () => navigate("/dashboard")}
         />
       ) : (
-        <SuccessPopup
+        <Popup
           message="Användare har checkats ut!"
           onClose={async () => {
             const status = createStatus();
