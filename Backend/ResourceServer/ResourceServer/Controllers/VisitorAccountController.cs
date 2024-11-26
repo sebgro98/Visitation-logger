@@ -72,7 +72,7 @@ namespace ResourceServer.Controller
             return Ok(visitorAccounts);
         }
 
-        [Authorize(Roles = "MasterAdmin")]
+        [Authorize(Roles = "MasterAdmin, Visitor")]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetVisitorAccountsById(Guid id)
         {
