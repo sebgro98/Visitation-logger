@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Button from "../../components/button";
-import SuccessPopup from "../../components/successPopup";
+import Popup from "../../components/popup";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import "./visitorForm.css";
@@ -106,7 +106,9 @@ const VisitorForm = () => {
         });
 
         // Visa framgångsmeddelande
-        setSuccessMessage("Användare har checkats in!");
+        setSuccessMessage(
+          "Besökarens profil har skapats. Var vänlig checka in besökaren."
+        );
         setShowSuccess(true);
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -203,9 +205,9 @@ const VisitorForm = () => {
           </div>
         </form>
         {showSuccess && (
-          <SuccessPopup
+          <Popup
             message={successMessage}
-            onClose={() => {
+            onClose={async () => {
               setShowSuccess(false);
               setSuccessMessage("");
               navigate("/dashboard");
