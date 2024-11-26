@@ -1,6 +1,7 @@
 import DashboardAction from "../dashboardAction";
 import DashboardHeader from "../dashboardHeader";
 import { faUserPlus, faUserTimes } from "@fortawesome/free-solid-svg-icons";
+
 const VisitorDashboard = () => {
   return (
     <>
@@ -10,15 +11,13 @@ const VisitorDashboard = () => {
       />
       <div className="dashboard-actions">
         <DashboardAction
-          to="/dashboard"
-          onClick={() => console.log("Länken till checka in har klickats!")}
+          to="/check-in"
           icons={[faUserPlus]}
           title="Checka in besökare"
           info="Klicka på ikonen ovan för att checka in. Är det första gången du checkar in var vänlig fyll i besöksformuläret"
         />
         <DashboardAction
-          to="/dashboard"
-          onClick={() => console.log("Länken till checka ut har klickats!")}
+          to="/check-out"
           icons={[faUserTimes]}
           title="Checka ut besökare"
           info="Klicka på ikonen ovan för att checka ut"

@@ -49,6 +49,30 @@ export const validateFullName = (fullName) => {
   return nameRegex.test(fullName);
 };
 
+// Funktion för att validera SSN/Personnummer
+export const validateSSN = (ssn) => {
+  const ssnRegex = /^\d{8}-\d{4}$/;
+  return ssnRegex.test(ssn);
+};
+
+// Funktion för att validera passnummer
+export const validatePassportNumber = (passportNumber) => {
+  const passportRegex = /^[A-Z0-9]{8,9}$/;
+  return passportRegex.test(passportNumber);
+};
+
+// Funktion för att validera företagsnamn
+export const validateCompanyName = (companyName) => {
+  const companyRegex = /^[a-zA-Z0-9@&\-_ ]{1,50}$/;
+  return companyRegex.test(companyName);
+};
+
+// Funktion för att validera stad
+export const validateTextField = (city) => {
+  const cityRegex = /^[a-zA-Z\s]{1,50}$/;
+  return cityRegex.test(city);
+};
+
 // Funktion för att trimma onödiga mellanslag från ett objekt
 export const trimObjectStrings = (obj) => {
   const trimmedObj = { ...obj };
@@ -166,4 +190,41 @@ export const validateAccount = (
   }
 
   return { valid, newErrors };
+};
+
+export const validateVisitor = (formData) => {
+  const newErrors = {};
+  let isValid = true;
+
+  if (!validateFullName(formData.fullName)) {
+    newErrors.fullName =
+      "Användarnamnet måste vara minst 4 och max 20 tecken får endast innehålla bokstäver och siffror, inga mellanslag.";
+    isValid = false;
+  }
+  if (!validateSSN(formData.ssn)) {
+    newErrors.ssn = "Personnumret måste vara i formatet ÅÅÅÅMMDD-XXXX";
+    isValid = false;
+  }
+  if (!formData.countryName) {
+    newErrors.countryName =
+      "Var god välj ett land från listan. Om ditt land inte finns med, vänligen kontakta support.";
+    isValid = false;
+  }
+  if (!validatePassportNumber(formData.passportNo)) {
+    newErrors.passportNumber =
+      "Passnummer måste vara 8-9 tecken långt och får endast innehålla bokstäver och siffror";
+    isValid = false;
+  }
+  if (!validateCompanyName(formData.company)) {
+    newErrors.company =
+      "Företagsnamnet får endast innehålla bokstäver och siffror och vara max 50 tecken långt";
+    isValid = false;
+  }
+  if (!validateTextField(formData.city)) {
+    newErrors.city =
+      "Stad får endast innehålla bokstäver och vara max 50 tecken långt";
+    isValid = false;
+  }
+
+  return { isValid, newErrors };
 };

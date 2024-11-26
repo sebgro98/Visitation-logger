@@ -64,7 +64,6 @@ namespace ResourceServer.Controllers
                 StartDate = visitorAccount.StartDate,
                 EndDate = visitorAccount.EndDate,
                 Username = visitorAccount.Username,
-                Password = visitorAccount.Password,
                 VisitorId = createdVisitor.Id,
                 NodeId = visitorAccount.NodeId
             });

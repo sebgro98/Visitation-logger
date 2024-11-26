@@ -25,7 +25,7 @@ const DashboardAction = ({ to, icons, title, info }) => {
 };
 
 DashboardAction.propTypes = {
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
   onClick: PropTypes.func,
   icons: PropTypes.arrayOf(PropTypes.object).isRequired,
   title: PropTypes.string.isRequired,

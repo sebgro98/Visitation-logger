@@ -10,7 +10,7 @@ import {
   validatePassword,
   validateUsername,
 } from "../../utils/utils";
-import SuccessPopup from "../successPopup";
+import Popup from "../popup";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getAllAccountTypes,
@@ -170,8 +170,8 @@ const HandleAccount = ({
   };
 
   return (
-    <main className="create-account-main">
-      <div className="create-account-container">
+    <main className="handle-account-main">
+      <div className="handle-account-container">
         <h1>
           {accountType === "visitor"
             ? isEditMode
@@ -181,7 +181,7 @@ const HandleAccount = ({
             ? "Redigera administratör"
             : "Skapa administratör"}
         </h1>
-        <form className="create-account-form" onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
           <label htmlFor="username">Användarnamn</label>
           <input
             type="text"
@@ -318,7 +318,7 @@ const HandleAccount = ({
             {errors.nodeId && <p className="error">{errors.nodeId}</p>}
           </div>
 
-          <div className="create-account-button">
+          <div className="handle-account-button">
             <Button
               label={isEditMode ? "Updatera konto" : "Skapa konto"}
               type="submit"
@@ -326,7 +326,7 @@ const HandleAccount = ({
           </div>
         </form>
         {showSuccess && (
-          <SuccessPopup
+          <Popup
             message={successMessage}
             onClose={() => {
               setShowSuccess(false);
