@@ -64,6 +64,26 @@ async function createVisitor(visitor) {
   return await post("Visitor", visitor);
 }
 
+async function getAllCountries() {
+  return await get("Country");
+}
+
+async function getCheckInStatus(id) {
+  return await get(`Status/${id}/checkin-status`);
+}
+
+async function createCheckInStatus(status) {
+  return await post("Status", status);
+}
+
+async function createCheckOutStatus(id, status) {
+  return await put(`Status/${id}`, status);
+}
+
+async function getStatusById(id) {
+  return await get(`Status/${id}`);
+}
+
 async function post(endpoint, data, auth = true) {
   return await request("POST", endpoint, data, auth);
 }
@@ -118,4 +138,9 @@ export {
   getAdminAccountById,
   updateAdminAccount,
   createVisitor,
+  getAllCountries,
+  getCheckInStatus,
+  createCheckInStatus,
+  createCheckOutStatus,
+  getStatusById,
 };
