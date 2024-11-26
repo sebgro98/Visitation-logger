@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import VisitorForm from "../visitorForm";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import SuccessPopup from "../../components/successPopup";
+import Popup from "../../components/popup";
 import {
   createCheckInStatus,
   getCheckInStatus,
@@ -31,7 +31,9 @@ const CheckIn = () => {
           console.log("Visitor account:", visitorAccount);
           setNodeId(visitorAccount.node.id);
 
-          setHasVisitorId(visitorAccount.visitor.id ? true : false);
+          if (visitorAccount.visitor) {
+            setHasVisitorId(visitorAccount.visitor.id ? true : false);
+          }
         } catch (error) {
           console.error("Error fetching visitor account:", error);
         }
@@ -82,14 +84,14 @@ const CheckIn = () => {
   return (
     <>
       {hasCheckedInToday ? (
-        <SuccessPopup
+        <Popup
           message="Användare har redan checkats in idag!"
           onClose={() => {
             navigate("/dashboard");
           }}
         />
       ) : (
-        <SuccessPopup
+        <Popup
           message="Användare har checkats in!"
           onClose={async () => {
             const status = createStatus();
