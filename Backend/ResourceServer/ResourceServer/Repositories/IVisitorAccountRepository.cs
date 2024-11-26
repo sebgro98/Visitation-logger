@@ -9,7 +9,7 @@ namespace ResourceServer.Repositories
         Task<VisitorAccount> GetVisitorAccountById(Guid id);
         Task<VisitorAccount> UpdateVisitorAccount(Guid id, VisitorAccountPutDTO dto);
         Task<VisitorAccount> CreateVisitorAccount(VisitorAccountDTO dto);
-        Task DeleteVisitorAccount(int id);
+        Task<bool> DeleteVisitorAccount(Guid id);
         Task<ByPageVisitorAccountDTO> GetVisitorAccountByPage(int pageNumber, int pageSize);
     }
 }
