@@ -85,12 +85,32 @@ namespace ResourceServer.Repositories
 
         public async Task<Status> GetCheckInStatus(Guid VisitorAccountId)
         {
-            var latestStatus = await _context.Status
-            .Where(s => s.VisitorAccountId == VisitorAccountId)
-            .OrderByDescending(s => s.CheckInTime)
-            .FirstOrDefaultAsync();
+            try
+            {
+                // Kontrollera om VisitorAccountId finns i databasen
+                var visitorAccountExists = await _context.VisitorAccounts
+                    .FindAsync(VisitorAccountId);
 
-            return latestStatus;
+                if (visitorAccountExists == null)
+                {
+                    // Kasta ett anpassat undantag om VisitorAccountId inte finns
+                    throw new KeyNotFoundException($"VisitorAccountId {VisitorAccountId} not found");
+                }
+
+                // Hämta den senaste statusen för VisitorAccountId
+                var latestStatus = await _context.Status
+                    .Where(s => s.VisitorAccountId == VisitorAccountId)
+                    .OrderByDescending(s => s.CheckInTime)
+                    .FirstOrDefaultAsync();
+
+                return latestStatus;
+            }
+            catch (KeyNotFoundException ex)
+            {
+                // Logga undantaget och kasta det vidare
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
     }
 }
