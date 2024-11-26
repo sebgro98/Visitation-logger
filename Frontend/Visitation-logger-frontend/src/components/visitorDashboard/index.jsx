@@ -11,13 +11,13 @@ const VisitorDashboard = () => {
       />
       <div className="dashboard-actions">
         <DashboardAction
-          to="/visitor-form"
+          to="/check-in"
           icons={[faUserPlus]}
           title="Checka in besökare"
           info="Klicka på ikonen ovan för att checka in. Är det första gången du checkar in var vänlig fyll i besöksformuläret"
         />
         <DashboardAction
-          to="/dashboard"
+          to="/check-out"
           icons={[faUserTimes]}
           title="Checka ut besökare"
           info="Klicka på ikonen ovan för att checka ut"
