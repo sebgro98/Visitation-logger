@@ -138,36 +138,36 @@ const Logs = () => {
             <input
               className="logsPage-filter-visitorName"
               type="text"
-              placeholder="Besökare"
+              placeholder={filter.visitorName ? filter.visitorName : "Besökare"} 
               onChange={e => setFilter({ ...filter, visitorName: e.target.value })}
               />
             <input
               className="logsPage-filter-visitorId"
               type="text"
-              placeholder="BesökarId"
+              placeholder={filter.visitorId ? filter.visitorId : "BesökarId"}
               onChange={e => setFilter({ ...filter, visitorId: e.target.value })}
               />
             <input
               className="logsPage-filter-purpose"
               type="text"
-              placeholder="Besöksbeskrivning"
+              placeholder={filter.purposeName ? filter.purposeName : "Besöksbeskrivning"}
               onChange={e => setFilter({ ...filter, purposeName: e.target.value })}
               />
             <input
               className="logsPage-filter-node"
               type="text"
-              placeholder="Nod"
+              placeholder={filter.node ? filter.node : "Nod"}
               onChange={e => setFilter({ ...filter, node: e.target.value })}
               />
             <div className="logsPage-filter-dates">
                 <input
                   type="date"
-                  placeholder="Incheckning"
+                  placeholder={filter.checkInTime ? filter.checkInTime : "Incheckning"}
                   onChange={e => setFilter({ ...filter, checkInTime: e.target.value })}
                   />
                 <input
                   type="date"
-                  placeholder="Utcheckning"
+                  placeholder={filter.checkOutTime ? filter.checkOutTime : "Utcheckning"}
                   onChange={e => setFilter({ ...filter, checkOutTime: e.target.value })}
                   />
               </div>
