@@ -10,7 +10,9 @@ import AccountManagement from "./pages/accountManagement";
 import CreateAdmin from "./pages/createAdmin";
 import CreateVisitor from "./pages/createVisitor";
 import EditAccount from "./pages/editAccount";
-import VisitorForm from "./components/visitorForm";
+import VisitorForm from "./pages/visitorForm";
+import CheckIn from "./pages/checkIn";
+import CheckOut from "./pages/checkOut";
 
 function App() {
   return (
@@ -99,6 +101,23 @@ function App() {
             }
           />
 
+          <Route
+            path="/check-in"
+            element={
+              <ProtectedRoute>
+                <CheckIn />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/check-out"
+            element={
+              <ProtectedRoute>
+                <CheckOut />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/visitor-form"
             element={
